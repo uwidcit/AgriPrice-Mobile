@@ -1,0 +1,34 @@
+<ion-view title="Check Prices">
+	<ion-content padding="true">
+		<div class="list">
+
+			<label class="item item-input item-select">
+			  <div class="input-label">
+			    Date
+			  </div>
+			  <select>
+			    <option>20-April-2014</option>
+			    <option selected>24-April-2014</option>
+			    <option>01-May-2014</option>
+			  </select>
+		</label>
+
+</div>
+	  <ion-list>
+        <div ng-repeat="crop in dailycrops">
+          <ion-item class="item-stable"
+                    ng-click="toggleCrop(crop)"
+                    ng-class="{active: isCropShown(crop)}">
+             <i class="icon" ng-class="isCropShown(crop) ? 'ion-minus' : 'ion-plus'"></i>
+            &nbsp;
+            {{crop.commodity}}
+          </ion-item>
+          <ion-item class="item-accordion"
+                    ng-repeat="(dim, val) in crop"
+                    ng-show="isCropShown(crop)">
+            {{dim}} - {{val}}
+          </ion-item>
+        </div>
+      </ion-list>
+	</ion-content>
+</ion-view>
