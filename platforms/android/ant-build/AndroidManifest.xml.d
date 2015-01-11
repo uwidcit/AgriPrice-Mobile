@@ -1,2 +1,2 @@
-/home/kyle/dev/marketwatcher/platforms/android/ant-build/AndroidManifest.xml : \
-/home/kyle/dev/marketwatcher/platforms/android/AndroidManifest.xml \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\AndroidManifest.xml : \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\AndroidManifest.xml \

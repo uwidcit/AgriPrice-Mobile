@@ -21,12 +21,12 @@
                     ng-class="{active: isCropShown(crop)}">
              <i class="icon" ng-class="isCropShown(crop) ? 'ion-minus' : 'ion-plus'"></i>
             &nbsp;
-            {{crop.commodity}}
+            {{crop.commodity}} {{crop.price}}
           </ion-item>
           <ion-item class="item-accordion"
                     ng-repeat="(dim, val) in crop"
                     ng-show="isCropShown(crop)">
-            {{dim}} - {{val}}
+            <span class="dim">{{dim | uppercase}}</span> - <span clas="val">{{val | lowercase}}</span>
           </ion-item>
         </div>
       </ion-list>

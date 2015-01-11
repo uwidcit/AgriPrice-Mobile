@@ -21,10 +21,14 @@ angular.module('agrinet.controllers', [])
 		console.log("Notification Controller Executed");
 	})
 
-	.controller("PriceCtrl", function($scope, DailyCrop){
+	.controller("PriceCtrl", ["$scope", "DailyCrop", function($scope, DailyCrop){
 
-		$scope.dailycrops = DailyCrop.all();
-
+		 DailyCrop.cropList()
+            .then(function(val){
+                console.log(val);
+                $scope.dailycrops = val;
+            });
+        
 		/*
 		 * if given group is the selected group, deselect it
 		 * else, select the given group
@@ -39,7 +43,7 @@ angular.module('agrinet.controllers', [])
 		$scope.isCropShown = function(crop) {
 		  return $scope.shownCrop === crop;
 		};
-	})
+	}])
 
 
 

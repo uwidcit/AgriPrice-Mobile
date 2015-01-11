@@ -1,4 +1,13 @@
 #homeScreen {
   text-align: center;
   width: 75%;
-  margin: 0 auto; }
+  margin: 0 auto; 
+}
+
+.dim{
+    font-weight: bold;
+}
+
+.val{
+    margin-left: 100px;
+}
