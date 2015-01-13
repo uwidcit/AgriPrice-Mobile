@@ -1,6 +1,16 @@
 <ion-view title="Notifications">
-	<ion-content padding="true">
-	  <p>Swipe to the right to reveal the left menu.</p>
-	  <p>(On desktop click and drag from left to right)</p>
-	</ion-content>
+    <ion-content padding="true">
+        <h3 class="title">Select crops you'd like to be notified about</h3>
+        <ul class="list">
+            <li ng-repeat="crop in crops" class="item item-toggle">
+                {{crop}}
+             <label class="toggle toggle-assertive">
+               <input type="checkbox">
+               <div class="track">
+                 <div class="handle"></div>
+               </div>
+             </label>
+            </li>
+        </ul>
+    </ion-content>
 </ion-view>

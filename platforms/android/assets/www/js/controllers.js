@@ -17,29 +17,42 @@ angular.module('agrinet.controllers', [])
 		console.log("Home Controller Executed");
 	})
 
-	.controller("NotifyCtrl", function($scope){
-		console.log("Notification Controller Executed");
-	})
+.controller("PriceCtrl", ["$scope", "DailyCrop", function($scope, DailyCrop){
 
-	.controller("PriceCtrl", function($scope, DailyCrop){
+     DailyCrop.cropList()
+        .then(function(val){
+            $scope.dailycrops = val;
+        });
 
-		$scope.dailycrops = DailyCrop.all();
+     DailyCrop.cropDates()
+        .then(function(val){
+        console.log(val);
+            //$scope.dates = val;
+        });
+    /*
+     * if given group is the selected group, deselect it
+     * else, select the given group
+     */
+    $scope.toggleCrop = function(crop) {
+      if ($scope.isCropShown(crop)) {
+        $scope.shownCrop = null;
+      } else {
+        $scope.shownCrop = crop;
+      }
+    };
+    $scope.isCropShown = function(crop) {
+      return $scope.shownCrop === crop;
+    };
+}])
 
-		/*
-		 * if given group is the selected group, deselect it
-		 * else, select the given group
-		 */
-		$scope.toggleCrop = function(crop) {
-		  if ($scope.isCropShown(crop)) {
-		    $scope.shownCrop = null;
-		  } else {
-		    $scope.shownCrop = crop;
-		  }
-		};
-		$scope.isCropShown = function(crop) {
-		  return $scope.shownCrop === crop;
-		};
-	})
+.controller("NotifyCtrl", ["$scope", "notifyService", function($scope, notifyService){
+
+    var promise = notifyService.getCropNames();
+    promise.then(function(val){
+        $scope.crops = val.data;
+    });
+
+}])
 
 
 

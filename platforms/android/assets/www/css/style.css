@@ -1,4 +1,26 @@
 #homeScreen {
   text-align: center;
   width: 75%;
-  margin: 0 auto; }
+  margin: 0 auto; 
+}
+
+.dim{
+    font-weight: bold;
+}
+
+.val{
+    margin-left: 200px;
+}
+
+.value{
+    margin-bottom: 10px;
+}
+
+.price{
+    float: right;
+    font-weight: bold;
+}
+
+.title{
+    text-align: center;
+}

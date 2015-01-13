@@ -1,29 +1,72 @@
-angular.module('agrinet.services', [])
+var app = angular.module('agrinet.services', ['ngResource']);
 
 
-.factory("DailyCrop", function(){
+app.service("DailyCrop", ['$resource', '$q', function($resource, $q){
   console.log("Initializing DailyCrop");
-
-  var crops = [
-    {"category": "ROOT CROPS", "commodity": "Carrot", "price": 10.8, "volume": 14062.0, "date": "2014-04-24T00:00:00", "_id": "53605368d9c0b00c48a6e4bc", "unit": "Kg"}, {"category": "ROOT CROPS", "commodity": "Cassava", "price": 5.56, "volume": 2952.0, "date": "2014-04-24T00:00:00", "_id": "53605368d9c0b00c48a6e4bd", "unit": "Kg"}, {"category": "ROOT CROPS", "commodity": "Yam (Local)", "price": 9.2, "volume": 576.0, "date": "2014-04-24T00:00:00", "_id": "53605368d9c0b00c48a6e4be", "unit": "Kg"}, {"category": "ROOT CROPS", "commodity": "Yam (Imported)", "price": 17.64, "volume": 0.0, "date": "2014-04-24T00:00:00", "_id": "53605368d9c0b00c48a6e4bf", "unit": "Kg"}, {"category": "ROOT CROPS", "commodity": "Dasheen(Local)", "price": 6.94, "volume": 612.0, "date": "2014-04-24T00:00:00", "_id": "53605368d9c0b00c48a6e4c0", "unit": "Kg"}, {"category": "ROOT CROPS", "commodity": "Dasheen(Imported)", "price": 5.0, "volume": 8325.0, "date": "2014-04-24T00:00:00", "_id": "53605368d9c0b00c48a6e4c1", "unit": "Kg"}, {"category": "ROOT CROPS", "commodity": "Eddoe (Local)", "price": 0.0, "volume": 0.0, "date": "2014-04-24T00:00:00", "_id": "53605368d9c0b00c48a6e4c2", "unit": "Kg"}, {"category": "ROOT CROPS", "commodity": "Eddoe (Imported)", "price": 14.45, "volume": 3465.0, "date": "2014-04-24T00:00:00", "_id": "53605368d9c0b00c48a6e4c3", "unit": "Kg"}, {"category": "ROOT CROPS", "commodity": "Sweet Potato (Local)", "price": 6.94, "volume": 3960.0, "date": "2014-04-24T00:00:00", "_id": "53605368d9c0b00c48a6e4c4", "unit": "Kg"}
-  ];
-
+    
+  var Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/daily/recent',{});
+  this.cropList = function(){
+      var deferredObject = $q.defer();
+      Crop.query().$promise.then(
+          function(croplist) {
+            deferredObject.resolve(_.map(croplist,processListDisplay));
+        }, function(error){
+            deferredObject.reject(error);
+        });
+        return deferredObject.promise;
+  };
+    
+    
   var processListDisplay = function(el){
      //remove id
       delete el._id;
-      //convert date to human readible form
-      el.date = (new Date(el.date)).toDateString();
+      //convert date to human readable form
+      el.date = processDate(el.date);
       //make price more presentable
       el.price = "$"+ el.price.toFixed(2);
       return el;
   };
-
-  return {
-    all: function(){
-      return _.map(crops,processListDisplay);
-    }
+    
+  var processDate = function(date){
+    date = (new Date(date)).toDateString();
+    return date;
   }
-})
+    
+  var dates = $resource('http://agrimarketwatch.herokuapp.com/crops/monthly/dates',{});
+  this.cropDates = function(){
+      var deferredObject = $q.defer();
+      dates.query().$promise.then(
+          function(croplist) {
+            deferredObject.resolve(croplist);
+        }, function(error){
+            deferredObject.reject(error);
+        });
+        return deferredObject.promise;
+  };
+}])
+
+app.service("Notify", ['$http', '$q', function($http, $q){
+    var deferredObject = $q.defer();
+    
+    this.cropNames = function(){
+        $http.get('https://agrimarketwatch.herokuapp.com/crops/crops').
+            success(function(data, status, headers, config) {
+                deferredObject.resolve(data);
+            }).
+            error(function(data, status, headers, config) {
+                deferredObject.resolve(data);
+            });
+    };
+}])
+
+app.factory('notifyService',['$http', function($http) {
+    return {
+      getCropNames: function() {
+         return $http.get('https://agrimarketwatch.herokuapp.com/crops/crops');
+      }
+    }
+}])
+    
 /**
  * A simple example service that returns some data.
  */

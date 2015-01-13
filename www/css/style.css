@@ -24,3 +24,9 @@
 .title{
     text-align: center;
 }
+
+.notif-footer{
+    position: fixed !important;
+    bottom: 0px !important;
+    color: red !important;
+}
