@@ -4,7 +4,7 @@ var app = angular.module('agrinet.services', ['ngResource']);
 app.service("DailyCrop", ['$resource', '$q', function($resource, $q){
   console.log("Initializing DailyCrop");
     
-  var Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/daily',{});
+  var Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/daily/recent',{});
   this.cropList = function(){
       var deferredObject = $q.defer();
       Crop.query().$promise.then(
@@ -21,12 +21,52 @@ app.service("DailyCrop", ['$resource', '$q', function($resource, $q){
      //remove id
       delete el._id;
       //convert date to human readable form
-      el.date = (new Date(el.date)).toDateString();
+      el.date = processDate(el.date);
       //make price more presentable
       el.price = "$"+ el.price.toFixed(2);
       return el;
   };
+    
+  var processDate = function(date){
+    date = (new Date(date)).toDateString();
+    return date;
+  }
+    
+  var dates = $resource('http://agrimarketwatch.herokuapp.com/crops/monthly/dates',{});
+  this.cropDates = function(){
+      var deferredObject = $q.defer();
+      dates.query().$promise.then(
+          function(croplist) {
+            deferredObject.resolve(croplist);
+        }, function(error){
+            deferredObject.reject(error);
+        });
+        return deferredObject.promise;
+  };
 }])
+
+app.service("Notify", ['$http', '$q', function($http, $q){
+    var deferredObject = $q.defer();
+    
+    this.cropNames = function(){
+        $http.get('https://agrimarketwatch.herokuapp.com/crops/crops').
+            success(function(data, status, headers, config) {
+                deferredObject.resolve(data);
+            }).
+            error(function(data, status, headers, config) {
+                deferredObject.resolve(data);
+            });
+    };
+}])
+
+app.factory('notifyService',['$http', function($http) {
+    return {
+      getCropNames: function() {
+         return $http.get('https://agrimarketwatch.herokuapp.com/crops/crops');
+      }
+    }
+}])
+    
 /**
  * A simple example service that returns some data.
  */

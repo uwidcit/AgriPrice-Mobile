@@ -7,9 +7,7 @@
 			    Date
 			  </div>
 			  <select>
-			    <option>20-April-2014</option>
-			    <option selected>24-April-2014</option>
-			    <option>01-May-2014</option>
+			    <option ng-repeat="date in dates">{{date}}</option>
 			  </select>
 		</label>
 
@@ -21,12 +19,13 @@
                     ng-class="{active: isCropShown(crop)}">
              <i class="icon" ng-class="isCropShown(crop) ? 'ion-minus' : 'ion-plus'"></i>
             &nbsp;
-            {{crop.commodity}} {{crop.price}}
+            {{crop.commodity}} <span class="price">{{crop.price}} per {{crop.unit}}</span>
           </ion-item>
           <ion-item class="item-accordion"
-                    ng-repeat="(dim, val) in crop"
                     ng-show="isCropShown(crop)">
-            <span class="dim">{{dim | uppercase}}</span> - <span clas="val">{{val | lowercase}}</span>
+            <div class="value"><span class="dim">Category</span>: <span clas="val">{{crop.category | lowercase}}</span></div>
+            <div class="value"><span class="dim">Date</span>: <span clas="val">{{crop.date | lowercase}}</span></div>
+            <div class="value"><span class="dim">Volume</span>: <span clas="val">{{crop.volume | lowercase}} {{crop.unit}}</span></div>
           </ion-item>
         </div>
       </ion-list>
