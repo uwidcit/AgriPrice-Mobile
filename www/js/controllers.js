@@ -51,23 +51,38 @@ angular.module('agrinet.controllers', [])
 }])
 
 //populates notificates mgmt page
-.controller("NotifyCtrl", ["$scope", "notifyService", function($scope, notifyService){
-    
+.controller("NotifyCtrl", ["$scope", "notifyService", "$localstorage", function($scope, notifyService, $localstorage){
     
     var promise = notifyService.getCropNames();
     promise.then(function(val){
-        $scope.crops = val.data;
+        var data = val.data;
+        var cropStates = [];
+        for(var i = 0; i < data.length; i++){
+            var curr = {};
+            if(typeof $localstorage.get(data[i]) == 'undefined'){
+                $localstorage.set(data[i], 'false');
+                curr.name = data[i];
+                curr.state = false;
+            }
+            else{
+                curr.name = data[i];
+                curr.state = $localstorage.get(data[i], 'false') == 'true';
+            }
+            cropStates.push(curr);
+        }
+        $scope.crops = cropStates;
     });
     
-    $scope.cropStatus = false;
     
-    $scope.cropToggled = function(name){
+    $scope.cropToggled = function(crop){
         var pusher = new Pusher('8749af531d18b551d367');
-        console.log(name + " " + $scope.cropStatus);
-        if($scope.cropStatus)
-            var channel = pusher.subscribe(name);
+        crop.state = !crop.state;
+        console.log(crop.name + " " + crop.state);
+        $localstorage.set(crop.name, crop.state);
+        if(crop.state)
+            var channel = pusher.subscribe(crop.name);
         else
-            var channel = pusher.unsubscribe(name);
+            var channel = pusher.unsubscribe(crop.name);
     }
 
 }])
