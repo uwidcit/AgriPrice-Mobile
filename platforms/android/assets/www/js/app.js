@@ -19,8 +19,8 @@ angular.module('agrinet', ['ionic', 'agrinet.controllers', 'agrinet.services'])
         url: "/home",
         views: {
           "content":{
-            templateUrl: "templates/home.html",
-            controller: "HomeCtrl"
+            templateUrl: "templates/checkprices.html",
+            controller: "PriceCtrl"
           }
         }
       })

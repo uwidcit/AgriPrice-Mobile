@@ -27,10 +27,10 @@ angular.module('agrinet.controllers', [])
         $scope.dailycrops = val;
     });
 
+    
     DailyCrop.cropDates()
-    .then(function(val){
-        console.log(val);
-        //$scope.dates = val;
+    .then(function(data){
+        $scope.dates = data;
     });
     /*
      * if given group is the selected group, deselect it

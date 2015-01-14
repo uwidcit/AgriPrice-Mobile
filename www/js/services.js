@@ -1,7 +1,7 @@
 var app = angular.module('agrinet.services', ['ngResource']);
 
 
-app.service("DailyCrop", ['$resource', '$q', function($resource, $q){
+app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $http){
   console.log("Initializing DailyCrop");
     
   var Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/daily/recent',{});
@@ -17,32 +17,33 @@ app.service("DailyCrop", ['$resource', '$q', function($resource, $q){
   };
     
     
-  var processListDisplay = function(el){
-     //remove id
-      delete el._id;
-      //convert date to human readable form
-      el.date = processDate(el.date);
-      //make price more presentable
-      el.price = "$"+ el.price.toFixed(2);
-      return el;
-  };
+    var processListDisplay = function(el){
+        //remove id
+        delete el._id;
+        //convert date to human readable form
+        el.date = processDate(el.date);
+        //make price more presentable
+        el.price = "$"+ el.price.toFixed(2);
+        return el;
+    };
     
-  var processDate = function(date){
-    date = (new Date(date)).toDateString();
-    return date;
-  }
+    //makes a date string readable
+    var processDate = function(date){
+        date = (new Date(date)).toDateString();
+        return date;
+    };
     
-  var dates = $resource('http://agrimarketwatch.herokuapp.com/crops/monthly/dates',{});
-  this.cropDates = function(){
-      var deferredObject = $q.defer();
-      dates.query().$promise.then(
-          function(croplist) {
-            deferredObject.resolve(croplist);
-        }, function(error){
-            deferredObject.reject(error);
-        });
-        return deferredObject.promise;
-  };
+    //returns monthly dates
+    this.cropDates = function(){
+        var deferredObject = $q.defer();
+        return $http.get('https://agrimarketwatch.herokuapp.com/crops/monthly/dates').
+            then(function(data) {
+                //var dates = [];
+                //for(var i = 0; i < data.length; i++)
+                  //  dates.push(processDate(data[i]));
+                return _.map(data.data, processDate);
+            });
+    };
 }])
 
 app.service("Notify", ['$http', '$q', function($http, $q){
