@@ -2,20 +2,31 @@ var app = angular.module('agrinet.services', ['ngResource']);
 
 
 app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $http){
-  console.log("Initializing DailyCrop");
+    console.log("Initializing DailyCrop");
     
-  var Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/daily/recent',{});
-  this.cropList = function(){
-      var deferredObject = $q.defer();
-      Crop.query().$promise.then(
-          function(croplist) {
-            deferredObject.resolve(_.map(croplist,processListDisplay));
-        }, function(error){
-            deferredObject.reject(error);
-        });
-        return deferredObject.promise;
-  };
-    
+    var Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/daily/recent',{});
+    this.cropList = function(){
+        var deferredObject = $q.defer();
+        Crop.query().$promise.then(
+            function(croplist) {
+                deferredObject.resolve(_.map(croplist,processListDisplay));
+            }, 
+            function(error){
+                deferredObject.reject(error);
+            });
+    return deferredObject.promise;
+    };
+     
+    //returns monthly dates
+    this.cropDates = function(){
+        return $http.get('https://agrimarketwatch.herokuapp.com/crops/monthly/dates').
+            then(function(data) {
+                //var dates = [];
+                //for(var i = 0; i < data.length; i++)
+                  //  dates.push(processDate(data[i]));
+                return _.map(data.data, processDate);
+            });
+    };
     
     var processListDisplay = function(el){
         //remove id
@@ -33,31 +44,6 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
         return date;
     };
     
-    //returns monthly dates
-    this.cropDates = function(){
-        var deferredObject = $q.defer();
-        return $http.get('https://agrimarketwatch.herokuapp.com/crops/monthly/dates').
-            then(function(data) {
-                //var dates = [];
-                //for(var i = 0; i < data.length; i++)
-                  //  dates.push(processDate(data[i]));
-                return _.map(data.data, processDate);
-            });
-    };
-}])
-
-app.service("Notify", ['$http', '$q', function($http, $q){
-    var deferredObject = $q.defer();
-    
-    this.cropNames = function(){
-        $http.get('https://agrimarketwatch.herokuapp.com/crops/crops').
-            success(function(data, status, headers, config) {
-                deferredObject.resolve(data);
-            }).
-            error(function(data, status, headers, config) {
-                deferredObject.resolve(data);
-            });
-    };
 }])
 
 app.factory('notifyService',['$http', function($http) {

@@ -42,6 +42,11 @@ angular.module('agrinet.controllers', [])
         } 
         else {
             $scope.shownCrop = crop;
+            console.log(crop);
+            var obj = {};
+            obj.state = $localstorage.get(crop.commodity, 'false').state;
+            obj.checks = parseInt($localstorage.get(crop.commodity, 'false').checks)++;
+            $localstorage.set(crop.commodity, obj);
         }
     };
     
@@ -60,13 +65,16 @@ angular.module('agrinet.controllers', [])
         for(var i = 0; i < data.length; i++){
             var curr = {};
             if(typeof $localstorage.get(data[i]) == 'undefined'){
-                $localstorage.set(data[i], 'false');
+                var obj = {};
+                obj.state = 'false';
+                obj.checks = 0;
+                $localstorage.set(data[i], obj);
                 curr.name = data[i];
                 curr.state = false;
             }
             else{
                 curr.name = data[i];
-                curr.state = $localstorage.get(data[i], 'false') == 'true';
+                curr.state = $localstorage.get(data[i], 'false').state == 'true';
             }
             cropStates.push(curr);
         }
