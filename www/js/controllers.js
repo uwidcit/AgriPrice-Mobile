@@ -33,17 +33,33 @@ angular.module('agrinet.controllers', [])
 
 //populates crop prices page
 .controller("PriceCtrl", ["$scope", "DailyCrop", function($scope, DailyCrop){
-
+    
+    var recentTxt = "Most recent";
+    var recentCrops;
+    
     DailyCrop.cropList()
     .then(function(val){
         $scope.dailycrops = val;
+        recentCrops = val;
     });
-
     
     DailyCrop.cropDates()
     .then(function(data){
         $scope.dates = data;
+        $scope.dates.push(recentTxt)
+        $scope.dates.reverse();
     });
+    
+    $scope.changeDate = function(selected){
+        if(selected == recentTxt){
+            $scope.dailycrops = recentCrops;
+            return;
+        }
+        DailyCrop.cropsByDate(selected)
+        .then(function(data){
+            $scope.dailycrops = data;
+        });
+    }
     /*
      * if given group is the selected group, deselect it
      * else, select the given group
@@ -54,11 +70,11 @@ angular.module('agrinet.controllers', [])
         } 
         else {
             $scope.shownCrop = crop;
-            console.log(crop);
+            var cache = JSON.parse($localstorage.get(crop.commodity));
             var obj = {};
-            obj.state = $localstorage.get(crop.commodity, 'false').state;
-            obj.checks = parseInt($localstorage.get(crop.commodity, 'false').checks)++;
-            $localstorage.set(crop.commodity, obj);
+            obj.state = cache.state;
+            obj.checks = (parseInt(cache.checks))++;
+            $localstorage.set(crop.commodity, JSON.stringify(obj));
         }
     };
     
@@ -80,6 +96,10 @@ angular.module('agrinet.controllers', [])
     var promise = notifyService.getCropNames();
     promise.then(function(val){
         var data = val.data;
+        $scope.crops = cacheCrops(data);
+    });
+    
+    var cacheCrops = function(data){
         var cropStates = [];
         for(var i = 0; i < data.length; i++){
             var curr = {};
@@ -87,33 +107,41 @@ angular.module('agrinet.controllers', [])
                 var obj = {};
                 obj.state = 'false';
                 obj.checks = 0;
-                $localstorage.set(data[i], obj);
+                $localstorage.set(data[i], JSON.stringify(obj));
                 curr.name = data[i];
                 curr.state = false;
             }
             else{
                 curr.name = data[i];
-                curr.state = $localstorage.get(data[i], 'false').state == 'true';
+                curr.state = (JSON.parse($localstorage.get(data[i]))).state;
             }
             cropStates.push(curr);
         }
-        $scope.crops = cropStates;
-    });
+        return cropStates;
+    }
     
     
     $scope.cropToggled = function(crop){
         crop.state = !crop.state;
         console.log(crop.name + " " + crop.state);
+        var obj = {};
+        obj.state = crop.state;
+        obj.checks = (JSON.parse($localstorage.get(crop.name, 'false'))).checks;
+        console.log(obj);
         if(crop.state){
+            $localstorage.set(crop.name, JSON.stringify(obj));
             parsePlugin.subscribe(crop.name, function() {
-                $localstorage.set(crop.name, crop.state);
+                
             }, function(e) {
+                alert("error");
             });
         }
         else{
+            $localstorage.set(crop.name, JSO.stringify(obj));
             parsePlugin.unsubscribe(crop.name, function(msg) {
-                $localstorage.set(crop.name, crop.state);
+                
             }, function(e) {
+                alert("error");
             });
         }
     }
