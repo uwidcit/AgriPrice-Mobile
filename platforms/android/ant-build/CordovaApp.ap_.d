@@ -124,7 +124,10 @@ C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\l
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\lib\ionic\scss\ionicons\_ionicons-variables.scss \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\lib\underscore\underscore-min.js \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\lib\underscore\underscore.js \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\plugins\org.apache.cordova.core.parseplugin \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\plugins\org.apache.cordova.device \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\plugins\org.apache.cordova.core.parseplugin\www \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\plugins\org.apache.cordova.core.parseplugin\www\cdv-plugin-parse.js \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\plugins\org.apache.cordova.device\www \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\plugins\org.apache.cordova.device\www\device.js \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\templates\checkprices.html \

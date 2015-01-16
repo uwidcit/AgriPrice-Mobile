@@ -1,6 +1,18 @@
 
 angular.module('agrinet.controllers', [])
-	
+
+.run(function($ionicPlatform) {
+  $ionicPlatform.ready(function() {
+        console.log("ready");
+        //var parsePlugin = cordova.require("cordova/core/parseplugin");
+         window.parsePlugin.initialize("ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb", function() {
+            console.log('success');
+        }, function(e) {
+            console.log('error');
+        });
+  });
+})
+
 .controller('MainCtrl', function($scope, $ionicSideMenuDelegate) {
     
     $scope.attendees = [
@@ -58,6 +70,13 @@ angular.module('agrinet.controllers', [])
 //populates notificates mgmt page
 .controller("NotifyCtrl", ["$scope", "notifyService", "$localstorage", function($scope, notifyService, $localstorage){
     
+    var checkConnection = function() {
+        if(navigator && navigator.connection && navigator.connection.type === 'none') {
+            return false;
+        }
+        return true;
+    };
+    
     var promise = notifyService.getCropNames();
     promise.then(function(val){
         var data = val.data;
@@ -83,14 +102,20 @@ angular.module('agrinet.controllers', [])
     
     
     $scope.cropToggled = function(crop){
-        var pusher = new Pusher('8749af531d18b551d367');
         crop.state = !crop.state;
         console.log(crop.name + " " + crop.state);
-        $localstorage.set(crop.name, crop.state);
-        if(crop.state)
-            var channel = pusher.subscribe(crop.name);
-        else
-            var channel = pusher.unsubscribe(crop.name);
+        if(crop.state){
+            parsePlugin.subscribe(crop.name, function() {
+                $localstorage.set(crop.name, crop.state);
+            }, function(e) {
+            });
+        }
+        else{
+            parsePlugin.unsubscribe(crop.name, function(msg) {
+                $localstorage.set(crop.name, crop.state);
+            }, function(e) {
+            });
+        }
     }
 
 }])

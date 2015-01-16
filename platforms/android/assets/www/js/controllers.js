@@ -1,6 +1,18 @@
 
 angular.module('agrinet.controllers', [])
-	
+
+.run(function($ionicPlatform) {
+  $ionicPlatform.ready(function() {
+        console.log("ready");
+        //var parsePlugin = cordova.require("cordova/core/parseplugin");
+         window.parsePlugin.initialize("ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb", function() {
+            console.log('success');
+        }, function(e) {
+            console.log('error');
+        });
+  });
+})
+
 .controller('MainCtrl', function($scope, $ionicSideMenuDelegate) {
     
     $scope.attendees = [
@@ -27,10 +39,10 @@ angular.module('agrinet.controllers', [])
         $scope.dailycrops = val;
     });
 
+    
     DailyCrop.cropDates()
-    .then(function(val){
-        console.log(val);
-        //$scope.dates = val;
+    .then(function(data){
+        $scope.dates = data;
     });
     /*
      * if given group is the selected group, deselect it
@@ -42,6 +54,11 @@ angular.module('agrinet.controllers', [])
         } 
         else {
             $scope.shownCrop = crop;
+            console.log(crop);
+            var obj = {};
+            obj.state = $localstorage.get(crop.commodity, 'false').state;
+            obj.checks = parseInt($localstorage.get(crop.commodity, 'false').checks)++;
+            $localstorage.set(crop.commodity, obj);
         }
     };
     
@@ -53,6 +70,13 @@ angular.module('agrinet.controllers', [])
 //populates notificates mgmt page
 .controller("NotifyCtrl", ["$scope", "notifyService", "$localstorage", function($scope, notifyService, $localstorage){
     
+    var checkConnection = function() {
+        if(navigator && navigator.connection && navigator.connection.type === 'none') {
+            return false;
+        }
+        return true;
+    };
+    
     var promise = notifyService.getCropNames();
     promise.then(function(val){
         var data = val.data;
@@ -60,13 +84,16 @@ angular.module('agrinet.controllers', [])
         for(var i = 0; i < data.length; i++){
             var curr = {};
             if(typeof $localstorage.get(data[i]) == 'undefined'){
-                $localstorage.set(data[i], 'false');
+                var obj = {};
+                obj.state = 'false';
+                obj.checks = 0;
+                $localstorage.set(data[i], obj);
                 curr.name = data[i];
                 curr.state = false;
             }
             else{
                 curr.name = data[i];
-                curr.state = $localstorage.get(data[i], 'false') == 'true';
+                curr.state = $localstorage.get(data[i], 'false').state == 'true';
             }
             cropStates.push(curr);
         }
@@ -75,14 +102,24 @@ angular.module('agrinet.controllers', [])
     
     
     $scope.cropToggled = function(crop){
-        var pusher = new Pusher('8749af531d18b551d367');
         crop.state = !crop.state;
         console.log(crop.name + " " + crop.state);
-        $localstorage.set(crop.name, crop.state);
-        if(crop.state)
-            var channel = pusher.subscribe(crop.name);
-        else
-            var channel = pusher.unsubscribe(crop.name);
+        if(crop.state){
+            parsePlugin.subscribe(crop.name, function() {
+                alert('OK');
+                $localstorage.set(crop.name, crop.state);
+            }, function(e) {
+                alert('error');
+            });
+        }
+        else{
+            parsePlugin.unsubscribe(crop.name, function(msg) {
+                alert('OK');
+                $localstorage.set(crop.name, crop.state);
+            }, function(e) {
+                alert('error');
+            });
+        }
     }
 
 }])
