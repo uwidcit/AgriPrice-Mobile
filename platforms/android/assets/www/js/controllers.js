@@ -33,17 +33,33 @@ angular.module('agrinet.controllers', [])
 
 //populates crop prices page
 .controller("PriceCtrl", ["$scope", "DailyCrop", function($scope, DailyCrop){
-
+    
+    var recentTxt = "Most recent";
+    var recentCrops;
+    
     DailyCrop.cropList()
     .then(function(val){
         $scope.dailycrops = val;
+        recentCrops = val;
     });
-
     
     DailyCrop.cropDates()
     .then(function(data){
         $scope.dates = data;
+        $scope.dates.push(recentTxt)
+        $scope.dates.reverse();
     });
+    
+    $scope.changeDate = function(selected){
+        if(selected == recentTxt){
+            $scope.dailycrops = recentCrops;
+            return;
+        }
+        DailyCrop.cropsByDate(selected)
+        .then(function(data){
+            $scope.dailycrops = data;
+        });
+    }
     /*
      * if given group is the selected group, deselect it
      * else, select the given group
@@ -54,11 +70,11 @@ angular.module('agrinet.controllers', [])
         } 
         else {
             $scope.shownCrop = crop;
-            console.log(crop);
+            var cache = JSON.parse($localstorage.get(crop.commodity));
             var obj = {};
-            obj.state = $localstorage.get(crop.commodity, 'false').state;
-            obj.checks = parseInt($localstorage.get(crop.commodity, 'false').checks)++;
-            $localstorage.set(crop.commodity, obj);
+            obj.state = cache.state;
+            obj.checks = (parseInt(cache.checks))++;
+            $localstorage.set(crop.commodity, JSON.stringify(obj));
         }
     };
     
@@ -80,6 +96,10 @@ angular.module('agrinet.controllers', [])
     var promise = notifyService.getCropNames();
     promise.then(function(val){
         var data = val.data;
+        $scope.crops = cacheCrops(data);
+    });
+    
+    var cacheCrops = function(data){
         var cropStates = [];
         for(var i = 0; i < data.length; i++){
             var curr = {};
@@ -97,8 +117,8 @@ angular.module('agrinet.controllers', [])
             }
             cropStates.push(curr);
         }
-        $scope.crops = cropStates;
-    });
+        return cropStates;
+    }
     
     
     $scope.cropToggled = function(crop){

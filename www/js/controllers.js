@@ -32,7 +32,7 @@ angular.module('agrinet.controllers', [])
 })
 
 //populates crop prices page
-.controller("PriceCtrl", ["$scope", "DailyCrop", function($scope, DailyCrop){
+.controller("PriceCtrl", ["$scope", "DailyCrop", "$localstorage", function($scope, DailyCrop,$localstorage){
     
     var recentTxt = "Most recent";
     var recentCrops;
@@ -73,7 +73,7 @@ angular.module('agrinet.controllers', [])
             var cache = JSON.parse($localstorage.get(crop.commodity));
             var obj = {};
             obj.state = cache.state;
-            obj.checks = (parseInt(cache.checks))++;
+            obj.checks = (parseInt(cache.checks)) + 1;
             $localstorage.set(crop.commodity, JSON.stringify(obj));
         }
     };

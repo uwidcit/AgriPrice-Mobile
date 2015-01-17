@@ -11,8 +11,7 @@
 			  <div class="input-label">
 			    Date
 			  </div>
-			  <select>
-			    <option ng-repeat="date in dates">{{date}}</option>
+			  <select ng-model="selDate" ng-options="date for date in dates" ng-change="changeDate(selDate)" >
 			  </select>
 		</label>
         </div>
