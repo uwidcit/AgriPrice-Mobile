@@ -76,7 +76,6 @@ angular.module('agrinet.controllers', [])
             obj.state = cache.state;
             obj.checks = (parseInt(cache.checks)) + 1;
             if(obj.checks >= MAX_CHECKS && obj.state == false){
-                alert("here");
                 showConfirm(crop.commodity);
             }
             $localstorage.set(crop.commodity, JSON.stringify(obj));
