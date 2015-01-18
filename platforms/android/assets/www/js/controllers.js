@@ -32,9 +32,10 @@ angular.module('agrinet.controllers', [])
 })
 
 //populates crop prices page
-.controller("PriceCtrl", ["$scope", "DailyCrop", function($scope, DailyCrop){
+.controller("PriceCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", function($scope, DailyCrop, $localstorage, $ionicPopup){
     
     var recentTxt = "Most recent";
+    var MAX_CHECKS = 2;
     var recentCrops;
     
     DailyCrop.cropList()
@@ -73,7 +74,11 @@ angular.module('agrinet.controllers', [])
             var cache = JSON.parse($localstorage.get(crop.commodity));
             var obj = {};
             obj.state = cache.state;
-            obj.checks = (parseInt(cache.checks))++;
+            obj.checks = (parseInt(cache.checks)) + 1;
+            if(obj.checks >= MAX_CHECKS && obj.state == false){
+                alert("here");
+                showConfirm(crop.commodity);
+            }
             $localstorage.set(crop.commodity, JSON.stringify(obj));
         }
     };
@@ -81,6 +86,20 @@ angular.module('agrinet.controllers', [])
     $scope.isCropShown = function(crop) {
         return $scope.shownCrop === crop;
     };
+    
+    var showConfirm = function(name) {
+       var confirmPopup = $ionicPopup.confirm({
+         title: 'Get Reminders',
+         template: 'Would you like to be notified of changes to this crops price?'
+       });
+       confirmPopup.then(function(res) {
+           var obj = {};
+           obj.state = res;
+           obj.checks = 0;
+           $localstorage.set(name, JSON.stringify(obj));
+       });
+     };
+
 }])
 
 //populates notificates mgmt page
@@ -137,7 +156,7 @@ angular.module('agrinet.controllers', [])
             });
         }
         else{
-            $localstorage.set(crop.name, JSO.stringify(obj));
+            $localstorage.set(crop.name, JSON.stringify(obj));
             parsePlugin.unsubscribe(crop.name, function(msg) {
                 
             }, function(e) {
