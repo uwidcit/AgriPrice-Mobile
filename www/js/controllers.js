@@ -42,6 +42,7 @@ angular.module('agrinet.controllers', [])
     .then(function(val){
         $scope.dailycrops = val;
         recentCrops = val;
+        
     });
     
     /*DailyCrop.cropDates()
@@ -67,7 +68,8 @@ angular.module('agrinet.controllers', [])
     $scope.dates = genDates();
     
     $scope.changeDate = function(selected){
-        if(selected == recentTxt){
+        var today = new Date();
+        if(selected == today.toDateString()){
             $scope.dailycrops = recentCrops;
             return;
         }
@@ -76,7 +78,7 @@ angular.module('agrinet.controllers', [])
             DailyCrop.cropsByDate(selected)
             .then(function(data){
                 var dateSelection = {};
-                dateSelection.date = new Date();
+                dateSelection.date = selected;
                 dateSelection.data = JSON.stringify(data);
                 $localstorage.set(selected, JSON.stringify(dateSelection));
                 $scope.dailycrops = data;
@@ -141,6 +143,8 @@ angular.module('agrinet.controllers', [])
     var promise = notifyService.getCropNames();
     promise.then(function(val){
         var data = val.data;
+        var cache = {};
+        cache.date = new Date();
         $scope.crops = cacheCrops(data);
     });
     
