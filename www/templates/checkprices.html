@@ -16,7 +16,7 @@
 		</label>
         </div>
 	  <ion-list>
-        <div ng-repeat="crop in dailycrops">
+        <div ng-repeat="crop in dailycrops | orderBy: 'commodity'">
           <ion-item class="item-stable"
                     ng-click="toggleCrop(crop)"
                     ng-class="{active: isCropShown(crop)}">
