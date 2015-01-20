@@ -13,15 +13,15 @@
     </ion-nav-view>
   </ion-side-menu-content> 
   
-  <ion-side-menu side="left">
+  <ion-side-menu side="left" enable-menu-with-back-views="false">
     <ion-header-bar class="bar-dark">
       <h1 class="title">Menu</h1>
     </ion-header-bar>
     <ion-content>
       <ul class="list">
-        <a href="#/app/checkprices" class="item">Latest Prices</a>
-        <a href="#/app/notifications" class="item">Notifications</a>
-        <a href="#/app/home" class="item">About</a>
+        <a menu-close href="#/app/checkprices" class="item">Latest Prices</a>
+        <a menu-close href="#/app/notifications" class="item">Notifications</a>
+        <a menu-close href="#/app/home" class="item">About</a>
       </ul>
     </ion-content>
   </ion-side-menu>

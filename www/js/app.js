@@ -19,8 +19,8 @@ angular.module('agrinet', ['ionic', 'agrinet.controllers', 'agrinet.services'])
         url: "/home",
         views: {
           "content":{
-            templateUrl: "templates/checkprices.html",
-            controller: "PriceCtrl"
+            templateUrl: "templates/home.html",
+            controller: "HomeCtrl"
           }
         }
       })
@@ -44,7 +44,7 @@ angular.module('agrinet', ['ionic', 'agrinet.controllers', 'agrinet.services'])
           }
         }
       })
-      $urlRouterProvider.otherwise("app/home");
+      $urlRouterProvider.otherwise("app/checkprices");
   });
 
 
