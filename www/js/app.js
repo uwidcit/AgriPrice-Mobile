@@ -10,7 +10,7 @@ angular.module('agrinet', ['ionic', 'agrinet.controllers', 'agrinet.services'])
   .config(function($stateProvider, $urlRouterProvider){
     $stateProvider
       .state("menu", {
-        url: '/app',
+        url: "/app",
         abstract: true,
         templateUrl: "templates/menu.html"
       })
