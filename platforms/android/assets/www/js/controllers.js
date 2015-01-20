@@ -35,7 +35,7 @@ angular.module('agrinet.controllers', [])
 .controller("PriceCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", function($scope, DailyCrop, $localstorage, $ionicPopup){
     
     var recentTxt = "Most recent";
-    var MAX_CHECKS = 2;
+    var MAX_CHECKS = 20;
     var recentCrops;
     
     DailyCrop.cropList()
@@ -44,12 +44,27 @@ angular.module('agrinet.controllers', [])
         recentCrops = val;
     });
     
-    DailyCrop.cropDates()
+    /*DailyCrop.cropDates()
     .then(function(data){
         $scope.dates = data;
         $scope.dates.push(recentTxt)
         $scope.dates.reverse();
-    });
+    });*/
+    
+    var genDates = function(){
+        var dates = [];
+        var date = new Date();
+        dates.push(date.toDateString());
+        for(var i = 0; i < 7; i++){
+            var yest = new Date(date.getTime());
+            yest.setDate(date.getDate() - 1);
+            dates.push(yest.toDateString());
+            date = yest;
+        }
+        return dates;
+    }
+    
+    $scope.dates = genDates();
     
     $scope.changeDate = function(selected){
         if(selected == recentTxt){
@@ -76,7 +91,6 @@ angular.module('agrinet.controllers', [])
             obj.state = cache.state;
             obj.checks = (parseInt(cache.checks)) + 1;
             if(obj.checks >= MAX_CHECKS && obj.state == false){
-                alert("here");
                 showConfirm(crop.commodity);
             }
             $localstorage.set(crop.commodity, JSON.stringify(obj));

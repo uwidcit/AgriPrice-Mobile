@@ -11,12 +11,12 @@
 			  <div class="input-label">
 			    Date
 			  </div>
-			  <select ng-model="selDate" ng-options="date for date in dates" ng-change="changeDate(selDate)" >
+			  <select ng-init="selDate = dates[0]" ng-model="selDate" ng-options="date for date in dates" ng-change="changeDate(selDate)" >
 			  </select>
 		</label>
         </div>
 	  <ion-list>
-        <div ng-repeat="crop in dailycrops">
+        <div ng-repeat="crop in dailycrops | orderBy: 'commodity'">
           <ion-item class="item-stable"
                     ng-click="toggleCrop(crop)"
                     ng-class="{active: isCropShown(crop)}">

@@ -71,10 +71,22 @@ angular.module('agrinet.controllers', [])
             $scope.dailycrops = recentCrops;
             return;
         }
-        DailyCrop.cropsByDate(selected)
-        .then(function(data){
-            $scope.dailycrops = data;
-        });
+        var cache = $localstorage.get(selected);
+        if(typeof cache == "undefined"){
+            DailyCrop.cropsByDate(selected)
+            .then(function(data){
+                var dateSelection = {};
+                dateSelection.date = new Date();
+                dateSelection.data = JSON.stringify(data);
+                $localstorage.set(selected, JSON.stringify(dateSelection));
+                $scope.dailycrops = data;
+            });
+        }
+        else{
+            cache = JSON.parse(cache);
+            console.log("cached");
+            $scope.dailycrops = JSON.parse(cache.data);
+        }
     }
     /*
      * if given group is the selected group, deselect it
