@@ -38,12 +38,15 @@ angular.module('agrinet.controllers', [])
     var MAX_CHECKS = 20;
     var recentCrops;
     
-    DailyCrop.cropList()
-    .then(function(val){
-        $scope.dailycrops = val;
-        recentCrops = val;
-        
-    });
+    var cropCache = $localstorage.get((new Date()).toDateString());
+    if(typeof cropCache == "undefined"){
+        DailyCrop.cropList()
+        .then(function(val){
+            $scope.dailycrops = val;
+            recentCrops = val;
+
+        });
+    }
     
     /*DailyCrop.cropDates()
     .then(function(data){
@@ -78,7 +81,7 @@ angular.module('agrinet.controllers', [])
             DailyCrop.cropsByDate(selected)
             .then(function(data){
                 var dateSelection = {};
-                dateSelection.date = selected;
+                dateSelection.date = new Date();
                 dateSelection.data = JSON.stringify(data);
                 $localstorage.set(selected, JSON.stringify(dateSelection));
                 $scope.dailycrops = data;
@@ -140,13 +143,17 @@ angular.module('agrinet.controllers', [])
         return true;
     };
     
-    var promise = notifyService.getCropNames();
-    promise.then(function(val){
-        var data = val.data;
-        var cache = {};
-        cache.date = new Date();
-        $scope.crops = cacheCrops(data);
-    });
+    var getCrops = function(){
+        var promise = notifyService.getCropNames();
+        promise.then(function(val){
+            var data = val.data;
+            var cache = {};
+            $scope.crops = cacheCrops(data);
+            cache.date = (new Date()).toDateString();
+            cache.data = JSON.stringify($scope.crops);
+            $localstorage.set('crops', JSON.stringify(cache));
+        });
+    }
     
     var cacheCrops = function(data){
         var cropStates = [];
@@ -167,6 +174,18 @@ angular.module('agrinet.controllers', [])
             cropStates.push(curr);
         }
         return cropStates;
+    }
+    
+    var check = $localstorage.get('crops');
+    if(typeof check == 'undefined'){
+        getCrops();
+    }
+    else if(check.date != (new Date()).toDateString()){
+        getCrops();
+    }
+    else{
+        check = JSON.parse(check);
+        $scope.crops = JSON.parse(check.data);
     }
     
     
