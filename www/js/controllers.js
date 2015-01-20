@@ -53,7 +53,6 @@ angular.module('agrinet.controllers', [])
     
     var genDates = function(){
         var dates = [];
-        dates.push(recentTxt);
         var date = new Date();
         dates.push(date.toDateString());
         for(var i = 0; i < 7; i++){
