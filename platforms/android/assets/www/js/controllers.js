@@ -38,11 +38,23 @@ angular.module('agrinet.controllers', [])
     var MAX_CHECKS = 20;
     var recentCrops;
     
-    DailyCrop.cropList()
-    .then(function(val){
-        $scope.dailycrops = val;
-        recentCrops = val;
-    });
+    var cropCache = $localstorage.get((new Date()).toDateString());
+    if(typeof cropCache == "undefined"){
+        DailyCrop.cropList()
+        .then(function(val){
+            $scope.dailycrops = val;
+            recentCrops = val;
+            var recent = {};
+            recent.date = new Date();
+            recent.data = JSON.stringify(val);
+            $localstorage.set((new Date()).toDateString(), JSON.stringify(recent));
+        });
+    }
+    else{
+        console.log('cached');
+        cropCache = JSON.parse(cropCache);
+        $scope.dailycrops = JSON.parse(cropCache.data);
+    }
     
     /*DailyCrop.cropDates()
     .then(function(data){
@@ -67,14 +79,27 @@ angular.module('agrinet.controllers', [])
     $scope.dates = genDates();
     
     $scope.changeDate = function(selected){
-        if(selected == recentTxt){
+        var today = new Date();
+        if(selected == today.toDateString()){
             $scope.dailycrops = recentCrops;
             return;
         }
-        DailyCrop.cropsByDate(selected)
-        .then(function(data){
-            $scope.dailycrops = data;
-        });
+        var cache = $localstorage.get(selected);
+        if(typeof cache == "undefined"){
+            DailyCrop.cropsByDate(selected)
+            .then(function(data){
+                var dateSelection = {};
+                dateSelection.date = new Date();
+                dateSelection.data = JSON.stringify(data);
+                $localstorage.set(selected, JSON.stringify(dateSelection));
+                $scope.dailycrops = data;
+            });
+        }
+        else{
+            cache = JSON.parse(cache);
+            console.log("cached");
+            $scope.dailycrops = JSON.parse(cache.data);
+        }
     }
     /*
      * if given group is the selected group, deselect it
@@ -126,11 +151,17 @@ angular.module('agrinet.controllers', [])
         return true;
     };
     
-    var promise = notifyService.getCropNames();
-    promise.then(function(val){
-        var data = val.data;
-        $scope.crops = cacheCrops(data);
-    });
+    var getCrops = function(){
+        var promise = notifyService.getCropNames();
+        promise.then(function(val){
+            var data = val.data;
+            var cache = {};
+            $scope.crops = cacheCrops(data);
+            cache.date = (new Date()).toDateString();
+            cache.data = JSON.stringify($scope.crops);
+            $localstorage.set('crops', JSON.stringify(cache));
+        });
+    }
     
     var cacheCrops = function(data){
         var cropStates = [];
@@ -151,6 +182,22 @@ angular.module('agrinet.controllers', [])
             cropStates.push(curr);
         }
         return cropStates;
+    }
+    
+    var check = $localstorage.get('crops');
+    if(typeof check == 'undefined'){
+        getCrops();
+    }
+    else{ 
+        check = JSON.parse(check);
+        if(check.date != (new Date()).toDateString()){
+            console.log(check.date);
+            getCrops();
+        }
+        else{
+            console.log('cache');
+            $scope.crops = JSON.parse(check.data);
+        }
     }
     
     

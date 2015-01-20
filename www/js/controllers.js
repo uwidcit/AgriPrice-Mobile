@@ -44,8 +44,16 @@ angular.module('agrinet.controllers', [])
         .then(function(val){
             $scope.dailycrops = val;
             recentCrops = val;
-
+            var recent = {};
+            recent.date = new Date();
+            recent.data = JSON.stringify(val);
+            $localstorage.set((new Date()).toDateString(), JSON.stringify(recent));
         });
+    }
+    else{
+        console.log('cached');
+        cropCache = JSON.parse(cropCache);
+        $scope.dailycrops = JSON.parse(cropCache.data);
     }
     
     /*DailyCrop.cropDates()
@@ -180,12 +188,16 @@ angular.module('agrinet.controllers', [])
     if(typeof check == 'undefined'){
         getCrops();
     }
-    else if(check.date != (new Date()).toDateString()){
-        getCrops();
-    }
-    else{
+    else{ 
         check = JSON.parse(check);
-        $scope.crops = JSON.parse(check.data);
+        if(check.date != (new Date()).toDateString()){
+            console.log(check.date);
+            getCrops();
+        }
+        else{
+            console.log('cache');
+            $scope.crops = JSON.parse(check.data);
+        }
     }
     
     

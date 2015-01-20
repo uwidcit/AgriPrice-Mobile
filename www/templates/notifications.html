@@ -1,6 +1,6 @@
 <ion-view title="Notifications">
     <ion-content padding="true">
         <h3 class="title">Select crops to be notified about</h3>
-             <ion-toggle ng-repeat="crop in crops" ng-model="crop.state" ng-change="cropToggled(this.crop)" toggle-class="toggle-calm">{{crop.name}}</ion-toggle>
+             <ion-toggle ng-repeat="crop in crops | orderBy: 'name'" ng-model="crop.state" ng-change="cropToggled(this.crop)" toggle-class="toggle-calm">{{crop.name}}</ion-toggle>
     </ion-content>
 </ion-view>
