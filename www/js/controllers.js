@@ -44,12 +44,28 @@ angular.module('agrinet.controllers', [])
         recentCrops = val;
     });
     
-    DailyCrop.cropDates()
+    /*DailyCrop.cropDates()
     .then(function(data){
         $scope.dates = data;
         $scope.dates.push(recentTxt)
         $scope.dates.reverse();
-    });
+    });*/
+    
+    var genDates = function(){
+        var dates = [];
+        dates.push(recentTxt);
+        var date = new Date();
+        dates.push(date.toDateString());
+        for(var i = 0; i < 7; i++){
+            var yest = new Date(date.getTime());
+            yest.setDate(date.getDate() - 1);
+            dates.push(yest.toDateString());
+            date = yest;
+        }
+        return dates;
+    }
+    
+    $scope.dates = genDates();
     
     $scope.changeDate = function(selected){
         if(selected == recentTxt){
