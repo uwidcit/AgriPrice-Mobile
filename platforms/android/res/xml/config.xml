@@ -1,12 +1,17 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.ionicframework.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <preference name="loglevel" value="DEBUG" />
-    <feature name="Device">
-        <param name="android-package" value="org.apache.cordova.device.Device" />
-    </feature>
     <feature name="ParsePlugin">
         <param name="android-package" value="org.apache.cordova.core.ParsePlugin" />
     </feature>
+    <feature name="Device">
+        <param name="android-package" value="org.apache.cordova.device.Device" />
+    </feature>
+    <icon height="72" src="icons/android/drawable-hdpi/ic_launcher.png" width="72" />
+    <icon height="48" src="icons/android/drawable-mdpi/ic_launcher.png" width="48" />
+    <icon height="96" src="icons/android/drawable-xdpi/ic_launcher.png" width="96" />
+    <icon height="144" src="icons/android/drawable-xxdpi/ic_launcher.png" width="144" />
+    <icon height="192" src="icons/android/drawable-xxxdpi/ic_launcher.png" width="192" />
     <name>Market Watcher</name>
     <description>
         An Ionic Framework and Cordova project.
