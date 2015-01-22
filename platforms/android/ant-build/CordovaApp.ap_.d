@@ -39,8 +39,11 @@ C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\c
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\css\style.css \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\css\style.min.css \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\img\350x150.gif \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\img\ic_launcher.png \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\img\ionic.png \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\img\logo_agrinet.png \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\img\namdevco.jpg \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\img\uwi.gif \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\js\app.js \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\js\controllers.js \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\js\services.js \
@@ -127,8 +130,8 @@ C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\p
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\plugins\org.apache.cordova.core.parseplugin\www\cdv-plugin-parse.js \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\plugins\org.apache.cordova.device\www \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\plugins\org.apache.cordova.device\www\device.js \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\templates\about.html \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\templates\checkprices.html \
-C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\templates\home.html \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\templates\menu.html \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\templates\notifications.html \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\AndroidManifest.xml \

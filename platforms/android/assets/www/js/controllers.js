@@ -13,18 +13,9 @@ angular.module('agrinet.controllers', [])
   });
 })
 
-.controller('MainCtrl', function($scope, $ionicSideMenuDelegate) {
+.controller('AboutCtrl', function($scope, $ionicSideMenuDelegate) {
     
-    $scope.attendees = [
-        { firstname: 'Nicolas', 		lastname: 'Cage' },
-        { firstname: 'Jean-Claude', lastname: 'Van Damme' },
-        { firstname: 'Keanu', 			lastname: 'Reeves' },
-        { firstname: 'Steven', 			lastname: 'Seagal' }
-    ];
-
-    $scope.toggleLeft = function() {
-        $ionicSideMenuDelegate.toggleLeft();
-    };
+    
 })
 
 .controller("HomeCtrl", function($scope){
@@ -33,6 +24,18 @@ angular.module('agrinet.controllers', [])
 
 //populates crop prices page
 .controller("PriceCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", '$ionicLoading', function($scope, DailyCrop, $localstorage, $ionicPopup, $ionicLoading){
+    
+    $scope.genDates = function(start){
+        var dates = [];
+        dates.push(start.toDateString());
+        for(var i = 0; i < 7; i++){
+            var yest = new Date(start.getTime());
+            yest.setDate(start.getDate() - 1);
+            dates.push(yest.toDateString());
+            start = yest;
+        }
+        return dates;
+    }
     
     var recentTxt = "Most recent";
     var MAX_CHECKS = 20;
@@ -51,6 +54,7 @@ angular.module('agrinet.controllers', [])
             recent.date = new Date();
             recent.data = JSON.stringify(val);
             $localstorage.set((new Date()).toDateString(), JSON.stringify(recent));
+            $scope.dates = genDates(new Date(val[0].date));
             $ionicLoading.hide();
         });
     }
@@ -58,6 +62,7 @@ angular.module('agrinet.controllers', [])
         console.log('cached');
         cropCache = JSON.parse(cropCache);
         $scope.dailycrops = JSON.parse(cropCache.data);
+        $scope.dates = $scope.genDates(new Date($scope.dailycrops[0].date));
         $ionicLoading.hide();
     }
     
@@ -68,20 +73,7 @@ angular.module('agrinet.controllers', [])
         $scope.dates.reverse();
     });*/
     
-    var genDates = function(){
-        var dates = [];
-        var date = new Date();
-        dates.push(date.toDateString());
-        for(var i = 0; i < 7; i++){
-            var yest = new Date(date.getTime());
-            yest.setDate(date.getDate() - 1);
-            dates.push(yest.toDateString());
-            date = yest;
-        }
-        return dates;
-    }
     
-    $scope.dates = genDates();
     
     $scope.changeDate = function(selected){
         var today = new Date();

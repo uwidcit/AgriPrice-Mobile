@@ -19,8 +19,9 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
      
     this.cropsByDate = function(date){
         var dateObj = new Date(date);
-        console.log(dateObj.toISOString());
-        var Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/monthly/' + dateObj.toISOString(),{});
+        var dateTxt = dateObj.getFullYear() + "-" + (dateObj.getMonth() + 1) + "-" + dateObj.getDate();
+        console.log(dateTxt);
+        var Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/daily/dates' + dateTxt,{});
         var deferredObject = $q.defer();
         Crop.query().$promise.then(
             function(croplist) {

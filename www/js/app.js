@@ -15,12 +15,12 @@ angular.module('agrinet', ['ionic', 'agrinet.controllers', 'agrinet.services'])
         templateUrl: "templates/menu.html"
       })
 
-      .state("menu.home",{
-        url: "/home",
+      .state("menu.about",{
+        url: "/about",
         views: {
           "content":{
-            templateUrl: "templates/home.html",
-            controller: "HomeCtrl"
+            templateUrl: "templates/about.html",
+            controller: "AboutCtrl"
           }
         }
       })
