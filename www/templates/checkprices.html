@@ -23,7 +23,7 @@
                     ng-class="{active: isCropShown(crop)}">
              <i class="icon" ng-class="isCropShown(crop) ? 'ion-minus' : 'ion-plus'"></i>
             &nbsp;
-            {{crop.commodity}} <span class="price">{{crop.price}} per {{crop.unit}}</span>
+            {{crop.commodity | capitalize}} <span class="price">{{crop.price}} per {{crop.unit}}</span>
             </ion-item>
             <ion-item class="item-accordion"
                     ng-show="isCropShown(crop)">
