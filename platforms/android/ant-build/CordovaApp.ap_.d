@@ -40,6 +40,7 @@ C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\c
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\css\style.min.css \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\img\350x150.gif \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\img\ionic.png \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\img\logo_agrinet.png \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\js\app.js \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\js\controllers.js \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\js\services.js \

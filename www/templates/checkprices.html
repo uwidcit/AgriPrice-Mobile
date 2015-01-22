@@ -16,20 +16,22 @@
 		</label>
         </div>
 	  <ion-list>
+        <div id="crop-list">
         <div ng-repeat="crop in dailycrops | orderBy: 'commodity'">
-          <ion-item class="item-stable"
+            <ion-item class="item-stable"
                     ng-click="toggleCrop(crop)"
                     ng-class="{active: isCropShown(crop)}">
              <i class="icon" ng-class="isCropShown(crop) ? 'ion-minus' : 'ion-plus'"></i>
             &nbsp;
             {{crop.commodity}} <span class="price">{{crop.price}} per {{crop.unit}}</span>
-          </ion-item>
-          <ion-item class="item-accordion"
+            </ion-item>
+            <ion-item class="item-accordion"
                     ng-show="isCropShown(crop)">
             <div class="value"><span class="dim">Category</span>: <span clas="val">{{crop.category | lowercase}}</span></div>
             <div class="value"><span class="dim">Date</span>: <span clas="val">{{crop.date | lowercase}}</span></div>
             <div class="value"><span class="dim">Volume</span>: <span clas="val">{{crop.volume | lowercase}} {{crop.unit}}</span></div>
-          </ion-item>
+            </ion-item>
+        </div>
         </div>
       </ion-list>
 	</ion-content>

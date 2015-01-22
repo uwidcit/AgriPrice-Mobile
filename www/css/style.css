@@ -37,3 +37,7 @@
     text-align: center;
     margin: 0px;
 }
+
+#crop-list{
+    padding-bottom: 50px !important;
+}

@@ -32,12 +32,15 @@ angular.module('agrinet.controllers', [])
 })
 
 //populates crop prices page
-.controller("PriceCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", function($scope, DailyCrop, $localstorage, $ionicPopup){
+.controller("PriceCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", '$ionicLoading', function($scope, DailyCrop, $localstorage, $ionicPopup, $ionicLoading){
     
     var recentTxt = "Most recent";
     var MAX_CHECKS = 20;
     var recentCrops;
     
+    $ionicLoading.show({
+      template: 'Loading...'
+    });
     var cropCache = $localstorage.get((new Date()).toDateString());
     if(typeof cropCache == "undefined"){
         DailyCrop.cropList()
@@ -48,12 +51,14 @@ angular.module('agrinet.controllers', [])
             recent.date = new Date();
             recent.data = JSON.stringify(val);
             $localstorage.set((new Date()).toDateString(), JSON.stringify(recent));
+            $ionicLoading.hide();
         });
     }
     else{
         console.log('cached');
         cropCache = JSON.parse(cropCache);
         $scope.dailycrops = JSON.parse(cropCache.data);
+        $ionicLoading.hide();
     }
     
     /*DailyCrop.cropDates()
@@ -84,6 +89,9 @@ angular.module('agrinet.controllers', [])
             $scope.dailycrops = recentCrops;
             return;
         }
+        $ionicLoading.show({
+          template: 'Loading...'
+        });
         var cache = $localstorage.get(selected);
         if(typeof cache == "undefined"){
             DailyCrop.cropsByDate(selected)
@@ -93,12 +101,14 @@ angular.module('agrinet.controllers', [])
                 dateSelection.data = JSON.stringify(data);
                 $localstorage.set(selected, JSON.stringify(dateSelection));
                 $scope.dailycrops = data;
+                $ionicLoading.hide();
             });
         }
         else{
             cache = JSON.parse(cache);
             console.log("cached");
             $scope.dailycrops = JSON.parse(cache.data);
+            $ionicLoading.hide();
         }
     }
     /*
@@ -152,6 +162,9 @@ angular.module('agrinet.controllers', [])
     };
     
     var getCrops = function(){
+        $ionicLoading.show({
+          template: 'Loading...'
+        });
         var promise = notifyService.getCropNames();
         promise.then(function(val){
             var data = val.data;
@@ -160,6 +173,7 @@ angular.module('agrinet.controllers', [])
             cache.date = (new Date()).toDateString();
             cache.data = JSON.stringify($scope.crops);
             $localstorage.set('crops', JSON.stringify(cache));
+            $ionicLoading.hide();
         });
     }
     

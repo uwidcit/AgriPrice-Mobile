@@ -18,11 +18,9 @@ C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\re
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\res\drawable-land-ldpi\screen.png \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\res\drawable-land-mdpi\screen.png \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\res\drawable-land-xhdpi\screen.png \
-C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\res\drawable-ldpi\icon.png \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\res\drawable-mdpi\icon.png \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\res\drawable-port-hdpi\screen.png \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\res\drawable-port-ldpi\screen.png \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\res\drawable-port-mdpi\screen.png \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\res\drawable-port-xhdpi\screen.png \
-C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\res\drawable-xhdpi\icon.png \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\AndroidManifest.xml \
