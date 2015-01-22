@@ -152,7 +152,7 @@ angular.module('agrinet.controllers', [])
 }])
 
 //populates notificates mgmt page
-.controller("NotifyCtrl", ["$scope", "notifyService", "$localstorage", function($scope, notifyService, $localstorage){
+.controller("NotifyCtrl", ["$scope", "notifyService", "$localstorage", "$ionicLoading", function($scope, notifyService, $localstorage, $ionicLoading){
     
     var checkConnection = function() {
         if(navigator && navigator.connection && navigator.connection.type === 'none') {
