@@ -7,6 +7,9 @@
     <feature name="Device">
         <param name="android-package" value="org.apache.cordova.device.Device" />
     </feature>
+    <feature name="InAppBrowser">
+        <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
+    </feature>
     <icon height="72" src="icons/android/drawable-hdpi/ic_launcher.png" width="72" />
     <icon height="48" src="icons/android/drawable-mdpi/ic_launcher.png" width="48" />
     <icon height="96" src="icons/android/drawable-xdpi/ic_launcher.png" width="96" />

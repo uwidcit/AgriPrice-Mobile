@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('agrinet', ['ionic', 'agrinet.controllers', 'agrinet.services'])
+angular.module('agrinet', ['ionic', 'agrinet.controllers', 'agrinet.services', 'ngCordova'])
 
   .config(function($stateProvider, $urlRouterProvider){
     $stateProvider
@@ -31,6 +31,16 @@ angular.module('agrinet', ['ionic', 'agrinet.controllers', 'agrinet.services'])
           "content":{
             templateUrl: "templates/checkprices.html",
             controller : "PriceCtrl"
+          }
+        }
+      })
+    
+     .state("menu.login", {
+        url: "/login",
+        views:{
+          "content":{
+            templateUrl: "templates/login.html",
+            controller : "LoginCtrl"
           }
         }
       })

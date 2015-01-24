@@ -18,9 +18,25 @@ angular.module('agrinet.controllers', [])
     
 })
 
-.controller("HomeCtrl", function($scope){
-    console.log("Home Controller Executed");
-})
+.controller("LoginCtrl", ["$scope", "$cordovaOauth", function($scope, $cordovaOauth){
+    $scope.val = "asdas";
+    
+    $scope.googleLogin = function() {
+        $cordovaOauth.google("602269272261-ihuhk6paf4bnpppdkmo4fpc1qanhhvp2.apps.googleusercontent.com", ["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/userinfo.email"]).then(function(result) {
+            alert(JSON.stringify(result));
+            var User = $resource('https://www.googleapis.com/plus/v1/people/userId',{});
+            Crop.get().$promise.then(
+            function(userData) {
+                alert(userData);
+            }, 
+            function(error){
+                
+            });
+        }, function(error) {
+            alert(error);
+        });
+    }
+}])
 
 //populates crop prices page
 .controller("PriceCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", '$ionicLoading', function($scope, DailyCrop, $localstorage, $ionicPopup, $ionicLoading){
@@ -54,7 +70,7 @@ angular.module('agrinet.controllers', [])
             recent.date = new Date();
             recent.data = JSON.stringify(val);
             $localstorage.set((new Date()).toDateString(), JSON.stringify(recent));
-            $scope.dates = genDates(new Date(val[0].date));
+            $scope.dates = $scope.genDates(new Date(val[0].date));
             $ionicLoading.hide();
         });
     }
@@ -113,7 +129,11 @@ angular.module('agrinet.controllers', [])
         } 
         else {
             $scope.shownCrop = crop;
-            var cache = JSON.parse($localstorage.get(crop.commodity));
+            var idx = crop.commodity.indexOf('(');
+            var name = crop.commodity;
+            if(idx != -1)
+                name = (crop.commodity.substr(0, idx)).replace(" ", "");
+            var cache = JSON.parse($localstorage.get(name));
             var obj = {};
             obj.state = cache.state;
             obj.checks = (parseInt(cache.checks)) + 1;
@@ -174,18 +194,39 @@ angular.module('agrinet.controllers', [])
         for(var i = 0; i < data.length; i++){
             var curr = {};
             if(typeof $localstorage.get(data[i]) == 'undefined'){
-                var obj = {};
-                obj.state = 'false';
-                obj.checks = 0;
-                $localstorage.set(data[i], JSON.stringify(obj));
-                curr.name = data[i];
-                curr.state = false;
+                var idx = data[i].indexOf('(');
+                var name = data[i];
+                if(idx != -1)
+                    name = (data[i].substr(0, idx)).replace(" ", "");
+                console.log(name);
+                if(typeof $localstorage.get(name) == 'undefined'){
+                    var obj = {};
+                    obj.state = 'false';
+                    obj.checks = 0;
+                    obj.aliases = [];
+                    obj.aliases.push(data[i]);
+                    $localstorage.set(name, JSON.stringify(obj));
+                    curr.name = name;
+                    curr.state = false;
+                    cropStates.push(curr);
+                }
+                else{
+                    var cache = JSON.parse($localstorage.get(name));
+                    var obj = {};
+                    obj.state = cache.state;
+                    obj.checks = cache.checks;
+                    obj.aliases = cache.aliases;
+                    obj.aliases.push(data[i]);
+                    $localstorage.set(name, JSON.stringify(obj));
+                    curr.name = name;
+                    curr.state = false;
+                }
             }
             else{
                 curr.name = data[i];
                 curr.state = (JSON.parse($localstorage.get(data[i]))).state;
+                cropStates.push(curr);
             }
-            cropStates.push(curr);
         }
         return cropStates;
     }
@@ -210,25 +251,29 @@ angular.module('agrinet.controllers', [])
     $scope.cropToggled = function(crop){
         crop.state = !crop.state;
         console.log(crop.name + " " + crop.state);
-        var obj = {};
+        var obj = JSON.parse($localstorage.get(crop.name, 'false'));
         obj.state = crop.state;
-        obj.checks = (JSON.parse($localstorage.get(crop.name, 'false'))).checks;
         console.log(obj);
         if(crop.state){
             $localstorage.set(crop.name, JSON.stringify(obj));
-            parsePlugin.subscribe(crop.name, function() {
-                
-            }, function(e) {
-                alert("error");
-            });
+            //for(var i = 0; i < obj.aliases.length; i++){
+              //  console.log(obj.aliases[i]);
+                parsePlugin.subscribe(obj.aliases[i], function() {
+
+                }, function(e) {
+                    alert("error");
+                });
+        //    }
         }
         else{
             $localstorage.set(crop.name, JSON.stringify(obj));
-            parsePlugin.unsubscribe(crop.name, function(msg) {
-                
-            }, function(e) {
-                alert("error");
-            });
+          //  for(var i = 0; i < obj.aliases.length; i++){
+                parsePlugin.unsubscribe(obj.aliases[i], function() {
+
+                }, function(e) {
+                    alert("error");
+                });
+            //}
         }
     }
 
