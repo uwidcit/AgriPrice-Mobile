@@ -5,6 +5,7 @@ angular.module('agrinet.controllers', [])
   $ionicPlatform.ready(function() {
         console.log("ready");
         //var parsePlugin = cordova.require("cordova/core/parseplugin");
+      Parse.initialize("ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "HbaUIyhiXFpUYhDQ7EsXW4IwP6zeXgqC81AQhQSL");
          window.parsePlugin.initialize("ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb", function() {
             console.log('success');
         }, function(e) {
@@ -18,22 +19,36 @@ angular.module('agrinet.controllers', [])
     
 })
 
-.controller("LoginCtrl", ["$scope", "$cordovaOauth", function($scope, $cordovaOauth){
+.controller("LoginCtrl", ["$scope", "$cordovaOauth", "$http", function($scope, $cordovaOauth, $http){
     $scope.val = "asdas";
     
     $scope.googleLogin = function() {
-        $cordovaOauth.google("602269272261-ihuhk6paf4bnpppdkmo4fpc1qanhhvp2.apps.googleusercontent.com", ["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/userinfo.email"]).then(function(result) {
-            alert(JSON.stringify(result));
-            var User = $resource('https://www.googleapis.com/plus/v1/people/userId',{});
-            Crop.get().$promise.then(
-            function(userData) {
-                alert(userData);
-            }, 
-            function(error){
+        $cordovaOauth.google("602269272261-ihuhk6paf4bnpppdkmo4fpc1qanhhvp2.apps.googleusercontent.com", ["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/plus.profile.emails.read"]).then(function(result) {
+            $http.defaults.headers.common.Authorization = "Bearer " + result.access_token;
+            $http.get('https://www.googleapis.com/plus/v1/people/me').
+            then(function(data) {
+                var email = data.data.emails[0].value;
+                $scope.register(email);
                 
-            });
+            }, function(error){alert(JSON.stringify(error));});
         }, function(error) {
             alert(error);
+        });
+    }
+    
+    $scope.register = function(userEmail){
+        parsePlugin.getInstallationId(function(installId) {
+            alert(installId);
+            Parse.Cloud.run('register', {email: userEmail, id: installId}, {
+              success: function(result) {
+                    alert(JSON.stringify(result));
+              },
+              error: function(error) {
+                  alert(JSON.stringify(error));
+              }
+            });
+        }, function(e) {
+            alert('error');
         });
     }
 }])
@@ -246,7 +261,6 @@ angular.module('agrinet.controllers', [])
             $scope.crops = JSON.parse(check.data);
         }
     }
-    
     
     $scope.cropToggled = function(crop){
         crop.state = !crop.state;
