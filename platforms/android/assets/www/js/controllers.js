@@ -19,15 +19,22 @@ angular.module('agrinet.controllers', [])
     
 })
 
-.controller("LoginCtrl", ["$scope", "$cordovaOauth", "$http", function($scope, $cordovaOauth, $http){
-    $scope.val = "asdas";
+.controller("LoginCtrl", ["$scope", "$cordovaOauth", "$http", "$state", "$localstorage", function($scope, $cordovaOauth, $http, $state, $localstorage){
+    var login = $localstorage.get("login");
+    
+    if(typeof login != "undefined"){
+        $state.go("menu.checkprices");
+    }
     
     $scope.googleLogin = function() {
+        //gets access token from google
         $cordovaOauth.google("602269272261-ihuhk6paf4bnpppdkmo4fpc1qanhhvp2.apps.googleusercontent.com", ["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/plus.profile.emails.read"]).then(function(result) {
             $http.defaults.headers.common.Authorization = "Bearer " + result.access_token;
+            //gets user data using token
             $http.get('https://www.googleapis.com/plus/v1/people/me').
             then(function(data) {
                 var email = data.data.emails[0].value;
+                $localstorage.set("login", email);
                 $scope.register(email);
                 
             }, function(error){alert(JSON.stringify(error));});
@@ -36,16 +43,27 @@ angular.module('agrinet.controllers', [])
         });
     }
     
+    //checks if user already registered or not and does accordingly
     $scope.register = function(userEmail){
         parsePlugin.getInstallationId(function(installId) {
-            alert(installId);
             Parse.Cloud.run('register', {email: userEmail, id: installId}, {
-              success: function(result) {
-                    alert(JSON.stringify(result));
-              },
-              error: function(error) {
-                  alert(JSON.stringify(error));
-              }
+                success: function(result) { //returns users subscribed channels in an array
+                    result = JSON.parse(result);
+                    for(var i = 0; i < result.length; i++){
+                        var obj = JSON.parse($localstorage.get(crop.name, 'false'));
+                        obj.state = true;
+                        $localstorage.set(result[i], JSON.stringify(obj));
+                        parsePlugin.subscribe(result[i], function() {
+                                
+                        }, function(e) {
+                            alert("error");
+                        });
+                    }
+                    $state.go("menu.checkprices");
+                },
+                error: function(error) {
+                    alert(JSON.stringify(error));
+                }
             });
         }, function(e) {
             alert('error');
@@ -270,24 +288,19 @@ angular.module('agrinet.controllers', [])
         console.log(obj);
         if(crop.state){
             $localstorage.set(crop.name, JSON.stringify(obj));
-            //for(var i = 0; i < obj.aliases.length; i++){
-              //  console.log(obj.aliases[i]);
-                parsePlugin.subscribe(obj.aliases[i], function() {
+            parsePlugin.subscribe(crop.name, function() {
 
-                }, function(e) {
-                    alert("error");
-                });
-        //    }
+            }, function(e) {
+                alert("error");
+            });
         }
         else{
             $localstorage.set(crop.name, JSON.stringify(obj));
-          //  for(var i = 0; i < obj.aliases.length; i++){
-                parsePlugin.unsubscribe(obj.aliases[i], function() {
+            parsePlugin.unsubscribe(crop.name, function() {
 
-                }, function(e) {
-                    alert("error");
-                });
-            //}
+            }, function(e) {
+                alert("error");
+            });
         }
     }
 
