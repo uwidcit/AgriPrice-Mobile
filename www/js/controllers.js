@@ -19,7 +19,7 @@ angular.module('agrinet.controllers', [])
     
 })
 
-.controller("LoginCtrl", ["$scope", "$cordovaOauth", "$http", "$state", "$localstorage", function($scope, $cordovaOauth, $http, $state, $localstorage){
+.controller("LoginCtrl", ["$scope", "$cordovaOauth", "$http", "$state", "$localstorage", "$ionicLoading", function($scope, $cordovaOauth, $http, $state, $localstorage, $ionicLoading){
     var login = $localstorage.get("login");
     
     if(typeof login != "undefined"){
@@ -45,12 +45,17 @@ angular.module('agrinet.controllers', [])
     
     //checks if user already registered or not and does accordingly
     $scope.register = function(userEmail){
+        $ionicLoading.show({
+          template: 'Signing in...'
+        });
         parsePlugin.getInstallationId(function(installId) {
             Parse.Cloud.run('register', {email: userEmail, id: installId}, {
                 success: function(result) { //returns users subscribed channels in an array
                     result = JSON.parse(result);
                     for(var i = 0; i < result.length; i++){
-                        var obj = JSON.parse($localstorage.get(crop.name, 'false'));
+                        var obj = {};
+                        obj.checks = 0;
+                        obj.name = result[i];
                         obj.state = true;
                         $localstorage.set(result[i], JSON.stringify(obj));
                         parsePlugin.subscribe(result[i], function() {
@@ -58,8 +63,9 @@ angular.module('agrinet.controllers', [])
                         }, function(e) {
                             alert("error");
                         });
+                        $ionicLoading.hide();
+                        $state.go('menu.checkprices');
                     }
-                    $state.transitionTo("menu.checkprices");
                 },
                 error: function(error) {
                     alert(JSON.stringify(error));
@@ -72,7 +78,7 @@ angular.module('agrinet.controllers', [])
 }])
 
 //populates crop prices page
-.controller("PriceCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", '$ionicLoading', function($scope, DailyCrop, $localstorage, $ionicPopup, $ionicLoading){
+.controller("PriceCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", "$ionicLoading", function($scope, DailyCrop, $localstorage, $ionicPopup, $ionicLoading){
     
     $scope.genDates = function(start){
         var dates = [];
@@ -214,9 +220,10 @@ angular.module('agrinet.controllers', [])
         promise.then(function(val){
             var data = val.data;
             var cache = {};
-            $scope.crops = cacheCrops(data);
+            var resp = cacheCrops(data);
+            $scope.crops = resp.states;
             cache.date = (new Date()).toDateString();
-            cache.data = JSON.stringify($scope.crops);
+            cache.names = resp.names;
             $localstorage.set('crops', JSON.stringify(cache));
             $ionicLoading.hide();
         });
@@ -224,6 +231,7 @@ angular.module('agrinet.controllers', [])
     
     var cacheCrops = function(data){
         var cropStates = [];
+        var names = [];
         for(var i = 0; i < data.length; i++){
             var curr = {};
             if(typeof $localstorage.get(data[i]) == 'undefined'){
@@ -233,11 +241,11 @@ angular.module('agrinet.controllers', [])
                     name = (data[i].substr(0, idx)).replace(" ", "");
                 console.log(name);
                 if(typeof $localstorage.get(name) == 'undefined'){
+                    names.push(name);
                     var obj = {};
+                    obj.name = name;
                     obj.state = 'false';
                     obj.checks = 0;
-                    obj.aliases = [];
-                    obj.aliases.push(data[i]);
                     $localstorage.set(name, JSON.stringify(obj));
                     curr.name = name;
                     curr.state = false;
@@ -246,13 +254,10 @@ angular.module('agrinet.controllers', [])
                 else{
                     var cache = JSON.parse($localstorage.get(name));
                     var obj = {};
+                    obj.name = cache.name;
                     obj.state = cache.state;
                     obj.checks = cache.checks;
-                    obj.aliases = cache.aliases;
-                    obj.aliases.push(data[i]);
                     $localstorage.set(name, JSON.stringify(obj));
-                    curr.name = name;
-                    curr.state = false;
                 }
             }
             else{
@@ -261,23 +266,10 @@ angular.module('agrinet.controllers', [])
                 cropStates.push(curr);
             }
         }
-        return cropStates;
-    }
-    
-    var check = $localstorage.get('crops');
-    if(typeof check == 'undefined'){
-        getCrops();
-    }
-    else{ 
-        check = JSON.parse(check);
-        if(check.date != (new Date()).toDateString()){
-            console.log(check.date);
-            getCrops();
-        }
-        else{
-            console.log('cache');
-            $scope.crops = JSON.parse(check.data);
-        }
+        var data = {};
+        data.states = cropStates;
+        data.names = names;
+        return data;
     }
     
     $scope.cropToggled = function(crop){
@@ -301,6 +293,26 @@ angular.module('agrinet.controllers', [])
             }, function(e) {
                 alert("error");
             });
+        }
+    }
+    
+    var check = $localstorage.get('crops');
+    if(typeof check == 'undefined'){
+        getCrops();
+    }
+    else{ 
+        check = JSON.parse(check);
+        if(check.date != (new Date()).toDateString()){
+            console.log(check.date);
+            getCrops();
+        }
+        else{
+            console.log('cache');
+            var crops = [];// = JSON.parse(check.name);
+            for(var i = 0; i < check.names.length; i++){
+                crops.push(JSON.parse($localstorage.get(check.names[i])));
+            }
+            $scope.crops = crops;
         }
     }
 
