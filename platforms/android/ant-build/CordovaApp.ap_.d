@@ -63,6 +63,7 @@ C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\c
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\css\style.css \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\css\style.min.css \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\img\350x150.gif \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\img\crops.png \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\img\ic_launcher.png \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\img\ionic.png \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\assets\www\img\logo_agrinet.png \

@@ -46,3 +46,28 @@
     width: 70%;
     margin: 0 auto;
 }
+
+#login-page{
+    background: url('../img/crops.png');
+    background-position: center;
+    background-size: cover;
+}
+
+#login-page h1{
+    color: white;
+}
+
+#btm-area{
+    background: white;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    color: #777;
+    text-align: center;
+    font-size: 1.2em;
+    border-radius: 3px;
+    box-shadow: 2px 2px 2px #aaa;
+}
+
+#gpbtn{
+    margin: 0 auto;
+}

@@ -59,7 +59,7 @@ angular.module('agrinet.controllers', [])
                             alert("error");
                         });
                     }
-                    $state.go("menu.checkprices");
+                    $state.transitionTo("menu.checkprices");
                 },
                 error: function(error) {
                     alert(JSON.stringify(error));

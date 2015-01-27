@@ -1,4 +1,13 @@
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\classes.dex : \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\classes\com\agrinett\marketwatcher\BuildConfig.class \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\classes\com\agrinett\marketwatcher\CordovaApp.class \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\classes\com\agrinett\marketwatcher\Manifest$permission.class \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\classes\com\agrinett\marketwatcher\Manifest.class \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\classes\com\agrinett\marketwatcher\R$attr.class \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\classes\com\agrinett\marketwatcher\R$drawable.class \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\classes\com\agrinett\marketwatcher\R$string.class \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\classes\com\agrinett\marketwatcher\R$xml.class \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\classes\com\agrinett\marketwatcher\R.class \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\classes\com\ionicframework\starter\BuildConfig.class \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\classes\com\ionicframework\starter\CordovaApp.class \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\classes\com\ionicframework\starter\Manifest$permission.class \

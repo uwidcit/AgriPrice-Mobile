@@ -1,4 +1,4 @@
-C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-gen\com\ionicframework\starter\R.java \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-gen\com\agrinett\marketwatcher\R.java \
  : C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\res\drawable\icon.png \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\res\drawable-hdpi\icon.png \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\res\drawable-hdpi\ic_action_next_item.png \
