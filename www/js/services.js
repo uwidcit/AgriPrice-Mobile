@@ -14,9 +14,22 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
             function(error){
                 deferredObject.reject(error);
             });
-    return deferredObject.promise;
+        return deferredObject.promise;
     };
      
+    this.cropPredictions = function(selDate){
+        var Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/predict',{date: selDate});
+        var deferredObject = $q.defer();
+        Crop.query().$promise.then(
+            function(croplist) {
+                deferredObject.resolve(_.map(croplist,processListDisplay));
+            }, 
+            function(error){
+                deferredObject.reject(error);
+            });
+        return deferredObject.promise;
+    };
+    
     this.cropsByDate = function(date){
         var dateObj = new Date(date);
         var dateTxt = dateObj.getFullYear() + "-" + (dateObj.getMonth() + 1) + "-" + dateObj.getDate();
