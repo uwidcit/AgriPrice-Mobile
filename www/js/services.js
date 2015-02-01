@@ -33,6 +33,32 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
         return deferredObject.promise;
     };
     
+    this.cropPredictions = function(selDate){
+        var Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/predict',{});
+        var deferredObject = $q.defer();
+        Crop.query().$promise.then(
+            function(croplist) {
+                deferredObject.resolve(_.map(croplist,processListDisplay));
+            }, 
+            function(error){
+                deferredObject.reject(error);
+            });
+        return deferredObject.promise;
+    };
+    
+    this.cropPredByCrop = function(selCrop){
+        var Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/predict',{crop: selCrop});
+        var deferredObject = $q.defer();
+        Crop.get().$promise.then(
+            function(crop) {
+                deferredObject.resolve(_.map(crop,processListDisplay));
+            }, 
+            function(error){
+                deferredObject.reject(error);
+            });
+        return deferredObject.promise;
+    };
+    
     //returns monthly dates
     this.cropDates = function(){
         return $http.get('https://agrimarketwatch.herokuapp.com/crops/monthly/dates').

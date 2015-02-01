@@ -92,7 +92,6 @@ angular.module('agrinet.controllers', [])
         return dates;
     }
     
-    var recentTxt = "Most recent";
     var MAX_CHECKS = 20;
     var recentCrops;
     
@@ -121,17 +120,10 @@ angular.module('agrinet.controllers', [])
         $ionicLoading.hide();
     }
     
-    /*DailyCrop.cropDates()
-    .then(function(data){
-        $scope.dates = data;
-        $scope.dates.push(recentTxt)
-        $scope.dates.reverse();
-    });*/
-    
-    
-    
+    //runs when user changes the date picker
     $scope.changeDate = function(selected){
         var today = new Date();
+        //if date selected is today just returns cached data
         if(selected == today.toDateString()){
             $scope.dailycrops = recentCrops;
             return;
@@ -163,6 +155,7 @@ angular.module('agrinet.controllers', [])
      * else, select the given group
      */
     $scope.toggleCrop = function(crop) {
+        //$scope.getProjected(crop);
         if ($scope.isCropShown(crop)) {
             $scope.shownCrop = null;
         } 
@@ -199,6 +192,17 @@ angular.module('agrinet.controllers', [])
            $localstorage.set(name, JSON.stringify(obj));
        });
      };
+    
+    //stores projected price
+    $scope.projected = "$20.00";
+    
+    //gets the price the crop might be on the next day
+    $scope.getProjected(crop){
+        DailyCrop.cropList()
+        .then(function(val){
+            $scope.projected = val.price;
+        });
+    }
 
 }])
 
