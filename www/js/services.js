@@ -47,10 +47,11 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
     };
     
     this.cropPredByCrop = function(selCrop){
-        var Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/predict',{crop: selCrop});
+        var Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/daily/predict/'+selCrop,{});
         var deferredObject = $q.defer();
-        Crop.get().$promise.then(
+        Crop.query().$promise.then(
             function(crop) {
+                console.log(crop);
                 deferredObject.resolve(_.map(crop,processListDisplay));
             }, 
             function(error){

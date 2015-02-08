@@ -155,7 +155,7 @@ angular.module('agrinet.controllers', [])
      * else, select the given group
      */
     $scope.toggleCrop = function(crop) {
-        //$scope.getProjected(crop);
+        $scope.getProjected(crop);
         if ($scope.isCropShown(crop)) {
             $scope.shownCrop = null;
         } 
@@ -197,10 +197,10 @@ angular.module('agrinet.controllers', [])
     $scope.projected = "$20.00";
     
     //gets the price the crop might be on the next day
-    $scope.getProjected(crop){
-        DailyCrop.cropList()
+    $scope.getProjected= function(crop){
+        DailyCrop.cropPredByCrop(crop.commodity)
         .then(function(val){
-            $scope.projected = val.price;
+            $scope.projected = val[0].price;
         });
     }
 
