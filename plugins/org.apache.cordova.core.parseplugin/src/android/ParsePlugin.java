@@ -1,28 +1,38 @@
 package org.apache.cordova.core;
 
-import java.util.Set;
+import java.util.List;
+import java.lang.Exception;
 
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaWebView;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.json.JSONException;
 
 import com.parse.Parse;
 import com.parse.ParseInstallation;
-import com.parse.PushService;
+import com.parse.ParsePush;
+
+import android.util.Log;
 
 public class ParsePlugin extends CordovaPlugin {
-    public static final String ACTION_INITIALIZE = "initialize";
+    public static final String ACTION_REGISTER = "register";
     public static final String ACTION_GET_INSTALLATION_ID = "getInstallationId";
     public static final String ACTION_GET_INSTALLATION_OBJECT_ID = "getInstallationObjectId";
     public static final String ACTION_GET_SUBSCRIPTIONS = "getSubscriptions";
     public static final String ACTION_SUBSCRIBE = "subscribe";
     public static final String ACTION_UNSUBSCRIBE = "unsubscribe";
+    
+    private static CordovaWebView gWebView;
+    private static String gECB;
+    
+    public static final String LOGTAG = "ParsePlugin";
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if (action.equals(ACTION_INITIALIZE)) {
-            this.initialize(callbackContext, args);
+    	if (action.equals(ACTION_REGISTER)) {
+            this.registerDevice(callbackContext, args);
             return true;
         }
         if (action.equals(ACTION_GET_INSTALLATION_ID)) {
@@ -49,28 +59,36 @@ public class ParsePlugin extends CordovaPlugin {
         return false;
     }
 
-    private void initialize(final CallbackContext callbackContext, final JSONArray args) {
-        cordova.getThreadPool().execute(new Runnable() {
-            public void run() {
-                try {
-                    String appId = args.getString(0);
-                    String clientKey = args.getString(1);
-                    Parse.initialize(cordova.getActivity(), appId, clientKey);
-                    PushService.setDefaultPushCallback(cordova.getActivity(), cordova.getActivity().getClass());
-                    ParseInstallation.getCurrentInstallation().saveInBackground();
-                    callbackContext.success();
-                } catch (JSONException e) {
-                    callbackContext.error("JSONException");
-                }
-            }
-        });
+    private void registerDevice(final CallbackContext callbackContext, final JSONArray args) {
+    	try {
+        	JSONObject jo = args.getJSONObject(0);
+            String appId = jo.getString("appId");
+            String clientKey = jo.getString("clientKey");
+            
+        	//
+        	// initialize Parse
+            Parse.initialize(cordova.getActivity(), appId, clientKey);
+            ParseInstallation.getCurrentInstallation().saveInBackground();
+            
+            //
+            // register callbacks for notification events
+            gECB = jo.optString("ecb");
+            
+            callbackContext.success();
+        } catch (JSONException e) {
+            callbackContext.error("JSONException: " + e.toString());
+        } catch(Exception e){
+        	callbackContext.error(e.toString());
+        }
     }
 
     private void getInstallationId(final CallbackContext callbackContext) {
         cordova.getThreadPool().execute(new Runnable() {
             public void run() {
                 String installationId = ParseInstallation.getCurrentInstallation().getInstallationId();
-                callbackContext.success(installationId);
+				if( installationId == null)
+					callbackContext.success("");
+				else callbackContext.success(installationId);
             }
         });
     }
@@ -79,6 +97,9 @@ public class ParsePlugin extends CordovaPlugin {
         cordova.getThreadPool().execute(new Runnable() {
             public void run() {
                 String objectId = ParseInstallation.getCurrentInstallation().getObjectId();
+				if( objectId == null )
+					callbackContext.success("");
+				else
                 callbackContext.success(objectId);
             }
         });
@@ -86,30 +107,54 @@ public class ParsePlugin extends CordovaPlugin {
 
     private void getSubscriptions(final CallbackContext callbackContext) {
         cordova.getThreadPool().execute(new Runnable() {
-            public void run() {
-                 Set<String> subscriptions = PushService.getSubscriptions(cordova.getActivity());
-                 callbackContext.success(subscriptions.toString());
+            public void run() {            	
+            	List<String> subscriptions = ParseInstallation.getCurrentInstallation().getList("channels");
+            	if( subscriptions == null )
+					callbackContext.success("");
+				else 
+					callbackContext.success(subscriptions.toString());            	
             }
         });
     }
 
     private void subscribe(final String channel, final CallbackContext callbackContext) {
-        cordova.getThreadPool().execute(new Runnable() {
-            public void run() {
-                PushService.subscribe(cordova.getActivity(), channel, cordova.getActivity().getClass());
-                callbackContext.success();
-            }
-        });
+		cordova.getThreadPool().execute(new Runnable() {
+			public void run() {            	
+				ParsePush.subscribeInBackground(channel);
+				callbackContext.success();
+			}
+		});
     }
 
     private void unsubscribe(final String channel, final CallbackContext callbackContext) {
-        cordova.getThreadPool().execute(new Runnable() {
-            public void run() {
-                PushService.unsubscribe(cordova.getActivity(), channel);
-                callbackContext.success();
-            }
-        });
+		cordova.getThreadPool().execute(new Runnable() {
+			public void run() {            	
+				ParsePush.unsubscribeInBackground(channel);
+				callbackContext.success();
+			}
+		});
     }
-
+    
+    /*
+    * Use the cordova bridge to call the jsCB and pass it _json as param
+    */
+    public static void javascriptECB(JSONObject _json){
+    	String snippet = "javascript:" + gECB + "(" + _json.toString() + ")";
+    	Log.v(LOGTAG, "javascriptCB: " + snippet);
+    	
+    	if (gECB != null && !gECB.isEmpty() && gWebView != null) gWebView.sendJavascript(snippet);
+    }
+    
+    @Override
+    protected void pluginInitialize() {
+    	gECB = null;
+    	gWebView = this.webView;
+    }
+    
+    @Override
+    public void onDestroy() {
+    	super.onDestroy();
+    	gECB = null;
+    	gWebView = null;
+    }
 }
-

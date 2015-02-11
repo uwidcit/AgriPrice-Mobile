@@ -8,5 +8,8 @@
     "gulp-concat": "^2.2.0",
     "gulp-minify-css": "^0.3.0",
     "gulp-rename": "^1.2.0"
-  }
+  },
+  "cordovaPlugins": [
+    "https://github.com/cookys/parse-push-plugin"
+  ]
 }

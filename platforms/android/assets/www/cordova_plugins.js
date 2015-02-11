@@ -1,8 +1,8 @@
 cordova.define('cordova/plugin_list', function(require, exports, module) {
 module.exports = [
     {
-        "file": "plugins/org.apache.cordova.core.parseplugin/www/cdv-plugin-parse.js",
-        "id": "org.apache.cordova.core.parseplugin.ParsePlugin",
+        "file": "plugins/org.apache.cordova.core.ParsePlugin/www/cdv-plugin-parse.js",
+        "id": "org.apache.cordova.core.ParsePlugin.ParsePlugin",
         "clobbers": [
             "window.parsePlugin"
         ]
@@ -26,7 +26,7 @@ module.exports.metadata =
 // TOP OF METADATA
 {
     "org.apache.cordova.console": "0.2.8",
-    "org.apache.cordova.core.parseplugin": "0.1.0",
+    "org.apache.cordova.core.ParsePlugin": "0.2.0",
     "org.apache.cordova.device": "0.2.9",
     "org.apache.cordova.inappbrowser": "0.5.5-dev"
 }

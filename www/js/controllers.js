@@ -4,14 +4,20 @@ angular.module('agrinet.controllers', [])
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
         console.log("ready");
-        //var parsePlugin = cordova.require("cordova/core/parseplugin");
-      Parse.initialize("ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "HbaUIyhiXFpUYhDQ7EsXW4IwP6zeXgqC81AQhQSL");
-         window.parsePlugin.initialize("ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb", function() {
-            console.log('success');
-        }, function(e) {
-            console.log('error');
+        //var parsePlugin = window.cordova.require("cordova/core/parseplugin");
+        Parse.initialize("ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "HbaUIyhiXFpUYhDQ7EsXW4IwP6zeXgqC81AQhQSL");
+        parsePlugin.register({
+            "appId":"ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "clientKey":"zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb", "ecb":"onNotification"}, 
+            function() {
+                alert('successfully registered device!');
+                doWhatever();
+            }, function(e) {
+                alert('error registering device: ' + e);
         });
   });
+    
+  function onNotification(){
+  }
 })
 
 .controller('AboutCtrl', function($scope, $ionicSideMenuDelegate) {
@@ -26,6 +32,12 @@ angular.module('agrinet.controllers', [])
         $state.go("menu.checkprices");
     }
     
+    $scope.noLogin = function() {
+        //gets access token from google
+        $localstorage.set("login", "none");
+        $state.go("menu.checkprices");
+    }
+        
     $scope.googleLogin = function() {
         //gets access token from google
         $cordovaOauth.google("602269272261-ihuhk6paf4bnpppdkmo4fpc1qanhhvp2.apps.googleusercontent.com", ["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/plus.profile.emails.read"]).then(function(result) {

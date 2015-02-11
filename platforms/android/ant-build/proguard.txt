@@ -1,6 +1,9 @@
 # view AndroidManifest.xml #generated:6
 -keep class com.agrinett.marketwatcher.CordovaApp { <init>(...); }
 
+# view AndroidManifest.xml #generated:5
+-keep class com.agrinett.marketwatcher.MainApplication { <init>(...); }
+
 # view AndroidManifest.xml #generated:19
 -keep class com.parse.GcmBroadcastReceiver { <init>(...); }
 

@@ -1,6 +1,7 @@
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\classes.dex : \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\classes\com\agrinett\marketwatcher\BuildConfig.class \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\classes\com\agrinett\marketwatcher\CordovaApp.class \
+C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\classes\com\agrinett\marketwatcher\MainApplication.class \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\classes\com\agrinett\marketwatcher\Manifest$permission.class \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\classes\com\agrinett\marketwatcher\Manifest.class \
 C:\Users\Keenen\Documents\Agrinett\market-watcher\platforms\android\ant-build\classes\com\agrinett\marketwatcher\R$attr.class \
