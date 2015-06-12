@@ -25,6 +25,16 @@ angular.module('agrinet.controllers', [])
     
 })
 
+/* LoginCtrl:
+noLogin - Should give an option not to login, sends them directly to checkprices.
+          The latest date should be loaded
+
+googleLogin - If the user is already registered, the app will automatically login to the registered account.
+
+register - If the user is not registered Google login would open and the user would need to sign up.
+           May need to be adjusted to pull information stored already on the phone.
+*/
+
 .controller("LoginCtrl", ["$scope", "$cordovaOauth", "$http", "$state", "$localstorage", "$ionicLoading", function($scope, $cordovaOauth, $http, $state, $localstorage, $ionicLoading){
     var login = $localstorage.get("login");
     
@@ -89,7 +99,24 @@ angular.module('agrinet.controllers', [])
     }
 }])
 
+/*PriceCtrl:
+genDates - Pulls information from the last 7 days from the server.
+           Dates pulled may also contain days that no information.
+
+$ionicLoading - While the page is being populated the loading... template would show.
+
+Data on the crops for the latest date will be Cached
+
+changeDate - Would allow the user to display information for a day selected.
+             If the date selected has no data then no information would show.
+             Either load dates that have information only or show error message.
+
+toggleCrops - should load crops that have been selected in notifications
+
+
+*/
 //populates crop prices page
+
 .controller("PriceCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", "$ionicLoading", function($scope, DailyCrop, $localstorage, $ionicPopup, $ionicLoading){
     
     $scope.genDates = function(start){
@@ -218,7 +245,12 @@ angular.module('agrinet.controllers', [])
 
 }])
 
+/*NotifyCtrl:
+getCrops - Loads crops that are availible.
+
+ */
 //populates notificates mgmt page
+
 .controller("NotifyCtrl", ["$scope", "notifyService", "$localstorage", "$ionicLoading", function($scope, notifyService, $localstorage, $ionicLoading){
     
     var checkConnection = function() {

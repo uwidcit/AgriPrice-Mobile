@@ -25,16 +25,13 @@
   visibility: hidden;
 }
 
-.keyboard-open,
-.footer-hide {
-  .bar-footer,
-  .tabs {
-    display: none;
-  }
-  .has-footer,
-  .has-tabs {
-    bottom: 0;
-  }
+.keyboard-open .hide-on-keyboard-open {
+  display: none;
+}
+
+.keyboard-open .tabs.hide-on-keyboard-open + .pane .has-tabs,
+.keyboard-open .bar-footer.hide-on-keyboard-open + .pane .has-footer {
+  bottom: 0;
 }
 
 .inline {
@@ -61,6 +58,27 @@
 
   -ms-touch-action: none;
   -ms-content-zooming: none;
+}
+
+// Fill the screen to block clicks (a better pointer-events: none) for the body
+// to avoid full-page reflows and paints which can cause flickers
+.click-block {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  z-index: $z-index-click-block;
+  @include translate3d(0, 0, 0);
+  overflow: hidden;
+}
+.click-block-hide {
+  @include translate3d(-9999px, 0, 0);
+}
+
+.no-resize {
+  resize: none;
 }
 
 .block {
@@ -121,6 +139,23 @@
 .padding-left,
 .padding-horizontal {
   padding-left: $content-padding;
+}
+
+
+/**
+ * Scrollable iFrames
+ * --------------------------------------------------
+ */
+
+.iframe-wrapper {
+  position: fixed;
+  -webkit-overflow-scrolling: touch;
+  overflow: scroll;
+
+  iframe {
+    height: 100%;
+    width: 100%;
+  }
 }
 
 
@@ -230,4 +265,32 @@
 }
 .dark-border {
   border-color: $button-dark-border;
+}
+
+[collection-repeat] {
+  /* Position is set by transforms */
+  left: 0 !important;
+  top: 0 !important;
+  position: absolute !important;
+  z-index: 1;
+}
+.collection-repeat-container {
+  position: relative;
+  z-index: 1; //make sure it's above the after-container
+}
+.collection-repeat-after-container {
+  z-index: 0;
+  display: block;
+
+  /* when scrolling horizontally, make sure the after container doesn't take up 100% width */
+  &.horizontal {
+    display: inline-block;
+  }
+}
+
+// ng-show fix for windows phone
+// https://www.hoessl.eu/2014/12/on-using-the-ionic-framework-for-windows-phone-8-1-apps/
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak,
+.x-ng-cloak, .ng-hide:not(.ng-hide-animate) {
+  display: none !important;
 }
