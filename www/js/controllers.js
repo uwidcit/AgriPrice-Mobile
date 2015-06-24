@@ -110,10 +110,6 @@ Data on the crops for the latest date will be Cached
 changeDate - Would allow the user to display information for a day selected.
              If the date selected has no data then no information would show.
              Either load dates that have information only or show error message.
-
-toggleCrops - should load crops that have been selected in notifications
-
-
 */
 //populates crop prices page
 

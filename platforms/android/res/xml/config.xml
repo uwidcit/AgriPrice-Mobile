@@ -17,10 +17,10 @@
     <icon height="192" src="icons/android/drawable-xxxdpi/ic_launcher.png" width="192" />
     <name>Market Watcher</name>
     <description>
-        An Ionic Framework and Cordova project.
+        Keep updated on the prices of crops in Trinidad and Tobago.
     </description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">
-      Ionic Framework Team
+        DCIT Agrinett
     </author>
     <content src="index.html" />
     <access origin="*" />

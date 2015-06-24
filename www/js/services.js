@@ -3,7 +3,9 @@ var app = angular.module('agrinet.services', ['ngResource']);
 
 app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $http){
     console.log("Initializing DailyCrop");
-    
+
+    // returns the information form the server of the crops.
+
     this.cropList = function(){
         var Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/daily/recent',{});
         var deferredObject = $q.defer();
@@ -16,7 +18,9 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
             });
     return deferredObject.promise;
     };
-     
+
+    // holds the recent dates that information is stored for
+
     this.cropsByDate = function(date){
         var dateObj = new Date(date);
         var dateTxt = dateObj.getFullYear() + "-" + (dateObj.getMonth() + 1) + "-" + dateObj.getDate();
@@ -32,7 +36,9 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
             });
         return deferredObject.promise;
     };
-    
+
+    //no information form the server
+
     this.cropPredictions = function(selDate){
         var Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/predict',{});
         var deferredObject = $q.defer();
