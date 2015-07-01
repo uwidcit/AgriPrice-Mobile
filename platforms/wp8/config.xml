@@ -23,4 +23,7 @@
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="BackupWebStorage" value="none" />
+    <feature name="Notification">
+        <param name="wp-package" value="Notification" />
+    </feature>
 </widget>

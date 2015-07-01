@@ -20,6 +20,20 @@ module.exports = [
         "clobbers": [
             "window.open"
         ]
+    },
+    {
+        "file": "plugins/cordova-plugin-dialogs/www/notification.js",
+        "id": "cordova-plugin-dialogs.notification",
+        "merges": [
+            "navigator.notification"
+        ]
+    },
+    {
+        "file": "plugins/cordova-plugin-dialogs/www/android/notification.js",
+        "id": "cordova-plugin-dialogs.notification_android",
+        "merges": [
+            "navigator.notification"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -28,7 +42,8 @@ module.exports.metadata =
     "org.apache.cordova.console": "0.2.8",
     "org.apache.cordova.core.ParsePlugin": "0.2.0",
     "org.apache.cordova.device": "0.2.9",
-    "org.apache.cordova.inappbrowser": "0.5.5-dev"
+    "org.apache.cordova.inappbrowser": "0.5.5-dev",
+    "cordova-plugin-dialogs": "1.1.1"
 }
 // BOTTOM OF METADATA
 });

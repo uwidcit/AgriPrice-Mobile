@@ -154,7 +154,7 @@ changeDate - Would allow the user to display information for a day selected.
       template: 'Loading...'
     });
 
-    var processDate = function(date){
+    var processDate = function(date){// adjust the date to correspond to the actual date from the server since it is 4 hours off(date being selected for change date)
         console.log(typeof date);
         date = new Date(date);
         date.setHours(date.getHours() + 4);

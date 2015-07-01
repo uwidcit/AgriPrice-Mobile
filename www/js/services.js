@@ -104,7 +104,7 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
     //    return date;
     //};
 
-    var processDate = function(date){
+    var processDate = function(date){// adjust the date to correspond to the actual date from the server since it is 4 hours off (date which is shown when a crop is selected)
         console.log(typeof date);
         date = new Date(date);
         date.setHours(date.getHours() + 4);
