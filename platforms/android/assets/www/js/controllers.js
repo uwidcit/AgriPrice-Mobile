@@ -110,35 +110,56 @@ Data on the crops for the latest date will be Cached
 changeDate - Would allow the user to display information for a day selected.
              If the date selected has no data then no information would show.
              Either load dates that have information only or show error message.
-
-toggleCrops - should load crops that have been selected in notifications
-
-
 */
 //populates crop prices page
 
-.controller("PriceCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", "$ionicLoading", function($scope, DailyCrop, $localstorage, $ionicPopup, $ionicLoading){
-    
-    $scope.genDates = function(start){
-        var dates = [];
-        dates.push(start.toDateString());
-        for(var i = 0; i < 7; i++){
-            var yest = new Date(start.getTime());
-            yest.setDate(start.getDate() - 1);
-            dates.push(yest.toDateString());
-            start = yest;
-        }
-        return dates;
-    }
-    
+.controller("PriceCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", "$ionicLoading", "$http", function($scope, DailyCrop, $localstorage, $ionicPopup, $ionicLoading, $http){
+    // Use Confirmation plugin
+
+    // Check if previously logged In
+    // Prompt to login
+    // If yes then redirect to login page
+    // Else just dismiss
+
+    //$scope.genDates = function(start){
+    //    var dates = [];
+    //    dates.push(start.toDateString());
+    //    for(var i = 0; i < 7; i++){
+    //        var yest = new Date(start.getTime());
+    //        yest.setDate(start.getDate() - 1);
+    //        dates.push(yest.toDateString());
+    //        start = yest;
+    //    }
+    //    return dates;
+    //}
+
+    $http
+        .get("https://agrimarketwatch.herokuapp.com/crops/daily/dates")
+        .success(function(data){
+            var dates = _.map(data, processDate);
+            dates.reverse();
+            $scope.dates = dates;
+        });
+
+
     var MAX_CHECKS = 20;
     var recentCrops;
     
     $ionicLoading.show({
       template: 'Loading...'
     });
+
+    var processDate = function(date){
+        console.log(typeof date);
+        date = new Date(date);
+        date.setHours(date.getHours() + 4);
+        date = date.toDateString();
+        return date;
+    };
+
     var cropCache = $localstorage.get((new Date()).toDateString());
-    if(typeof cropCache == "undefined"){
+
+    if(typeof cropCache == "undefined"){ // Data for the date was not found in cache
         DailyCrop.cropList()
         .then(function(val){
             $scope.dailycrops = val;
@@ -147,7 +168,7 @@ toggleCrops - should load crops that have been selected in notifications
             recent.date = new Date();
             recent.data = JSON.stringify(val);
             $localstorage.set((new Date()).toDateString(), JSON.stringify(recent));
-            $scope.dates = $scope.genDates(new Date(val[0].date));
+            //$scope.dates = $scope.genDates(new Date(val[0].date));
             $ionicLoading.hide();
         });
     }
@@ -155,39 +176,52 @@ toggleCrops - should load crops that have been selected in notifications
         console.log('cached');
         cropCache = JSON.parse(cropCache);
         $scope.dailycrops = JSON.parse(cropCache.data);
-        $scope.dates = $scope.genDates(new Date($scope.dailycrops[0].date));
+        //$scope.dates = $scope.genDates(new Date($scope.dailycrops[0].date));
         $ionicLoading.hide();
     }
     
     //runs when user changes the date picker
     $scope.changeDate = function(selected){
-        var today = new Date();
-        //if date selected is today just returns cached data
-        if(selected == today.toDateString()){
-            $scope.dailycrops = recentCrops;
-            return;
-        }
+        console.log(selected);
+        console.log(typeof selected);
+
+
         $ionicLoading.show({
           template: 'Loading...'
         });
-        var cache = $localstorage.get(selected);
-        if(typeof cache == "undefined"){
-            DailyCrop.cropsByDate(selected)
+
+        DailyCrop.cropsByDate(selected)
             .then(function(data){
-                var dateSelection = {};
-                dateSelection.date = new Date();
-                dateSelection.data = JSON.stringify(data);
-                $localstorage.set(selected, JSON.stringify(dateSelection));
+                console.log(data);
                 $scope.dailycrops = data;
                 $ionicLoading.hide();
             });
-        }
-        else{
-            cache = JSON.parse(cache);
-            console.log("cached");
-            $scope.dailycrops = JSON.parse(cache.data);
-            $ionicLoading.hide();
-        }
+
+        //var today = new Date();
+        ////if date selected is today just returns cached data
+        //if(selected == today.toDateString()){
+        //    $scope.dailycrops = recentCrops;
+        //    return;
+        //}
+
+        //var cache = $localstorage.get(selected);
+        //if(typeof cache == "undefined"){
+        //    DailyCrop.cropsByDate(selected)
+        //    .then(function(data){
+        //        var dateSelection = {};
+        //        dateSelection.date = new Date();
+        //        dateSelection.data = JSON.stringify(data);
+        //        $localstorage.set(selected, JSON.stringify(dateSelection));
+        //        $scope.dailycrops = data;
+        //        $ionicLoading.hide();
+        //    });
+        //}
+        //else{
+        //    cache = JSON.parse(cache);
+        //    console.log("cached");
+        //    $scope.dailycrops = JSON.parse(cache.data);
+        //    $ionicLoading.hide();
+        //}
     }
     /*
      * if given group is the selected group, deselect it

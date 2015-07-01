@@ -14,5 +14,10 @@
   },
   "cordovaPlugins": [
     "https://github.com/cookys/parse-push-plugin"
+    "cordova-plugin-device",
+    "cordova-plugin-console",
+    "cordova-plugin-whitelist",
+    "cordova-plugin-splashscreen",
+    "com.ionic.keyboard"
   ]
 }

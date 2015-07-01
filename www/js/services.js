@@ -7,30 +7,37 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
     // returns the information form the server of the crops.
 
     this.cropList = function(){
-        var Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/daily/recent',{});
+        var Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/daily/recent',{}); // https://docs.angularjs.org/api/ngResource/service/$resource
         var deferredObject = $q.defer();
+
         Crop.query().$promise.then(
             function(croplist) {
                 deferredObject.resolve(_.map(croplist,processListDisplay));
             }, 
             function(error){
                 deferredObject.reject(error);
-            });
-    return deferredObject.promise;
+            }
+        );
+        return deferredObject.promise;
     };
 
     // holds the recent dates that information is stored for
 
     this.cropsByDate = function(date){
         var dateObj = new Date(date);
+        console.log(dateObj);
+
         var dateTxt = dateObj.getFullYear() + "-" + (dateObj.getMonth() + 1) + "-" + dateObj.getDate();
         console.log(dateTxt);
-        var Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/daily/dates' + dateTxt,{});
+
+        console.log('https://agrimarketwatch.herokuapp.com/crops/daily/dates/' + dateTxt);
+
+        var Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/daily/dates/' + dateTxt,{});
         var deferredObject = $q.defer();
         Crop.query().$promise.then(
             function(croplist) {
                 deferredObject.resolve(_.map(croplist,processListDisplay));
-            }, 
+            },
             function(error){
                 deferredObject.reject(error);
             });
@@ -88,8 +95,20 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
     };
     
     //makes a date string readable
+    //var processDate = function(date){
+    //    //create a date object based off  "date" passed in.
+    //    date  = new Date(date);
+    //    date.setDate(date.getDate() + 1);
+    //    console.log(date);
+    //    date = (date).toDateString();
+    //    return date;
+    //};
+
     var processDate = function(date){
-        date = (new Date(date)).toDateString();
+        console.log(typeof date);
+        date = new Date(date);
+        date.setHours(date.getHours() + 4);
+        date = date.toDateString();
         return date;
     };
     

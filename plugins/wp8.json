@@ -19,6 +19,10 @@
                         {
                             "xml": "<feature name=\"InAppBrowser\"><param name=\"wp-package\" value=\"InAppBrowser\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Notification\"><param name=\"wp-package\" value=\"Notification\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -50,6 +54,9 @@
             "PACKAGE_NAME": "{b5451e20-b0c1-11e4-b274-0ffd6ca60aff}"
         },
         "org.apache.cordova.inappbrowser": {
+            "PACKAGE_NAME": "{b5451e20-b0c1-11e4-b274-0ffd6ca60aff}"
+        },
+        "cordova-plugin-dialogs": {
             "PACKAGE_NAME": "{b5451e20-b0c1-11e4-b274-0ffd6ca60aff}"
         }
     },

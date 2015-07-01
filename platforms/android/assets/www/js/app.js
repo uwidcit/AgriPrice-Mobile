@@ -54,7 +54,7 @@ angular.module('agrinet', ['ionic', 'agrinet.controllers', 'agrinet.services', '
           }
         }
       })
-      $urlRouterProvider.otherwise("app/login");
+      $urlRouterProvider.otherwise("app/checkprices");
   });
 
 
