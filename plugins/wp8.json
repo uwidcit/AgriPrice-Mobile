@@ -58,6 +58,9 @@
         },
         "cordova-plugin-dialogs": {
             "PACKAGE_NAME": "{b5451e20-b0c1-11e4-b274-0ffd6ca60aff}"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "{b5451e20-b0c1-11e4-b274-0ffd6ca60aff}"
         }
     },
     "dependent_plugins": {}

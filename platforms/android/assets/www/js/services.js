@@ -95,8 +95,20 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
     };
     
     //makes a date string readable
-    var processDate = function(date){
-        date = (new Date(date)).toDateString();
+    //var processDate = function(date){
+    //    //create a date object based off  "date" passed in.
+    //    date  = new Date(date);
+    //    date.setDate(date.getDate() + 1);
+    //    console.log(date);
+    //    date = (date).toDateString();
+    //    return date;
+    //};
+
+    var processDate = function(date){// adjust the date to correspond to the actual date from the server since it is 4 hours off (date which is shown when a crop is selected)
+        //console.log(typeof date);
+        date = new Date(date);
+        date.setHours(date.getHours() + 4);
+        date = date.toDateString();
         return date;
     };
     

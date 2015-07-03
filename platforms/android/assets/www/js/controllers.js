@@ -5,15 +5,20 @@ angular.module('agrinet.controllers', [])
   $ionicPlatform.ready(function() {
         console.log("ready");
         //var parsePlugin = window.cordova.require("cordova/core/parseplugin");
-        Parse.initialize("ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "HbaUIyhiXFpUYhDQ7EsXW4IwP6zeXgqC81AQhQSL");
-        parsePlugin.register({
-            "appId":"ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "clientKey":"zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb", "ecb":"onNotification"}, 
-            function() {
-                alert('successfully registered device!');
-                doWhatever();
-            }, function(e) {
-                alert('error registering device: ' + e);
-        });
+        //  parsePlugin.initialize(appId, clientKey, function() {
+        //      alert('success');
+        //  }, function(e) {
+        //      alert('error');
+        //  });
+        //Parse.initialize("ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "HbaUIyhiXFpUYhDQ7EsXW4IwP6zeXgqC81AQhQSL");
+        //parsePlugin.register({
+        //    "appId":"ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "clientKey":"zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb", "ecb":"onNotification"},
+        //    function() {
+        //        alert('successfully registered device!');
+        //        doWhatever();
+        //    }, function(e) {
+        //        alert('error registering device: ' + e);
+        //});
   });
     
   function onNotification(){
@@ -113,7 +118,7 @@ changeDate - Would allow the user to display information for a day selected.
 */
 //populates crop prices page
 
-.controller("PriceCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", "$ionicLoading", "$http", function($scope, DailyCrop, $localstorage, $ionicPopup, $ionicLoading, $http){
+.controller("PriceCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", "$ionicLoading", "$http", "$state", function($scope, DailyCrop, $localstorage, $ionicPopup, $ionicLoading, $http, $state){
     // Use Confirmation plugin
 
     // Check if previously logged In
@@ -133,6 +138,45 @@ changeDate - Would allow the user to display information for a day selected.
     //    return dates;
     //}
 
+        //function onConfirm(buttonIndex) {
+        //
+        //    /* if user taps yes */
+        //    if(buttonIndex == 1){
+        //        console.log("O_O");
+        //        $state.go("menu.login");
+        //    }
+        //}
+        //
+        //navigator.notification.confirm(
+        //    'Want to login?', // message
+        //    onConfirm,            // callback to invoke with index of button pressed
+        //    'LOGIN',           // title
+        //    ['Yes','No']     // buttonLabels
+        //);
+
+
+        function onConfirm(buttonIndex) {
+            //alert('You selected button ' + buttonIndex);
+                /* if user taps yes */
+                if(buttonIndex == 1){
+                    console.log("O_O");
+                    $state.go("menu.login");
+                }
+        }
+
+        console.log('here');
+        var logmein = function(){
+
+            console.log("here i am");
+            navigator.notification.confirm(
+                'You are the winner!', // message
+                onConfirm,            // callback to invoke with index of button pressed
+                'Game Over',           // title
+                ['Restart','Exit']     // buttonLabels
+            );
+
+        };
+
     $http
         .get("https://agrimarketwatch.herokuapp.com/crops/daily/dates")
         .success(function(data){
@@ -149,15 +193,15 @@ changeDate - Would allow the user to display information for a day selected.
       template: 'Loading...'
     });
 
-    var processDate = function(date){
-        console.log(typeof date);
+    var processDate = function(date){// adjust the date to correspond to the actual date from the server since it is 4 hours off(date being selected for change date)
+        //console.log(typeof date);
         date = new Date(date);
         date.setHours(date.getHours() + 4);
         date = date.toDateString();
         return date;
     };
 
-    var cropCache = $localstorage.get((new Date()).toDateString());
+    //var cropCache = $localstorage.get((new Date()).toDateString());
 
     if(typeof cropCache == "undefined"){ // Data for the date was not found in cache
         DailyCrop.cropList()
@@ -173,13 +217,18 @@ changeDate - Would allow the user to display information for a day selected.
         });
     }
     else{
-        console.log('cached');
+        //console.log('cached');
         cropCache = JSON.parse(cropCache);
-        $scope.dailycrops = JSON.parse(cropCache.data);
+        var crops  = JSON.parse(cropCache.data);
+
+        //for loop to change the date
+
+
+        $scope.dailycrops = crops;
         //$scope.dates = $scope.genDates(new Date($scope.dailycrops[0].date));
         $ionicLoading.hide();
     }
-    
+
     //runs when user changes the date picker
     $scope.changeDate = function(selected){
         console.log(selected);
@@ -276,6 +325,8 @@ changeDate - Would allow the user to display information for a day selected.
             $scope.projected = val[0].price;
         });
     }
+
+
 
 }])
 
@@ -405,7 +456,6 @@ getCrops - Loads crops that are availible.
       return (!!input) ? input.replace(/([^\W_]+[^\s-]*) */g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();}) : '';
     }
     });
-
 
 
 // 	.controller("OptionCtrl", function($scope){

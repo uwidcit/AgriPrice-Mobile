@@ -5,7 +5,7 @@
         </div>
     </a>
 	<ion-content padding="true">
-		<div class="list">
+		<div class="list" ng-init="logmein()">
 
 			<label class="item item-input item-select">
 			  <div class="input-label">
@@ -17,23 +17,22 @@
         </div>
 	  <ion-list>
         <div id="crop-list">
-        <div ng-repeat="crop in dailycrops | orderBy: 'commodity'">
-            <ion-item class="item-stable"
-                    ng-click="toggleCrop(crop)"
-                    ng-class="{active: isCropShown(crop)}">
-             <i class="icon" ng-class="isCropShown(crop) ? 'ion-minus' : 'ion-plus'"></i>
-            &nbsp;
-            {{crop.commodity | capitalize}} <span class="price">{{crop.price}} per {{crop.unit}}</span>
-            </ion-item>
-            <ion-item class="item-accordion"
-                    ng-show="isCropShown(crop)">
-            <div class="value"><span class="dim">Projected Price</span>: <span class="val">{{projected}}</span></div>
-            <div class="value"><span class="dim">Category</span>: <span class="val">{{crop.category | lowercase}}</span></div>
-            <div class="value"><span class="dim">Date</span>: <span class="val">{{crop.date | capitalize}}</span></div>
-            <div class="value"><span class="dim">Volume</span>: <span class="val">{{crop.volume | lowercase}} {{crop.unit}}</span></div>
-            </ion-item>
-        </div>
-        </div>
+            <div ng-repeat="crop in dailycrops | orderBy: 'commodity'">
+                <ion-item class="item item-avatar" ng-click="toggleCrop(crop)" ng-class="{active: isCropShown(crop)}" href="#//">
+                     <!--<i class="icon" ng-class="isCropShown(crop) "></i>
+                    &nbsp;-->
+                    <img  id="cAvatar" src="http://blogs-images.forbes.com/steveodland/files/2012/03/crops.jpg">
+                    <h2>{{crop.commodity | capitalize}}</h2>
+                    <p>{{crop.price}} per {{crop.unit}}</p>
+                </ion-item>
+                <ion-item class="item-accordion" ng-show="isCropShown(crop)">
+                    <div class="value"><span class="dim">Projected Price</span>: <span class="val">{{projected}}</span></div>
+                    <div class="value"><span class="dim">Category</span>: <span class="val">{{crop.category | lowercase}}</span></div>
+                    <div class="value"><span class="dim">Date</span>: <span class="val">{{crop.date | capitalize}}</span></div>
+                    <div class="value"><span class="dim">Volume</span>: <span class="val">{{crop.volume | lowercase}} {{crop.unit}}</span></div>
+                </ion-item>
+            </div>
+            </div>
       </ion-list>
 	</ion-content>
 </ion-view>

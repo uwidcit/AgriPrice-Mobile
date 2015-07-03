@@ -50,7 +50,8 @@ module.exports.metadata =
     "org.apache.cordova.core.ParsePlugin": "0.2.0",
     "org.apache.cordova.device": "0.2.9",
     "org.apache.cordova.inappbrowser": "0.5.5-dev",
-    "cordova-plugin-dialogs": "1.1.1"
+    "cordova-plugin-dialogs": "1.1.1",
+    "cordova-plugin-whitelist": "1.0.0"
 }
 // BOTTOM OF METADATA
 });

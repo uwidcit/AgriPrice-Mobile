@@ -118,7 +118,7 @@ changeDate - Would allow the user to display information for a day selected.
 */
 //populates crop prices page
 
-.controller("PriceCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", "$ionicLoading", "$http", function($scope, DailyCrop, $localstorage, $ionicPopup, $ionicLoading, $http){
+.controller("PriceCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", "$ionicLoading", "$http", "$state", function($scope, DailyCrop, $localstorage, $ionicPopup, $ionicLoading, $http, $state){
     // Use Confirmation plugin
 
     // Check if previously logged In
@@ -138,6 +138,26 @@ changeDate - Would allow the user to display information for a day selected.
     //    return dates;
     //}
 
+        // error: the confirmation is not loading in time for the app
+
+        //function onConfirm(buttonIndex) {
+        //
+        //    /* if user taps yes */
+        //    if(buttonIndex == 1){
+        //        console.log("O_O");
+        //        $state.go("menu.login");
+        //    }
+        //}
+        //
+        //navigator.notification.confirm(
+        //    'Want to login?', // message
+        //    onConfirm,            // callback to invoke with index of button pressed
+        //    'LOGIN',           // title
+        //    ['Yes','No']     // buttonLabels
+        //);
+
+
+
     $http
         .get("https://agrimarketwatch.herokuapp.com/crops/daily/dates")
         .success(function(data){
@@ -155,7 +175,7 @@ changeDate - Would allow the user to display information for a day selected.
     });
 
     var processDate = function(date){// adjust the date to correspond to the actual date from the server since it is 4 hours off(date being selected for change date)
-        console.log(typeof date);
+        //console.log(typeof date);
         date = new Date(date);
         date.setHours(date.getHours() + 4);
         date = date.toDateString();
@@ -286,6 +306,8 @@ changeDate - Would allow the user to display information for a day selected.
             $scope.projected = val[0].price;
         });
     }
+
+
 
 }])
 

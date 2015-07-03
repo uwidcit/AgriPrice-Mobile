@@ -21,6 +21,8 @@
     font-weight: bold;
 }
 
+
+
 .title{
     text-align: center;
 }
@@ -40,6 +42,10 @@
 
 #crop-list{
     padding-bottom: 50px !important;
+}
+
+#cAvatar{
+    border-radius: 50%;
 }
 
 .logo{
