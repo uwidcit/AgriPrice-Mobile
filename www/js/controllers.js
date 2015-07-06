@@ -1,7 +1,7 @@
 
 angular.module('agrinet.controllers', [])
 
-.run(function($ionicPlatform) {
+.run(["$ionicPlatform", "$state", function($ionicPlatform, $state) {
   $ionicPlatform.ready(function() {
         console.log("ready");
         //var parsePlugin = window.cordova.require("cordova/core/parseplugin");
@@ -19,11 +19,27 @@ angular.module('agrinet.controllers', [])
         //    }, function(e) {
         //        alert('error registering device: ' + e);
         //});
+
+      function onConfirm(buttonIndex) {
+
+          /* if user taps yes */
+          if(buttonIndex == 1){
+              console.log("O_O");
+              $state.go("menu.login");
+          }
+      }
+
+      navigator.notification.confirm(
+          'Want to login?', // message
+          onConfirm,            // callback to invoke with index of button pressed
+          'LOGIN',           // title
+          ['Yes','No']     // buttonLabels
+      );
   });
     
   function onNotification(){
   }
-})
+}])
 
 .controller('AboutCtrl', function($scope, $ionicSideMenuDelegate) {
     
@@ -137,26 +153,6 @@ changeDate - Would allow the user to display information for a day selected.
     //    }
     //    return dates;
     //}
-
-        // error: the confirmation is not loading in time for the app
-
-        //function onConfirm(buttonIndex) {
-        //
-        //    /* if user taps yes */
-        //    if(buttonIndex == 1){
-        //        console.log("O_O");
-        //        $state.go("menu.login");
-        //    }
-        //}
-        //
-        //navigator.notification.confirm(
-        //    'Want to login?', // message
-        //    onConfirm,            // callback to invoke with index of button pressed
-        //    'LOGIN',           // title
-        //    ['Yes','No']     // buttonLabels
-        //);
-
-
 
     $http
         .get("https://agrimarketwatch.herokuapp.com/crops/daily/dates")

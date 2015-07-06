@@ -9,6 +9,7 @@
     </author>
     <content src="index.html" />
     <access origin="*" />
+    <!--<allow-navigation href="*" /> <!-added to support white list plugin-->
     <preference name="fullscreen" value="false" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
@@ -25,3 +26,5 @@
 		<icon src="icons/android/drawable-xxxdpi/ic_launcher.png" width="192" height="192" />
 	</platform>
 </widget>
+
+
