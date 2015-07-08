@@ -1,7 +1,7 @@
 
 angular.module('agrinet.controllers', [])
 
-.run(["$ionicPlatform", "$state", function($ionicPlatform, $state) {
+.run(["$ionicPlatform", "$state", "$localstorage", function($ionicPlatform, $state, $localstorage) {
   $ionicPlatform.ready(function() {
         console.log("ready");
         //var parsePlugin = window.cordova.require("cordova/core/parseplugin");
@@ -20,12 +20,27 @@ angular.module('agrinet.controllers', [])
         //        alert('error registering device: ' + e);
         //});
 
+      function alertDismissed() {
+          $state.go("menu.checkprices");
+      }
+
       function onConfirm(buttonIndex) {
 
           /* if user taps yes */
-          if(buttonIndex == 1){
-              console.log("O_O");
-              $state.go("menu.login");
+          if(buttonIndex == 2){
+              var login = $localstorage.get("login");
+
+              if(typeof login == "undefined" || typeof login == "none"){
+                  $state.go("menu.login");
+              }
+              if(typeof login != "undefined"){
+                  navigator.notification.alert(
+                      'You are already logged in.', // message
+                       alertDismissed,          // callback to invoke with index of button pressed
+                      'Login',           // title
+                      'Continue'     // buttonLabels
+                  );
+              }
           }
       }
 
@@ -33,7 +48,7 @@ angular.module('agrinet.controllers', [])
           'Want to login?', // message
           onConfirm,            // callback to invoke with index of button pressed
           'LOGIN',           // title
-          ['Yes','No']     // buttonLabels
+          ['No','Yes']     // buttonLabels
       );
   });
     
@@ -59,13 +74,13 @@ register - If the user is not registered Google login would open and the user wo
 .controller("LoginCtrl", ["$scope", "$cordovaOauth", "$http", "$state", "$localstorage", "$ionicLoading", function($scope, $cordovaOauth, $http, $state, $localstorage, $ionicLoading){
     var login = $localstorage.get("login");
     
-    if(typeof login != "undefined"){
-        $state.go("menu.checkprices");
-    }
+    //if(typeof login != "undefined"){
+    //    $state.go("menu.checkprices");
+    //}
     
     $scope.noLogin = function() {
         //gets access token from google
-        $localstorage.set("login", "none");
+        $localstorage.set("", "");
         $state.go("menu.checkprices");
     }
         
