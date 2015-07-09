@@ -61,6 +61,9 @@
         },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "{b5451e20-b0c1-11e4-b274-0ffd6ca60aff}"
+        },
+        "nl.x-services.plugins.googleplus": {
+            "PACKAGE_NAME": "{b5451e20-b0c1-11e4-b274-0ffd6ca60aff}"
         }
     },
     "dependent_plugins": {}
