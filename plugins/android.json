@@ -27,14 +27,6 @@
                         {
                             "xml": "<feature name=\"Whitelist\"><param name=\"android-package\" value=\"org.apache.cordova.whitelist.WhitelistPlugin\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"GooglePlus\"><param name=\"android-package\" value=\"nl.xservices.plugins.GooglePlus\" /><param name=\"onload\" value=\"true\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<access origin=\"https://accounts.google.com/*\" />",
-                            "count": 1
                         }
                     ]
                 }
@@ -78,7 +70,7 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\" />",
-                            "count": 2
+                            "count": 1
                         },
                         {
                             "xml": "<uses-permission android:name=\"com.google.android.c2dm.permission.RECEIVE\" />",
@@ -90,10 +82,6 @@
                         },
                         {
                             "xml": "<uses-permission android:name=\"com.ionicframework.starter.permission.C2D_MESSAGE\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.USE_CREDENTIALS\" />",
                             "count": 1
                         }
                     ]
@@ -118,9 +106,6 @@
             "PACKAGE_NAME": "com.agrinett.marketwatcher"
         },
         "cordova-plugin-whitelist": {
-            "PACKAGE_NAME": "com.agrinett.marketwatcher"
-        },
-        "nl.x-services.plugins.googleplus": {
             "PACKAGE_NAME": "com.agrinett.marketwatcher"
         }
     },

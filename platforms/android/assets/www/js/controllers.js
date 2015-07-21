@@ -5,53 +5,56 @@ angular.module('agrinet.controllers', [])
   $ionicPlatform.ready(function() {
         console.log("ready");
         //var parsePlugin = window.cordova.require("cordova/core/parseplugin");
-        //  parsePlugin.initialize(appId, clientKey, function() {
-        //      alert('success');
-        //  }, function(e) {
-        //      alert('error');
-        //  });
-        //Parse.initialize("ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "HbaUIyhiXFpUYhDQ7EsXW4IwP6zeXgqC81AQhQSL");
-        //parsePlugin.register({
-        //    "appId":"ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "clientKey":"zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb", "ecb":"onNotification"},
-        //    function() {
-        //        alert('successfully registered device!');
-        //        doWhatever();
-        //    }, function(e) {
-        //        alert('error registering device: ' + e);
-        //});
 
-      function alertDismissed() {
-          $state.go("menu.checkprices");
-      }
+          parsePlugin.initialize("ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb", function() {
+              alert('success');
+          }, function(e) {
+              alert('error');
+          });
 
-      function onConfirm(buttonIndex) {
+      //Parse.initialize("ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "HbaUIyhiXFpUYhDQ7EsXW4IwP6zeXgqC81AQhQSL");
 
-          /* if user taps yes */
-          if(buttonIndex == 2){
-              var login = $localstorage.get("login");
+      parsePlugin.register({
+            "appId":"ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "clientKey":"zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb", "ecb":"onNotification"},
+            function() {
+                alert('successfully registered device!');
+                doWhatever();
+            }, function(e) {
+                alert('error registering device: ' + e);
+        });
 
-              if(typeof login == "undefined" || typeof login == "none"){
-                  $state.go("menu.login");
-              }
-              if(typeof login != "undefined"){
-                  navigator.notification.alert(
-                      'You are already logged in.', // message
-                       alertDismissed,          // callback to invoke with index of button pressed
-                      'Login',           // title
-                      'Continue'     // buttonLabels
-                  );
-              }
-          }
-      }
-
-      navigator.notification.confirm(
-          'Want to login?', // message
-          onConfirm,            // callback to invoke with index of button pressed
-          'LOGIN',           // title
-          ['No','Yes']     // buttonLabels
-      );
+      //function alertDismissed() {
+      //    $state.go("menu.checkprices");
+      //}
+      //
+      //function onConfirm(buttonIndex) {
+      //
+      //    /* if user taps yes */
+      //    if(buttonIndex == 2){
+      //        var login = $localstorage.get("login");
+      //
+      //        if(typeof login == "undefined" || typeof login == "none"){
+      //            $state.go("menu.login");
+      //        }
+      //        if(typeof login != "undefined"){
+      //            navigator.notification.alert(
+      //                'You are already logged in.', // message
+      //                 alertDismissed,          // callback to invoke with index of button pressed
+      //                'Login',           // title
+      //                'Continue'     // buttonLabels
+      //            );
+      //        }
+      //    }
+      //}
+      //
+      //navigator.notification.confirm(
+      //    'Want to login?', // message
+      //    onConfirm,            // callback to invoke with index of button pressed
+      //    'LOGIN',           // title
+      //    ['No','Yes']     // buttonLabels
+      //);
   });
-    
+
   function onNotification(){
   }
 }])
@@ -100,12 +103,13 @@ register - If the user is not registered Google login would open and the user wo
             alert(error);
         });
     }
-    
-    //checks if user already registered or not and does accordingly
+
     $scope.register = function(userEmail){
         $ionicLoading.show({
           template: 'Signing in...'
         });
+
+
         parsePlugin.getInstallationId(function(installId) {
             Parse.Cloud.run('register', {email: userEmail, id: installId}, {
                 success: function(result) { //returns users subscribed channels in an array
@@ -223,8 +227,8 @@ changeDate - Would allow the user to display information for a day selected.
 
     //runs when user changes the date picker
     $scope.changeDate = function(selected){
-        console.log(selected);
-        console.log(typeof selected);
+        //console.log(selected);
+        //console.log(typeof selected);
 
 
         $ionicLoading.show({
@@ -233,7 +237,7 @@ changeDate - Would allow the user to display information for a day selected.
 
         DailyCrop.cropsByDate(selected)
             .then(function(data){
-                console.log(data);
+                //console.log(data);
                 $scope.dailycrops = data;
                 $ionicLoading.hide();
             });
@@ -364,7 +368,7 @@ getCrops - Loads crops that are availible.
                 var name = data[i];
                 if(idx != -1)
                     name = (data[i].substr(0, idx)).replace(" ", "");
-                console.log(name);
+                //console.log(name);
                 if(typeof $localstorage.get(name) == 'undefined'){
                     names.push(name);
                     var obj = {};
@@ -399,10 +403,10 @@ getCrops - Loads crops that are availible.
     
     $scope.cropToggled = function(crop){
         crop.state = !crop.state;
-        console.log(crop.name + " " + crop.state);
+        //console.log(crop.name + " " + crop.state);
         var obj = JSON.parse($localstorage.get(crop.name, 'false'));
         obj.state = crop.state;
-        console.log(obj);
+        //console.log(obj);
         if(crop.state){
             $localstorage.set(crop.name, JSON.stringify(obj));
             parsePlugin.subscribe(crop.name, function() {
@@ -428,11 +432,11 @@ getCrops - Loads crops that are availible.
     else{ 
         check = JSON.parse(check);
         if(check.date != (new Date()).toDateString()){
-            console.log(check.date);
+            //console.log(check.date);
             getCrops();
         }
         else{
-            console.log('cache');
+            //console.log('cache');
             var crops = [];// = JSON.parse(check.name);
             for(var i = 0; i < check.names.length; i++){
                 crops.push(JSON.parse($localstorage.get(check.names[i])));

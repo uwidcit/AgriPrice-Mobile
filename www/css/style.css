@@ -1,7 +1,7 @@
 #homeScreen {
   text-align: center;
   width: 75%;
-  margin: 0 auto; 
+  margin: 0 auto;
 }
 
 .dim{
@@ -20,8 +20,6 @@
     float: right;
     font-weight: bold;
 }
-
-
 
 .title{
     text-align: center;
