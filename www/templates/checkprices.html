@@ -19,7 +19,7 @@
         <div id="crop-list">
             <div ng-repeat="crop in dailycrops | orderBy: 'commodity'">
                 <ion-item class="item item-avatar" ng-click="toggleCrop(crop)" ng-class="{active: isCropShown(crop)}" href="#//">
-                     <!--<i class="icon" ng-class="isCropShown(crop) "></i>
+                    <!--<i class="icon" ng-class="isCropShown(crop) "></i>
                     &nbsp;-->
                     <img  id="cAvatar" src="img/fruits/{{crop.commodity}}.jpg">
                     <!--<img  id="cAvatar" src="img/fruits/{{crop.commodity}}.jpg"> -->

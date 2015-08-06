@@ -4,24 +4,51 @@ angular.module('agrinet.controllers', [])
 .run(["$ionicPlatform", "$state", "$localstorage", function($ionicPlatform, $state, $localstorage) {
   $ionicPlatform.ready(function() {
         console.log("ready");
-      //  var parsePlugin = window.cordova.require("cordova/core/parseplugin");
-      //
-      //    parsePlugin.initialize("ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb", function() {
+       // var parsePlugin = window.cordova.require("cordova/core/parseplugin");
+
+      parsePlugin.getInstallationId(function(id) {
+          //alert(id);
+      }, function(e) {
+          alert('error');
+      });
+      var appid="ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ";
+      var clientKey="zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb";
+
+
+      //parsePlugin.initialize('ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ', 'zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb', function() {
       //        alert('success');
       //    }, function(e) {
       //        alert('error');
       //    });
-      //
-      //Parse.initialize("ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "HbaUIyhiXFpUYhDQ7EsXW4IwP6zeXgqC81AQhQSL");
-      //
+
+      parsePlugin.initialize(appid, clientKey, function() {
+          //alert('success');
+          parsePlugin.subscribe('SampleChannel', function() {
+              //alert('OK');
+          }, function(e) {
+              alert('error');
+          });
+          parsePlugin.getSubscriptions(function(subscriptions) {
+              //alert(subscriptions);
+          }, function(e) {
+              alert('error');
+          });
+      }, function(e) {
+          alert('error');
+      });
+      Parse.initialize("ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "HbaUIyhiXFpUYhDQ7EsXW4IwP6zeXgqC81AQhQSL");
+
+
       //parsePlugin.register({
-      //      "appId":"ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "clientKey":"zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb", "ecb":"onNotification"},
+      //      "appId":appid, "clientKey":clientKey, "ecb":"onNotification"},
       //      function() {
       //          alert('successfully registered device!');
       //          doWhatever();
       //      }, function(e) {
       //          alert('error registering device: ' + e);
       //  });
+
+
 
 
 
@@ -99,7 +126,6 @@ register - If the user is not registered Google login would open and the user wo
                 var email = data.data.emails[0].value;
                 $localstorage.set("login", email);
                 $scope.register(email);
-                
             }, function(error){alert(JSON.stringify(error));});
         }, function(error) {
             alert(error);
@@ -107,28 +133,39 @@ register - If the user is not registered Google login would open and the user wo
     }
 
     $scope.register = function(userEmail){
+        console.log("blah");
         $ionicLoading.show({
           template: 'Signing in...'
         });
 
 
         parsePlugin.getInstallationId(function(installId) {
+            console.log("blah 1");
             Parse.Cloud.run('register', {email: userEmail, id: installId}, {
                 success: function(result) { //returns users subscribed channels in an array
                     result = JSON.parse(result);
-                    for(var i = 0; i < result.length; i++){
-                        var obj = {};
-                        obj.checks = 0;
-                        obj.name = result[i];
-                        obj.state = true;
-                        $localstorage.set(result[i], JSON.stringify(obj));
-                        parsePlugin.subscribe(result[i], function() {
-                                
-                        }, function(e) {
-                            alert("error");
-                        });
+                    console.log(result.length);
+                    if(result.length!=0) {
+                        for (var i = 0; i < result.length; i++) {
+                            console.log("x");
+                            var obj = {};
+                            obj.checks = 0;
+                            obj.name = result[i];
+                            obj.state = true;
+                            $localstorage.set(result[i], JSON.stringify(obj));
+                            parsePlugin.subscribe(result[i], function () {
+
+                            }, function (e) {
+                                alert("error");
+                            });
+                            $ionicLoading.hide();
+                            $state.go('menu.checkprices');
+                            $scope.$apply();
+                        }
+                    }else{
                         $ionicLoading.hide();
                         $state.go('menu.checkprices');
+                        $scope.$apply();
                     }
                 },
                 error: function(error) {
@@ -404,7 +441,8 @@ getCrops - Loads crops that are availible.
     }
     
     $scope.cropToggled = function(crop){
-        crop.state = !crop.state;
+
+        //crop.state = !crop.state;
         //console.log(crop.name + " " + crop.state);
         var obj = JSON.parse($localstorage.get(crop.name, 'false'));
         obj.state = crop.state;
@@ -412,6 +450,8 @@ getCrops - Loads crops that are availible.
         if(crop.state){
             $localstorage.set(crop.name, JSON.stringify(obj));
             parsePlugin.subscribe(crop.name, function() {
+
+                console.log("Client subscribed to crop.");
 
             }, function(e) {
                 alert("error");
@@ -421,10 +461,13 @@ getCrops - Loads crops that are availible.
             $localstorage.set(crop.name, JSON.stringify(obj));
             parsePlugin.unsubscribe(crop.name, function() {
 
+                console.log("Client unsubcribed to crop.");
             }, function(e) {
                 alert("error");
             });
         }
+
+
     }
     
     var check = $localstorage.get('crops');
