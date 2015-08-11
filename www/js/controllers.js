@@ -4,7 +4,6 @@ angular.module('agrinet.controllers', [])
 .run(["$ionicPlatform", "$state", "$localstorage", function($ionicPlatform, $state, $localstorage) {
   $ionicPlatform.ready(function() {
         console.log("ready");
-       // var parsePlugin = window.cordova.require("cordova/core/parseplugin");
 
       parsePlugin.getInstallationId(function(id) {
           //alert(id);
@@ -13,13 +12,6 @@ angular.module('agrinet.controllers', [])
       });
       var appid="ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ";
       var clientKey="zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb";
-
-
-      //parsePlugin.initialize('ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ', 'zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb', function() {
-      //        alert('success');
-      //    }, function(e) {
-      //        alert('error');
-      //    });
 
       parsePlugin.initialize(appid, clientKey, function() {
           //alert('success');
@@ -48,40 +40,36 @@ angular.module('agrinet.controllers', [])
       //          alert('error registering device: ' + e);
       //  });
 
+      function alertDismissed() {
+          $state.go("menu.checkprices");
+      }
 
+      function onConfirm(buttonIndex) {
 
+          /* if user taps yes */
+          if(buttonIndex == 2){
+              var login = $localstorage.get("login");
 
+              if(typeof login == "undefined" || typeof login == "none"){
+                  $state.go("menu.login");
+              }
+              if(typeof login != "undefined"){
+                  navigator.notification.alert(
+                      'You are already logged in.', // message
+                       alertDismissed,          // callback to invoke with index of button pressed
+                      'Login',           // title
+                      'Continue'     // buttonLabels
+                  );
+              }
+          }
+      }
 
-      //function alertDismissed() {
-      //    $state.go("menu.checkprices");
-      //}
-      //
-      //function onConfirm(buttonIndex) {
-      //
-      //    /* if user taps yes */
-      //    if(buttonIndex == 2){
-      //        var login = $localstorage.get("login");
-      //
-      //        if(typeof login == "undefined" || typeof login == "none"){
-      //            $state.go("menu.login");
-      //        }
-      //        if(typeof login != "undefined"){
-      //            navigator.notification.alert(
-      //                'You are already logged in.', // message
-      //                 alertDismissed,          // callback to invoke with index of button pressed
-      //                'Login',           // title
-      //                'Continue'     // buttonLabels
-      //            );
-      //        }
-      //    }
-      //}
-      //
-      //navigator.notification.confirm(
-      //    'Want to login?', // message
-      //    onConfirm,            // callback to invoke with index of button pressed
-      //    'LOGIN',           // title
-      //    ['No','Yes']     // buttonLabels
-      //);
+      navigator.notification.confirm(
+          'Want to login?', // message
+          onConfirm,            // callback to invoke with index of button pressed
+          'LOGIN',           // title
+          ['No','Yes']     // buttonLabels
+      );
   });
 
   function onNotification(){
@@ -223,7 +211,7 @@ changeDate - Would allow the user to display information for a day selected.
 
     var MAX_CHECKS = 20;
     var recentCrops;
-    
+
     $ionicLoading.show({
       template: 'Loading...'
     });
