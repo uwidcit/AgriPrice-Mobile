@@ -8,23 +8,30 @@ angular.module('agrinet.controllers', [])
       parsePlugin.getInstallationId(function(id) {
           //alert(id);
       }, function(e) {
-          alert('error');
+          console.log("Unable to Retrive Installation ID: " + e );
+          //alert('error');
       });
+
       var appid="ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ";
       var clientKey="zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb";
 
       parsePlugin.initialize(appid, clientKey, function() {
-          //alert('success');
+          console.log("Starting Process to Connect to the Parse API");
+
           parsePlugin.subscribe('SampleChannel', function() {
-              //alert('OK');
+              console.log("Successfully Initialized the appropriate Channel");
           }, function(e) {
-              alert('error');
+              console.log("Unable to connect to the Parse API:" + e);
           });
+
+          console.log("Attempting to retrieve current subscriptions");
+
           parsePlugin.getSubscriptions(function(subscriptions) {
-              //alert(subscriptions);
+              console.log(subscriptions);
           }, function(e) {
-              alert('error');
+              console.log("Error Occurred while retrieving subscriptions: " + e);
           });
+
       }, function(e) {
           alert('error');
       });
@@ -64,6 +71,7 @@ angular.module('agrinet.controllers', [])
           }
       }
 
+
       navigator.notification.confirm(
           'Want to login?', // message
           onConfirm,            // callback to invoke with index of button pressed
@@ -100,7 +108,7 @@ register - If the user is not registered Google login would open and the user wo
     
     $scope.noLogin = function() {
         //gets access token from google
-        $localstorage.set("", "");
+        //$localstorage.set("", "");
         $state.go("menu.checkprices");
     }
         
@@ -114,7 +122,7 @@ register - If the user is not registered Google login would open and the user wo
                 var email = data.data.emails[0].value;
                 $localstorage.set("login", email);
                 $scope.register(email);
-            }, function(error){alert(JSON.stringify(error));});
+            }, function(error){ navigator.notification.alert(JSON.stringify(error)); });
         }, function(error) {
             alert(error);
         });
@@ -144,7 +152,8 @@ register - If the user is not registered Google login would open and the user wo
                             parsePlugin.subscribe(result[i], function () {
 
                             }, function (e) {
-                                alert("error");
+                                console.log("Error Occurred: " + e);
+                                navigator.notification.alert("error");
                             });
                             $ionicLoading.hide();
                             $state.go('menu.checkprices');
@@ -157,11 +166,13 @@ register - If the user is not registered Google login would open and the user wo
                     }
                 },
                 error: function(error) {
-                    alert(JSON.stringify(error));
+                    navigator.notification.alert("Unable to Complete Login");
+                    console.log(JSON.stringify(error));
                 }
             });
         }, function(e) {
-            alert('error');
+            navigator.notification.alert("Unable to Complete Login");
+            console.log(JSON.stringify(e));
         });
     }
 }])
@@ -432,28 +443,31 @@ getCrops - Loads crops that are availible.
 
         //crop.state = !crop.state;
         //console.log(crop.name + " " + crop.state);
-        var obj = JSON.parse($localstorage.get(crop.name, 'false'));
-        obj.state = crop.state;
-        //console.log(obj);
-        if(crop.state){
-            $localstorage.set(crop.name, JSON.stringify(obj));
-            parsePlugin.subscribe(crop.name, function() {
+        try{
+            var obj = JSON.parse($localstorage.get(crop.name, 'false'));
+            obj.state = crop.state;
+            //console.log(obj);
+            if(crop.state){
+                $localstorage.set(crop.name, JSON.stringify(obj));
+                parsePlugin.subscribe(crop.name, function() {
+                    console.log("Client subscribed to crop: " + crop.name);
+                }, function(e) {
+                    alert("Unable to subscribe to crop: " + crop.name);
+                });
+            }
+            else{
+                $localstorage.set(crop.name, JSON.stringify(obj));
+                parsePlugin.unsubscribe(crop.name, function() {
 
-                console.log("Client subscribed to crop.");
-
-            }, function(e) {
-                alert("error");
-            });
+                    console.log("Client unsubcribed to crop.");
+                }, function(e) {
+                    alert("error");
+                });
+            }
+        }catch(e){
+            console.log("Error Occurred: " + e);
         }
-        else{
-            $localstorage.set(crop.name, JSON.stringify(obj));
-            parsePlugin.unsubscribe(crop.name, function() {
 
-                console.log("Client unsubcribed to crop.");
-            }, function(e) {
-                alert("error");
-            });
-        }
 
 
     }
