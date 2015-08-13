@@ -3,13 +3,12 @@ angular.module('agrinet.controllers', [])
 
 .run(["$ionicPlatform", "$state", "$localstorage", function($ionicPlatform, $state, $localstorage) {
   $ionicPlatform.ready(function() {
-        console.log("ready");
-
+      console.log("Ionic Platform is ready");
+      
       parsePlugin.getInstallationId(function(id) {
-          //alert(id);
+
       }, function(e) {
           console.log("Unable to Retrive Installation ID: " + e );
-          //alert('error');
       });
 
       var appid="ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ";
