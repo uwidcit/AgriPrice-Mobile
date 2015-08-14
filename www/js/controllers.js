@@ -6,7 +6,7 @@ angular.module('agrinet.controllers', [])
       console.log("Ionic Platform is ready");
       
       parsePlugin.getInstallationId(function(id) {
-
+          
       }, function(e) {
           console.log("Unable to Retrive Installation ID: " + e );
       });
@@ -34,6 +34,7 @@ angular.module('agrinet.controllers', [])
       }, function(e) {
           alert('error');
       });
+      
       Parse.initialize("ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "HbaUIyhiXFpUYhDQ7EsXW4IwP6zeXgqC81AQhQSL");
 
 
