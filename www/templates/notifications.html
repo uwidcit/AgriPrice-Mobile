@@ -1,6 +1,6 @@
 <ion-view title="Notifications">
     <ion-content padding="true">
         <h3 class="title">Select crops to be notified about</h3>
-        <ion-checkbox ng-repeat="crop in crops | orderBy: 'name'" ng-model="crop.state" ng-change="cropToggled(this.crop)" toggle-class="toggle-balanced">{{crop.name | capitalize}}</ion-checkbox>
+        <ion-checkbox  class="noteText" ng-repeat="crop in crops | orderBy: 'name'" ng-model="crop.state" ng-change="cropToggled(this.crop)" toggle-class="toggle-balanced">{{crop.name | capitalize}}</ion-checkbox>
     </ion-content>
 </ion-view>

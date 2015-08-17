@@ -10,10 +10,12 @@
 
 .val{
     float: right;
+    font-size: 20px;
 }
 
 .value{
     margin-bottom: 10px;
+    font-size: 20px;
 }
 
 .price{
@@ -75,4 +77,12 @@
 #gpbtn{
     margin: 5px auto;
     width: 200px;
+}
+
+.item-accordion{
+    background-color: lightgray;
+}
+
+.noteText{
+    font-size: 20px;
 }

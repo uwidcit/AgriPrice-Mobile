@@ -23,10 +23,11 @@
                         <p>{{crop.price}} per {{crop.unit}}</p>
                     </ion-item>
                     <ion-item class="item-accordion" ng-show="isCropShown(crop)">
-                        <div class="value"><span class="dim">Projected Price</span>: <span class="val">{{projected}}</span></div>
+                        <!--<div class="value"><span class="dim">Projected Price</span>: <span class="val">{{projected}}</span></div>-->
+                        <div class="value"><span class="dim">Price</span>: <span class="val">{{crop.price}}</span></div>
                         <div class="value"><span class="dim">Category</span>: <span class="val">{{crop.category | lowercase}}</span></div>
                         <div class="value"><span class="dim">Date</span>: <span class="val">{{crop.date | capitalize}}</span></div>
-                        <div class="value"><span class="dim">Volume</span>: <span class="val">{{crop.volume | lowercase}} {{crop.unit}}</span></div>
+                        <div class="value"><span class="dim">Volume</span>:  {{crop.unit}}<span class="val">{{crop.volume | lowercase}}</span></div>
                     </ion-item>
                 </div>
             </div>
