@@ -2,4 +2,4 @@ node_modules/
 plugins/
 platforms/
 .idea/
-www/libs
+www/lib

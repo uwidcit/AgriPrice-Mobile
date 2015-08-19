@@ -1,3 +1,5 @@
+var angular = window.angular,
+    parsePlugin = window.parsePlugin || {};
 
 angular.module('agrinet.controllers', [])
 
