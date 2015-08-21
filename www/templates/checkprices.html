@@ -1,36 +1,39 @@
 <ion-view title="Latest Prices">
-    <a href="#/app/notifications">
-        <div class="bottom-bar">
-            Manage Notifications
-        </div>
-    </a>
+	<a href="#/app/notifications">
+		<div id="bottom-bar">
+			Manage Notifications
+		</div>
+	</a>
 
 	<ion-content padding="true">
 		<div class="list" ng-init="logmein()">
 			<label class="item item-input item-select">
 			  <div class="input-label">
-			    Date
+				Date
 			  </div>
 			  <select ng-init="selDate = dates[0]" ng-model="selDate" ng-options="date for date in dates" ng-change="changeDate(selDate)"></select>
-		    </label>
-        </div>
-        <ion-list>
-            <div id="crop-list">
-                <div ng-repeat="crop in dailycrops | orderBy: 'commodity'">
-                    <ion-item class="item item-avatar" ng-click="toggleCrop(crop)" ng-class="{active: isCropShown(crop)}" href="#//">
-                        <img  id="cAvatar" src="img/fruits/{{crop.commodity}}.jpg">
-                        <h2>{{crop.commodity | capitalize}}</h2>
-                        <p>{{crop.price}} per {{crop.unit}}</p>
-                    </ion-item>
-                    <ion-item class="item-accordion" ng-show="isCropShown(crop)">
-                        <!--<div class="value"><span class="dim">Projected Price</span>: <span class="val">{{projected}}</span></div>-->
-                        <div class="value"><span class="dim">Price</span>: <span class="val">{{crop.price}}</span></div>
-                        <div class="value"><span class="dim">Category</span>: <span class="val">{{crop.category | lowercase}}</span></div>
-                        <div class="value"><span class="dim">Date</span>: <span class="val">{{crop.date | capitalize}}</span></div>
-                        <div class="value"><span class="dim">Volume</span>:  {{crop.unit}}<span class="val">{{crop.volume | lowercase}}</span></div>
-                    </ion-item>
-                </div>
-            </div>
-        </ion-list>
+			  
+			</label>
+		</div>
+		<ion-list>
+			<div id="crop-list">
+				<div ng-repeat="crop in dailycrops | orderBy: 'commodity'">
+					<ion-item class="item item-avatar" ng-click="toggleCrop(crop)" ng-class="{active: isCropShown(crop)}" href="#//">
+						<img  id="cAvatar" src="img/fruits/{{crop.commodity}}.jpg" />
+						<h2>{{crop.commodity | capitalize}}</h2>
+						<p>{{crop.price}} per {{crop.unit}}</p>
+					</ion-item>
+					<ion-item class="item-accordion" ng-show="isCropShown(crop)">
+						
+						<div class="value"><span class="dim">Current Price</span>: <span class="val">{{crop.price}}</span></div>
+						<div class="value"><span class="dim">Category</span>: <span class="val">{{crop.category | capitalize}}</span></div>
+						<div class="value"><span class="dim">Date</span>: <span class="val">{{crop.date | capitalize}}</span></div>
+						<div class="value"><span class="dim">Volume Sold ( {{crop.unit}} )</span>:  <span class="val">{{crop.volume }}</span></div>
+						<div class="value"><span class="dim">Projected Price</span>: <span class="val">{{projected}}</span></div>
+					</ion-item>
+				</div>
+			</div>
+		</ion-list>
+		
 	</ion-content>
 </ion-view>

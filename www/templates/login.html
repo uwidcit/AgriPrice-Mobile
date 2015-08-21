@@ -1,28 +1,31 @@
-<ion-view title="Market Watcher" hide-nav-bar="true" id="login-page">
+<ion-view title="AgriPrice Login"  id="login-page">
 	<ion-content padding="true">
 		<div id="homeScreen">
-			<!-- Logo -->
-			<div id="logoSec" class="row">
-				<div class="col">
-					
-				</div>
-			</div>
-
 			<div class="row">
-				<div class="col-lg-12" >
-                    <img class="fade-in logo" src="img/ic_launcher.png">
-					<h1>Market Watcher</h1>
-				</div>
+				<div class="col" >
+                    <img class="fade-in logo" src="img/ic_launcher.png" />
+                </div>
 			</div>
 
 			
 			<div class="row" id="btm-area">
-				<div class="col-md-12" >
+				<div class="col" >
+                    <h1>AgriPrice</h1>
                     <p>
-                        Get notifications for crop prices within Trinidad and Tobago
+                        Get notifications for crop prices within Trinidad and Tobago.
 					</p>
-                    <button ng-click="googleLogin()" class="button button-assertive" id="gpbtn">Sign in with Google</button>
-                    <button ng-click="noLogin()" class="button button-active" id="gpbtn">Continue to app</button>
+					<p>
+						Sign In using your google account to recieve notifications on price changes for selected crops.
+					</p>
+					<p> 
+						<b>Note:</b> You can use the application without logging in, however you will only be able to check prices, as notifications will not work without sign-in. 
+					</p>
+                    <button ng-click="googleLogin()" class="button button-assertive gpbtn icon-left ion-social-googleplus-outline">
+                    	 Sign in
+                    </button>
+                    <button ng-click="noLogin()" class="button button-active gpbtn icon-right ion-arrow-right-c">
+                    	Continue
+                	</button>
 				</div>
 			</div>
 		</div>
