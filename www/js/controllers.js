@@ -88,6 +88,15 @@ register - If the user is not registered Google login would open and the user wo
 
 .controller("LoginCtrl", ["$scope", "$cordovaOauth", "$http", "$state", "$localstorage", "$ionicLoading", function($scope, $cordovaOauth, $http, $state, $localstorage, $ionicLoading) {
 	var login = $localstorage.get("login");
+	console.log(login);
+	if (login) {
+		navigator.notification.alert(
+			'You are already logged in.', // message
+			function() { $state.go("menu.checkprices"); }, // callback to invoke with index of button pressed
+			'AgriPrice', // title
+			'Continue' // buttonLabels
+		);
+	}
 
 	//if(typeof login != "undefined"){
 	//    $state.go("menu.checkprices");
