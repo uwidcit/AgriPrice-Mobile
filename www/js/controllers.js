@@ -72,8 +72,7 @@ angular.module('agrinet.controllers', [])
 }])
 
 .controller('AboutCtrl', function($scope, $ionicSideMenuDelegate) {
-
-
+	console.log("About Controller Launched");
 })
 
 /* LoginCtrl:
@@ -199,38 +198,7 @@ changeDate - Would allow the user to display information for a day selected.
 */
 //populates crop prices page
 
-.controller("PriceCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", "$ionicLoading", "$http", "$state", function($scope, DailyCrop, $localstorage, $ionicPopup, $ionicLoading, $http, $state) {
-	// Use Confirmation plugin
-
-	// Check if previously logged In
-	// Prompt to login
-	// If yes then redirect to login page
-	// Else just dismiss
-
-	//$scope.genDates = function(start){
-	//    var dates = [];
-	//    dates.push(start.toDateString());
-	//    for(var i = 0; i < 7; i++){
-	//        var yest = new Date(start.getTime());
-	//        yest.setDate(start.getDate() - 1);
-	//        dates.push(yest.toDateString());
-	//        start = yest;
-	//    }
-	//    return dates;
-	//}
-
-	$http
-		.get("https://agrimarketwatch.herokuapp.com/crops/daily/dates")
-		.success(function(data) {
-			var dates = _.map(data, processDate);
-			dates.reverse();
-			dates = dates.slice(0, 5); // Limit date list to the last 5 available dates
-			$scope.dates = dates;
-		});
-
-
-	var MAX_CHECKS = 20;
-	var recentCrops;
+.controller("PriceCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", "$ionicLoading", "$http", "$state", "$sessionstorage", function($scope, DailyCrop, $localstorage, $ionicPopup, $ionicLoading, $http, $state, $sessionstorage) {
 
 	$ionicLoading.show({
 		template: 'Loading...'
@@ -244,76 +212,73 @@ changeDate - Would allow the user to display information for a day selected.
 		return date;
 	};
 
-	//var cropCache = $localstorage.get((new Date()).toDateString());
+	// Load Dates from Server to populate the dropdown menu
+	var dateKey = (new Date().toDateString());
+	if (!$sessionstorage.exists(dateKey)){
+		console.log("No previous Request for Dates");
+		$http
+			.get("https://agrimarketwatch.herokuapp.com/crops/daily/dates")
+			.success(function(data) {
+				var dates = _.map(data, processDate);
+				dates.reverse();
+				dates = dates.slice(0, 5); // Limit date list to the last 5 available dates
+				$scope.dates = dates;
+				$sessionstorage.setObject(dateKey, dates);
+			});
 
-	if (typeof cropCache == "undefined") { // Data for the date was not found in cache
-		DailyCrop.cropList()
+		}else{
+			console.log("Using Cached Request for Dates");
+			$scope.dates = $sessionstorage.getObject(dateKey);
+		}
+	
+		
+
+	var MAX_CHECKS = 20;
+	var recentCrops;
+
+	// Attempt to Load Data from Cache
+	var cropCache = $localstorage.getObject((new Date()).toDateString());
+	console.log(Object.keys(cropCache).length);
+
+	if (!cropCache || Object.keys(cropCache).length < 1) { // Data for the date was not found in cache
+		// Load from Server
+		DailyCrop
+			.cropList()
 			.then(function(val) {
 				$scope.dailycrops = val;
-				recentCrops = val;
-				var recent = {};
-				recent.date = new Date();
-				recent.data = JSON.stringify(val);
-				$localstorage.set((new Date()).toDateString(), JSON.stringify(recent));
-				//$scope.dates = $scope.genDates(new Date(val[0].date));
 				$ionicLoading.hide();
+				$localstorage.setObject((new Date()).toDateString(), val);
 			});
 	} else {
-		//console.log('cached');
-		cropCache = JSON.parse(cropCache);
-		var crops = JSON.parse(cropCache.data);
-
-		//for loop to change the date
-
-
-		$scope.dailycrops = crops;
-		//$scope.dates = $scope.genDates(new Date($scope.dailycrops[0].date));
+		console.log('cached');
+		$scope.dailycrops = cropCache;
 		$ionicLoading.hide();
 	}
 
 	//runs when user changes the date picker
 	$scope.changeDate = function(selected) {
-			//console.log(selected);
-			//console.log(typeof selected);
+		// Present Loading Screen 
+		$ionicLoading.show({
+			template: 'Loading...'
+		});
 
+		var cropCache = $localstorage.getObject(selected);
 
-			$ionicLoading.show({
-				template: 'Loading...'
-			});
-
-			DailyCrop.cropsByDate(selected)
+		if (!cropCache || Object.keys(cropCache).length < 1){
+			DailyCrop
+				.cropsListByDate(selected)
 				.then(function(data) {
-					//console.log(data);
 					$scope.dailycrops = data;
 					$ionicLoading.hide();
+					$localstorage.setObject(selected, data);
 				});
-
-			//var today = new Date();
-			////if date selected is today just returns cached data
-			//if(selected == today.toDateString()){
-			//    $scope.dailycrops = recentCrops;
-			//    return;
-			//}
-
-			//var cache = $localstorage.get(selected);
-			//if(typeof cache == "undefined"){
-			//    DailyCrop.cropsByDate(selected)
-			//    .then(function(data){
-			//        var dateSelection = {};
-			//        dateSelection.date = new Date();
-			//        dateSelection.data = JSON.stringify(data);
-			//        $localstorage.set(selected, JSON.stringify(dateSelection));
-			//        $scope.dailycrops = data;
-			//        $ionicLoading.hide();
-			//    });
-			//}
-			//else{
-			//    cache = JSON.parse(cache);
-			//    console.log("cached");
-			//    $scope.dailycrops = JSON.parse(cache.data);
-			//    $ionicLoading.hide();
-			//}
+		}else{
+			console.log("cached :" + selected);
+			$scope.dailycrops = cropCache;
+			$ionicLoading.hide();
 		}
+
+	};
 		/*
 		 * if given group is the selected group, deselect it
 		 * else, select the given group
@@ -365,7 +330,7 @@ changeDate - Would allow the user to display information for a day selected.
 			.then(function(val) {
 				$scope.projected = val[0].price;
 			});
-	}
+	};
 
 
 
@@ -390,17 +355,20 @@ getCrops - Loads crops that are availible.
 		$ionicLoading.show({
 			template: 'Loading...'
 		});
-		var promise = notifyService.getCropNames();
-		promise.then(function(val) {
-			var data = val.data;
-			var cache = {};
-			var resp = cacheCrops(data);
-			$scope.crops = resp.states;
-			cache.date = (new Date()).toDateString();
-			cache.names = resp.names;
-			$localstorage.set('crops', JSON.stringify(cache));
-			$ionicLoading.hide();
-		});
+
+
+		notifyService
+			.getCropNames()
+			.then(function(val) {
+				var data = val.data;
+				var cache = {};
+				var resp = cacheCrops(data);
+				$scope.crops = resp.states;
+				cache.date = (new Date()).toDateString();
+				cache.names = resp.names;
+				$localstorage.setObject('crops', val);
+				$ionicLoading.hide();
+			});
 	}
 
 	var cacheCrops = function(data) {
@@ -408,19 +376,19 @@ getCrops - Loads crops that are availible.
 		var names = [];
 		for (var i = 0; i < data.length; i++) {
 			var curr = {};
-			if (typeof $localstorage.get(data[i]) == 'undefined') {
+			if (!$localstorage.get(data[i])) {
 				var idx = data[i].indexOf('(');
 				var name = data[i];
 				if (idx != -1)
 					name = (data[i].substr(0, idx)).replace(" ", "");
 				//console.log(name);
-				if (typeof $localstorage.get(name) == 'undefined') {
+				if (!$localstorage.get(name)) {
 					names.push(name);
 					var obj = {};
 					obj.name = name;
 					obj.state = 'false';
 					obj.checks = 0;
-					$localstorage.set(name, JSON.stringify(obj));
+					$localstorage.setObject(name, obj);
 					curr.name = name;
 					curr.state = false;
 					cropStates.push(curr);
@@ -430,7 +398,7 @@ getCrops - Loads crops that are availible.
 					obj.name = cache.name;
 					obj.state = cache.state;
 					obj.checks = cache.checks;
-					$localstorage.set(name, JSON.stringify(obj));
+					$localstorage.setObject(name, obj);
 				}
 			} else {
 				curr.name = data[i];
@@ -445,24 +413,19 @@ getCrops - Loads crops that are availible.
 	}
 
 	$scope.cropToggled = function(crop) {
-
-		//crop.state = !crop.state;
-		//console.log(crop.name + " " + crop.state);
+		var name = crop.name.replace(/ +/g, "");
 		try {
-			var obj = JSON.parse($localstorage.get(crop.name, 'false'));
+			var obj = $localstorage.getObject(crop.name);
 			obj.state = crop.state;
-			//console.log(obj);
+			$localstorage.setObject(crop.name, obj);
 			if (crop.state) {
-				$localstorage.set(crop.name, JSON.stringify(obj));
-				parsePlugin.subscribe(crop.name, function() {
+				parsePlugin.subscribe(name, function() {
 					console.log("Client subscribed to crop: " + crop.name);
 				}, function(e) {
 					alert("Unable to subscribe to crop: " + crop.name);
 				});
 			} else {
-				$localstorage.set(crop.name, JSON.stringify(obj));
-				parsePlugin.unsubscribe(crop.name, function() {
-
+				parsePlugin.unsubscribe(name, function() {
 					console.log("Client unsubcribed to crop.");
 				}, function(e) {
 					alert("error");
@@ -471,16 +434,12 @@ getCrops - Loads crops that are availible.
 		} catch (e) {
 			console.log("Error Occurred: " + e);
 		}
-
-
-
 	}
 
-	var check = $localstorage.get('crops');
-	if (typeof check == 'undefined') {
+	if ($localstorage.exists('crops')) {
 		getCrops();
 	} else {
-		check = JSON.parse(check);
+		var check = $localstorage.getObject('crops');
 		if (check.date != (new Date()).toDateString()) {
 			//console.log(check.date);
 			getCrops();
