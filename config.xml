@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.agrinett.marketwatcher" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="uwi.dcit.agriprice" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>AgriPrice</name>
   <description>
     Keep updated on the prices of crops in Trinidad and Tobago.
   </description>
-  <author email="hi@ionicframework" href="http://ionicframework.com/">
-    DCIT AgriNeTT
+  <author email="kyle.defreitas@sta.uwi.edu" href="http://sta.uwi.edu/fst/dcit">
+    Kyle DeFreitas@AgriNeTT
   </author>
   <content src="index.html"/>
   <access origin="*"/>
