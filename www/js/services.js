@@ -57,7 +57,6 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
 		var deferredObject = $q.defer();
 		Crop.query().$promise.then(
 			function(crop) {
-				console.log(crop);
 				deferredObject.resolve(_.map(crop,processListDisplay));
 			}, 
 			function(error){

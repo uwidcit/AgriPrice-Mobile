@@ -1,4 +1,6 @@
 var angular = window.angular,
+	_ = window._,
+	Parse = window.Parse,
 	parsePlugin = window.parsePlugin || {};
 
 angular.module('agrinet.controllers', [])
@@ -211,6 +213,22 @@ changeDate - Would allow the user to display information for a day selected.
 		date = date.toDateString();
 		return date;
 	};
+	
+	var processPrice = function(crop){ // Convert KG to LB (based on request from Farmers)
+		crop.price = parseFloat(crop.price.slice(1));
+		if (crop.unit && crop.unit.toLowerCase() === "kg"){
+			crop.unit = "lb";
+			crop.volume = crop.volume * 2.20462;
+			crop.price = crop.price * 2.20462; 
+		}
+		return crop;
+	};
+	
+	$scope.filterCrops =  function(crop){
+		if ( !isNaN(crop.price) && crop.price > 0){ // If valid price and system actual has a price for commodity
+			return crop;	
+		}
+	}
 
 	// Load Dates from Server to populate the dropdown menu
 	var dateKey = (new Date().toDateString());
@@ -245,6 +263,7 @@ changeDate - Would allow the user to display information for a day selected.
 		DailyCrop
 			.cropList()
 			.then(function(val) {
+				val = _.map(val, processPrice);
 				$scope.dailycrops = val;
 				$ionicLoading.hide();
 				$localstorage.setObject((new Date()).toDateString(), val);
@@ -263,11 +282,13 @@ changeDate - Would allow the user to display information for a day selected.
 		});
 
 		var cropCache = $localstorage.getObject(selected);
-
+		console.log(cropCache);
+		
 		if (!cropCache || Object.keys(cropCache).length < 1){
 			DailyCrop
 				.cropsListByDate(selected)
 				.then(function(data) {
+					data = _.map(data, processPrice);
 					$scope.dailycrops = data;
 					$ionicLoading.hide();
 					$localstorage.setObject(selected, data);
@@ -277,30 +298,41 @@ changeDate - Would allow the user to display information for a day selected.
 			$scope.dailycrops = cropCache;
 			$ionicLoading.hide();
 		}
-
 	};
 		/*
 		 * if given group is the selected group, deselect it
 		 * else, select the given group
 		 */
 	$scope.toggleCrop = function(crop) {
-		$scope.getProjected(crop);
+		console.log($scope.getProjected(crop));
+		
 		if ($scope.isCropShown(crop)) {
 			$scope.shownCrop = null;
 		} else {
 			$scope.shownCrop = crop;
-			var idx = crop.commodity.indexOf('(');
 			var name = crop.commodity;
-			if (idx != -1)
+			
+			var idx = crop.commodity.indexOf('(');
+			if (idx !== -1)
 				name = (crop.commodity.substr(0, idx)).replace(" ", "");
-			var cache = JSON.parse($localstorage.get(name));
-			var obj = {};
-			obj.state = cache.state;
-			obj.checks = (parseInt(cache.checks)) + 1;
-			if (obj.checks >= MAX_CHECKS && obj.state == false) {
+			
+			console.log(name);
+			
+			var obj = { state: true, checks: 1};
+			
+			// Attempting to keep a track of how much times a user selects a particular crop (this information will be used for future recommendations);
+			
+			if ($localstorage.exists(name)){
+				var cache = $localstorage.getObject(name);
+				obj.state = cache.state;
+				obj.checks = (parseInt(cache.checks)) + 1;
+			}
+			
+			// If selected more than MAX CHECKS then ask user if they would like to add crop to their recommendation
+			if (obj.checks >= MAX_CHECKS && obj.state === false) {
 				showConfirm(crop.commodity);
 			}
-			$localstorage.set(crop.commodity, JSON.stringify(obj));
+			$localstorage.setObject(crop.commodity, obj);
 		}
 	};
 
@@ -308,6 +340,7 @@ changeDate - Would allow the user to display information for a day selected.
 		return $scope.shownCrop === crop;
 	};
 
+	// Prompt User to add crop to set of recommendations
 	var showConfirm = function(name) {
 		var confirmPopup = $ionicPopup.confirm({
 			title: 'Get Reminders',
@@ -462,25 +495,3 @@ getCrops - Loads crops that are availible.
 		}) : '';
 	}
 });
-
-
-// 	.controller("OptionCtrl", function($scope){
-// 		$scope.options = [
-// 			{title: "Monthly"},
-// 			{title: "Daily"}
-// 		];
-// 	})
-
-// .controller('DashCtrl', function($scope) {
-// })
-
-// .controller('FriendsCtrl', function($scope, Friends) {
-//   $scope.friends = Friends.all();
-// })
-
-// .controller('FriendDetailCtrl', function($scope, $stateParams, Friends) {
-//   $scope.friend = Friends.get($stateParams.friendId);
-// })
-
-// .controller('AccountCtrl', function($scope) {
-// });
