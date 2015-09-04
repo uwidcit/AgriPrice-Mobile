@@ -57,11 +57,18 @@ angular.module('agrinet.controllers', [])
 				} else {
 					$state.go("menu.login");
 				}
+			}else if (buttonIndex === 1){
+				navigator.notification.alert(
+					"The Login option can be accessed later in the right side menu",
+					function() { $localstorage.set("tried_login", "true"); $state.go("menu.checkprices"); },
+					'AgriPrice', // title
+					'Continue' // buttonLabels
+				);
 			}
 		}
 
 		// If user not logged in, the prompt to login
-		if (!$localstorage.get("login")) {
+		if (!$localstorage.get("login") && !$localstorage.get("tried_login")) {
 			navigator.notification.confirm(
 				'Login will Enable device to recieve notification of Price changes. Will you like to Login', // message
 				onConfirm, // callback to invoke with index of button pressed
