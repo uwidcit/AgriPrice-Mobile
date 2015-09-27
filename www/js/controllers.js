@@ -207,7 +207,7 @@ changeDate - Would allow the user to display information for a day selected.
 */
 //populates crop prices page
 
-.controller("PriceCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", "$ionicLoading", "$http", "$state", "$sessionstorage", function($scope, DailyCrop, $localstorage, $ionicPopup, $ionicLoading, $http, $state, $sessionstorage) {
+.controller("PriceListCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", "$ionicLoading", "$http", "$state", "$sessionstorage", function($scope, DailyCrop, $localstorage, $ionicPopup, $ionicLoading, $http, $state, $sessionstorage) {
 
 	$ionicLoading.show({
 		template: 'Loading...'
@@ -240,7 +240,7 @@ changeDate - Would allow the user to display information for a day selected.
 	// Load Dates from Server to populate the dropdown menu
 	var dateKey = (new Date().toDateString());
 	if (!$sessionstorage.exists(dateKey)){
-		console.log("No previous Request for Dates");
+	console.log("No previous Request for Dates");
 		$http
 			.get("https://agrimarketwatch.herokuapp.com/crops/daily/dates")
 			.success(function(data) {
@@ -250,12 +250,11 @@ changeDate - Would allow the user to display information for a day selected.
 				$scope.dates = dates;
 				$sessionstorage.setObject(dateKey, dates);
 			});
+	}else{
+		console.log("Using Cached Request for Dates");
+		$scope.dates = $sessionstorage.getObject(dateKey);
+	}
 
-		}else{
-			console.log("Using Cached Request for Dates");
-			$scope.dates = $sessionstorage.getObject(dateKey);
-		}
-	
 		
 
 	var MAX_CHECKS = 20;
@@ -374,6 +373,24 @@ changeDate - Would allow the user to display information for a day selected.
 
 
 
+}])
+
+.controller("CropPriceCtrl", ["$stateParams", "$scope", "$localstorage", function($stateParams, $scope,$localstorage){
+	// Making the Assumption that at this point they already have the data cached
+	var date = (new Date($stateParams['date'])).toDateString();
+	console.log($stateParams);
+	// console.log(new Date($stateParams['date']));
+	if (!$localstorage.exists()){
+		date = (new Date()).toDateString()
+	}
+
+	var cropCache = $localstorage.getObject(date);
+	$scope.crop = cropCache.find(function(el){
+		if (el.commodity.toLowerCase() === $stateParams.crop.toLowerCase())
+			return el;
+		else
+			return false;
+	})
 }])
 
 /*NotifyCtrl:

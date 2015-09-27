@@ -1,8 +1,12 @@
 <ion-view title="Latest Prices">
 	
-		<div id="bottom-bar">
+		<!-- <div id="bottom-bar">
 			<a href="#/app/notifications">Manage Notifications</a>
-		</div>
+		</div> -->
+
+	<div class="bar bar-footer bar-light">
+			<button id="bottom-bar"class="button button-dark button-block">Manage Notifications</button>
+	</div>
 	
 
 	<ion-content padding="true">
@@ -15,24 +19,12 @@
 			  
 			</label>
 		</div>
-		<ion-list>
-			<div id="crop-list">
-				<div ng-repeat="crop in dailycrops | orderBy: 'commodity' | filter: filterCrops">
-					<ion-item class="item item-avatar" ng-click="toggleCrop(crop)" ng-class="{active: isCropShown(crop)}" href="#//">
-						<img  id="cAvatar" src="img/fruits/{{crop.commodity}}.jpg" />
-						<h2>{{crop.commodity | capitalize}}</h2>
-						<p>{{crop.price | currency}} per {{crop.unit}}</p>
-					</ion-item>
-					<ion-item class="item-accordion" ng-show="isCropShown(crop)">
-						
-						<div class="value"><span class="dim">Current Price</span>: <span class="val">{{crop.price | currency}} TTD</span></div>
-						<div class="value"><span class="dim">Category</span>: <span class="val">{{crop.category | capitalize}}</span></div>
-						<div class="value"><span class="dim">Date</span>: <span class="val">{{crop.date | capitalize}}</span></div>
-						<div class="value"><span class="dim">Volume Sold ( {{crop.unit}} )</span>:  <span class="val">{{crop.volume }}</span></div>
-						<div class="value"><span class="dim">Projected Price</span>: <span class="val">{{projected}} TTD</span></div>
-					</ion-item>
-				</div>
-			</div>
+		<ion-list id="crop-list">
+			<ion-item collection-repeat="crop in dailycrops | orderBy: 'commodity' | filter: filterCrops" class="item item-avatar" href="#/app/crop/{{crop.commodity}}/{{crop.date}}">
+				<img  id="cAvatar" src="img/fruits/{{crop.commodity}}.jpg" />
+				<h2>{{crop.commodity | capitalize}}</h2>
+				<p>{{crop.price | currency}} per {{crop.unit}}</p>
+			</ion-item>
 		</ion-list>
 		
 	</ion-content>

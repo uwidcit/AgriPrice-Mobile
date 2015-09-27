@@ -31,14 +31,8 @@
 }
 
 #bottom-bar{
-    position: fixed;
-    bottom: 20px;
-    z-index: 100;
-    bottom: 0px;
-    padding: 10px;
+    padding: 5px;
     width: 100%;
-    background: #333;
-    text-align: center;
     margin: auto 0;
 }
 
@@ -123,9 +117,9 @@
     .item-avatar .item-content{ padding-left: 100px; }
 
     #bottom-bar{
-        height: 80px;
+        height: 70px;
         font-size: 18px;
-        line-height: 30px;
+        /*line-height: 30px;*/
     }
 
     .value{ margin-bottom: 10px; }

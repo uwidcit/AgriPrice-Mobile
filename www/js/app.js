@@ -30,7 +30,17 @@ angular.module('agrinet', ['ionic', 'agrinet.controllers', 'agrinet.services', '
         views:{
           "content":{
             templateUrl: "templates/checkprices.html",
-            controller : "PriceCtrl"
+            controller : "PriceListCtrl"
+          }
+        }
+      })
+
+      .state("menu.crop",{
+        url: "/crop/:crop/:date",
+        views:{
+          "content":{
+            templateUrl : "templates/cropview.html",
+            controller : "CropPriceCtrl"
           }
         }
       })
