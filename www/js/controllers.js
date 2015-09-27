@@ -214,7 +214,7 @@ changeDate - Would allow the user to display information for a day selected.
 	});
 
 	var processDate = function(date) { // adjust the date to correspond to the actual date from the server since it is 4 hours off(date being selected for change date)
-		//console.log(typeof date);
+		// console.log(typeof date);
 		date = new Date(date);
 		date.setHours(date.getHours() + 4);
 		date = date.toDateString();
@@ -225,8 +225,8 @@ changeDate - Would allow the user to display information for a day selected.
 		crop.price = parseFloat(crop.price.slice(1));
 		if (crop.unit && crop.unit.toLowerCase() === "kg"){
 			crop.unit = "lb";
-			crop.volume = crop.volume * 2.20462;
-			crop.price = crop.price * 2.20462; 
+			crop.volume = Math.round(crop.volume * 2.20462);
+			crop.price = crop.price / 2.20462; 
 		}
 		return crop;
 	};
