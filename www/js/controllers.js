@@ -1,19 +1,23 @@
 var angular = window.angular,
 	_ = window._,
 	Parse = window.Parse,
-	parsePlugin = window.parsePlugin || {};
+	parsePlugin = window.parsePlugin || {},
+	isDeviceReady = false,
+	isConnected = false;
 
 angular.module('agrinet.controllers', [])
 
 .run(["$ionicPlatform", "$state", "$localstorage", function($ionicPlatform, $state, $localstorage) {
 	$ionicPlatform.ready(function() {
 		console.log("Ionic Platform is ready");
+		isDeviceReady = true;
 
+		// Check if the device is connected
+
+		//TODO Place the Parse Plugin Functionality in its own module (Clean up from run state)
 		parsePlugin.getInstallationId(function(id) {
 			console.log("Received Installation ID: " + id);
-		}, function(e) {
-			console.log("Unable to Retrive Installation ID: " + e);
-		});
+		}, function(e) { console.log("Unable to Retrive Installation ID: " + e); });
 
 		var appid = "ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ";
 		var clientKey = "zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb";
@@ -34,9 +38,7 @@ angular.module('agrinet.controllers', [])
 			}, function(e) {
 				console.error("Error Occurred while retrieving subscriptions: " + e);
 			});
-		}, function(e) {
-			console.error(e);
-		});
+		}, function(e) { console.error(e); });
 
 		Parse.initialize("ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "HbaUIyhiXFpUYhDQ7EsXW4IwP6zeXgqC81AQhQSL");
 
@@ -66,6 +68,8 @@ angular.module('agrinet.controllers', [])
 				);
 			}
 		}
+
+
 
 		// If user not logged in, the prompt to login
 		if (!$localstorage.get("login") && !$localstorage.get("tried_login")) {

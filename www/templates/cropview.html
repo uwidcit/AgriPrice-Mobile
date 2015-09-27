@@ -1,12 +1,15 @@
 <ion-view title="{{crop.commodity | capitalize}}">
 	<ion-content padding="true">
-		<div class="list card">
+		<div id="infoCard" class="list card">
 			<div class="item item-image">
 			    <img id="cpviewAvatar" src="img/fruits/{{crop.commodity}}.jpg" />
 			  </div>
 
 			<div class="item item-avatar">
-				
+				<div class="value"><span class="dim">
+					Commodity</span>: 
+					<span class="val">{{crop.commodity | capitalize}} TTD</span>
+				</div>
 				<div class="value"><span class="dim">
 					Current Price</span>: 
 					<span class="val">{{crop.price | currency}} TTD</span>
@@ -25,13 +28,19 @@
 				</div>
 				<!--<div class="value"><span class="dim">Projected Price</span>: <span class="val">{{projected}} TTD</span></div>-->
 			</div>
-			<div class="item">
-				<button class="button icon-left ion-arrow-graph-up-right">
-					Projected Price
-				</button>
-				<button class="button icon-left ion-pie-graph">
-					Historical Trends
-				</button>
+			<div id="cropViewControls" class="item">
+				<div class="row">
+					<div class="col">
+						<button class="button icon-left ion-arrow-graph-up-right">
+							Projected Price
+						</button>
+					</div>
+					<div class="col">
+						<button class="button icon-left ion-pie-graph">
+							Historical Trends
+						</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</ion-content>
