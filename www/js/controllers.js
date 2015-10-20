@@ -1,46 +1,72 @@
 var angular = window.angular,
 	_ = window._,
-	Parse = window.Parse,
+	Parse = window.Parse || {},
 	parsePlugin = window.parsePlugin || {},
 	isDeviceReady = false,
 	isConnected = false;
 
 angular.module('agrinet.controllers', [])
 
-.run(["$ionicPlatform", "$state", "$localstorage", function($ionicPlatform, $state, $localstorage) {
+.run(["$ionicPlatform", "$state", "$localstorage",function($ionicPlatform, $state, $localstorage) {
+	
 	$ionicPlatform.ready(function() {
 		console.log("Ionic Platform is ready");
 		isDeviceReady = true;
+		
 
-		// Check if the device is connected
+		if (window.Connection){
+			if (navigator.connection.type === window.Connection.NONE){
+				console.log("No Connection Detected - Attempting to Exit App");
+				navigator.notification.alert("Unable to Connect to the Internet. Please Connect and Try Again", function(){
+					ionic.Platform.exitApp();
+				}, "AgriPrice");
+				
+				return;
+			}else{
+				console.log("Connection Available");
+			}
+		}else{
+			console.log("No Window Connection Found");
+		}
 
-		//TODO Place the Parse Plugin Functionality in its own module (Clean up from run state)
-		parsePlugin.getInstallationId(function(id) {
-			console.log("Received Installation ID: " + id);
-		}, function(e) { console.log("Unable to Retrive Installation ID: " + e); });
+		// Check if cordova parse plugin is available
+		if (parsePlugin && parsePlugin.getInstallationId && parsePlugin.initialize){
+			//TODO Place the Parse Plugin Functionality in its own module (Clean up from run state)
+			parsePlugin.getInstallationId(function(id) {
+				console.log("Received Installation ID: " + id);
+			}, function(e) { console.log("Unable to Retrive Installation ID: " + e); });
 
-		var appid = "ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ";
-		var clientKey = "zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb";
+			var appid = "ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ";
+			var clientKey = "zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb";
 
-		parsePlugin.initialize(appid, clientKey, function() {
-			console.log("Starting Process to Connect to the Parse API");
+			parsePlugin.initialize(appid, clientKey, function() {
+				console.log("Starting Process to Connect to the Parse API");
 
-			parsePlugin.subscribe('SampleChannel', function() {
-				console.log("Successfully Initialized the appropriate Channel");
-			}, function(e) {
-				console.error("Unable to connect to the Parse API:" + e);
-			});
+				parsePlugin.subscribe('SampleChannel', function() {
+					console.log("Successfully Initialized the appropriate Channel");
+				}, function(e) {
+					console.log("Unable to connect to the Parse API:" + e);
+				});
 
-			console.log("Attempting to retrieve current subscriptions");
+				console.log("Attempting to retrieve current subscriptions");
 
-			parsePlugin.getSubscriptions(function(subscriptions) {
-				console.log(subscriptions);
-			}, function(e) {
-				console.error("Error Occurred while retrieving subscriptions: " + e);
-			});
-		}, function(e) { console.error(e); });
-
-		Parse.initialize("ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "HbaUIyhiXFpUYhDQ7EsXW4IwP6zeXgqC81AQhQSL");
+				parsePlugin.getSubscriptions(function(subscriptions) {
+					console.log(subscriptions);
+				}, function(e) {
+					console.log("Error Occurred while retrieving subscriptions: " + e);
+				});
+			}, function(e) { console.log(e); });
+		}else{
+			console.log("Parse Plugin in not available - probably running in browser");
+		}
+		
+		// Check if the Parse web library loaded
+		if (Parse && Parse.initialize){
+			Parse.initialize("ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "HbaUIyhiXFpUYhDQ7EsXW4IwP6zeXgqC81AQhQSL");
+		}else{
+			console.log("Parse Library not loaded");
+		}
+			
 
 		function alertDismissed() {
 			$state.go("menu.checkprices");
@@ -84,6 +110,18 @@ angular.module('agrinet.controllers', [])
 	});
 }])
 
+
+/*
+	System Controller
+*/
+.controller("SystemCtrl", ["$scope", function($scope){
+	console.log("System Controller Loaded");
+	console.log($scope);
+}])
+
+/*
+	About Controller
+*/
 .controller('AboutCtrl', function($scope, $ionicSideMenuDelegate) {
 	console.log("About Controller Launched");
 })
@@ -138,11 +176,11 @@ register - If the user is not registered Google login would open and the user wo
 						$localstorage.set("login", email);
 						$scope.register(email);
 					}, function(error) { // Error connecting to Google Services
-						console.error(error);
+						console.log(error);
 						navigator.notification.alert("Unable to Connect to Google");
 					});
 			}, function(error) {
-				console.error(error);
+				console.log(error);
 				navigator.notification.alert("Unable to Connect to Google");
 			});
 	}
@@ -234,12 +272,18 @@ changeDate - Would allow the user to display information for a day selected.
 		}
 		return crop;
 	};
+
+	$scope.processMissingImgs = function(el){
+		console.log(el);
+	}
 	
 	$scope.filterCrops =  function(crop){
 		if ( !isNaN(crop.price) && crop.price > 0){ // If valid price and system actual has a price for commodity
 			return crop;	
 		}
 	}
+
+
 
 	// Load Dates from Server to populate the dropdown menu
 	var dateKey = (new Date().toDateString());
@@ -403,7 +447,7 @@ getCrops - Loads crops that are availible.
  */
 //populates notificates mgmt page
 
-.controller("NotifyCtrl", ["$scope", "notifyService", "$localstorage", "$ionicLoading", function($scope, notifyService, $localstorage, $ionicLoading) {
+.controller("NotifyCtrl", ["$scope", "notifyService", "$localstorage", "$ionicLoading","loggedInService", function($scope, notifyService, $localstorage, $ionicLoading, loggedInService) {
 
 	var checkConnection = function() {
 		if (navigator && navigator.connection && navigator.connection.type === 'none') {
@@ -496,6 +540,13 @@ getCrops - Loads crops that are availible.
 			console.log("Error Occurred: " + e);
 		}
 	}
+
+	// Main of the Notify Controller
+
+	// Check if User Logged In
+	var res = loggedInService.checkRedirect("notify");
+	if (!res)
+		return;
 
 	if ($localstorage.exists('crops')) {
 		getCrops();

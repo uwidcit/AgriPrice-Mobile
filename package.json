@@ -15,9 +15,10 @@
   "cordovaPlugins": [
     "cordova-plugin-whitelist",
     "cordova-plugin-splashscreen",
-    "com.ionic.keyboard",
     "https://github.com/benjie/phonegap-parse-plugin",
-    "cordova-plugin-dialogs"
+    "cordova-plugin-dialogs",
+    "cordova-plugin-network-information",
+    "cordova-plugin-device"
   ],
   "cordovaPlatforms": [
     "android",

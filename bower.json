@@ -8,6 +8,7 @@
   "dependencies": {
     "angular-resource": "~1.4.4",
     "ionicons": "~2.0.1",
-    "ngCordova": "~0.1.20-alpha"
+    "ngCordova": "~0.1.20-alpha",
+    "angular-img-fallback": "~0.1.3"
   }
 }

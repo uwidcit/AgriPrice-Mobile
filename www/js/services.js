@@ -102,6 +102,28 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
 	}
 }])
 
+.factory('loggedInService', ['$state','$localstorage', function($state, $localstorage){
+	return {
+		isLoggedIn: function(){
+			return ($localstorage.get("login") !== undefined);
+		},
+		checkRedirect: function(type){
+			var login = $localstorage.get("login") ;
+			if (!login){
+				var mssg = "Unable to proceed without logging in.";
+				if (type === "notify" || type === "notification"){
+					msg = "Must be logged in to Manage Notifications";
+				}
+				navigator.notification.alert("Must be logged in to Manage Notifications", function(btn){
+					$state.go("menu.login");
+				}, "AgriPrice")
+				return false;
+			}
+			return true;
+		}
+	}
+}])
+
 .factory('$localstorage', ['$window', function($window) {
   return {
 		set: function(key, value) {

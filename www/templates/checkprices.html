@@ -1,12 +1,10 @@
-<ion-view title="Latest Prices">
+<ion-view title="AgriPrice - Latest Prices">
 	
 		<!-- <div id="bottom-bar">
 			<a href="#/app/notifications">Manage Notifications</a>
 		</div> -->
 
-	<div class="bar bar-footer bar-light">
-			<button id="bottom-bar"class="button button-dark button-block">Manage Notifications</button>
-	</div>
+	
 	
 
 	<ion-content padding="true">
@@ -21,11 +19,14 @@
 		</div>
 		<ion-list id="crop-list">
 			<ion-item collection-repeat="crop in dailycrops | orderBy: 'commodity' | filter: filterCrops" class="item item-avatar" href="#/app/crop/{{crop.commodity}}/{{crop.date}}">
-				<img  id="cAvatar" src="img/fruits/{{crop.commodity}}.jpg" />
+				<img  id="cAvatar" ng-src="img/fruits/{{crop.commodity}}.jpg" fallback-src="img/fruits_icon_placeholder.jpg"  />
 				<h2>{{crop.commodity | capitalize}}</h2>
 				<p>{{crop.price | currency}} per {{crop.unit}}</p>
 			</ion-item>
 		</ion-list>
 		
 	</ion-content>
+	<ion-footer-bar id="bottom-bar" >
+		<button class="button button-dark button-block">Manage Notifications</button>
+	</ion-footer-bar>
 </ion-view>

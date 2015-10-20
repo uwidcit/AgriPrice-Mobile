@@ -29,11 +29,13 @@
 .title{
     text-align: center;
 }
-
 #bottom-bar{
+    height: 60px;
+}
+#bottom-bar button{
     padding: 5px;
-    width: 100%;
-    margin: auto 0;
+    width: 98%;
+    margin: 0 auto;
 }
 
 #bottom-bar a{
@@ -127,10 +129,12 @@
     .item-avatar .item-content{ padding-left: 100px; }
 
     #bottom-bar{
-        height: 70px;
-        font-size: 18px;
-        /*line-height: 30px;*/
+        height: 80px;
     }
+    #bottom-bar button{
+        font-size: 18px;
+    }
+
 
     .value{ margin-bottom: 10px; }
     .dim{
