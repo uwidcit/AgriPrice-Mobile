@@ -275,14 +275,18 @@ changeDate - Would allow the user to display information for a day selected.
 
 	$scope.processMissingImgs = function(el){
 		console.log(el);
-	}
+	};
 	
 	$scope.filterCrops =  function(crop){
 		if ( !isNaN(crop.price) && crop.price > 0){ // If valid price and system actual has a price for commodity
 			return crop;	
 		}
-	}
+	};
 
+	$scope.manageNotification = function(){
+		console.log("Manage Notification CLicked");
+		$state.go("menu.notifications");
+	};
 
 
 	// Load Dates from Server to populate the dropdown menu
@@ -426,7 +430,7 @@ changeDate - Would allow the user to display information for a day selected.
 .controller("CropPriceCtrl", ["$stateParams", "$scope", "$localstorage", function($stateParams, $scope,$localstorage){
 	// Making the Assumption that at this point they already have the data cached
 	var date = (new Date($stateParams['date'])).toDateString();
-	console.log($stateParams);
+	// console.log($stateParams);
 	// console.log(new Date($stateParams['date']));
 	if (!$localstorage.exists()){
 		date = (new Date()).toDateString()
@@ -564,6 +568,48 @@ getCrops - Loads crops that are availible.
 			$scope.crops = crops;
 		}
 	}
+
+}])
+
+.controller("VisualCtrl", ['$scope',"$stateParams","DailyCrop", function($scope, $stateParams, DailyCrop){
+	var crop = $stateParams['crop'];
+
+	var processDate = function(date) { // adjust the date to correspond to the actual date from the server since it is 4 hours off(date being selected for change date)
+		// console.log(typeof date);
+		date = new Date(date);
+		date.setHours(date.getHours() + 4);
+		date = date.toDateString();
+		return date;
+	};
+
+
+	DailyCrop
+		.cropBetweenDates()
+		.then(function(data){
+			// Process the data in the format need for the chanrts
+			var labels = [], price_recs = [], vol_recs = [];
+			// Transform the data recieved into the form need for visualization
+			_.each(data, function(el){
+				labels.push(processDate(el['date']));
+				price_recs.push(el['price']);
+				vol_recs.push(el['volume']);
+			});
+
+			console.log()
+
+			$scope.price_data = price_recs;
+			$scope.volume_data = vol_recs;
+			$scope.labels = labels;
+		});
+
+	// console.log("Received: " + crop);
+	// $scope.labels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+	// $scope.series = ['Series A', 'Series B'];
+
+	// $scope.data = [
+	// 	[65, 59, 80, 81, 56, 55, 40],
+	// 	[28, 48, 40, 19, 86, 27, 90]
+	// ];
 
 }])
 

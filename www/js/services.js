@@ -20,6 +20,16 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
 		return deferredObject.promise;
 	}
 
+	var dateHelper = function(dateStr){
+		var dateObj;
+		if (dateStr)
+		 	dateObj = new Date(dateStr);
+		 else
+		 	dateObj = new Date();
+
+		return dateObj.getFullYear() + "-" + (dateObj.getMonth() + 1) + "-" + dateObj.getDate();
+	}
+
 	this.cropList = function(){
 		var Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/daily/recent',{}); // https://docs.angularjs.org/api/ngResource/service/$resource
 		return processCropResource(Crop);
@@ -28,13 +38,19 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
 	// holds the recent dates that information is stored for
 
 	this.cropsListByDate = function(date){
-		var dateObj = new Date(date),
-			dateTxt = dateObj.getFullYear() + "-" + (dateObj.getMonth() + 1) + "-" + dateObj.getDate(),
+		var dateTxt = dateHelper(date),
 			Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/daily/dates/' + dateTxt , {});
 
-		console.log('Retrieving information from: https://agrimarketwatch.herokuapp.com/crops/daily/dates/' + dateTxt);
+		// console.log('Retrieving information from: https://agrimarketwatch.herokuapp.com/crops/daily/dates/' + dateTxt);
 
 		return processCropResource(Crop);
+	};
+
+	this.cropBetweenDates = function(crop, start){
+		var start_date = dateHelper(date),
+			end_date = dateHelper(),
+			Crop = $resouce("https://agrimarketwatch.herokuapp.com/crops/daily/dates/" + start_date + "/" + end_date+"/"+crop);
+			return processCropResource(Crop);
 	};
 
 	//no information form the server

@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('agrinet', ['ionic', 'agrinet.controllers', 'agrinet.services', 'ngCordova', 'ui.router', 'dcbImgFallback'])
+angular.module('agrinet', ['ionic', 'agrinet.controllers', 'agrinet.services', 'ngCordova', 'ui.router', 'dcbImgFallback', 'chart.js'])
 
   .config(function($stateProvider, $urlRouterProvider){
     $stateProvider
@@ -42,6 +42,16 @@ angular.module('agrinet', ['ionic', 'agrinet.controllers', 'agrinet.services', '
           "content":{
             templateUrl : "templates/cropview.html",
             controller : "CropPriceCtrl"
+          }
+        }
+      })
+
+      .state("menu.visualize",{
+        url: "/visualize/:crop",
+        views:{
+          "content":{
+            templateUrl : "templates/visualize.html",
+            controller : "VisualCtrl"
           }
         }
       })
