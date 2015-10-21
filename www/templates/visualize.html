@@ -1,0 +1,12 @@
+<ion-view title="AgriPrice - Latest Prices">
+	<ion-content padding="true">
+		<canvas id="bar" class="chart chart-bar"
+		  chart-data="volume_data" chart-labels="labels">
+		</canvas>
+
+		<canvas id="line" class="chart chart-line" chart-data="price_data"
+			chart-labels="labels" chart-legend="true" chart-series="series"
+			chart-click="onClick" >
+		</canvas> 
+	</ion-content>
+</ion-view>
