@@ -5,6 +5,8 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
 
 	// returns the information form the server of the crops.
 
+	//TODO the difference between the processCropResource and processCropResourceFormatted, is opposite than what is logically expected. Need to be reversed
+
 	// Helper function to return the promise of the REST request for crop prices
 	var processCropResource = function(CropResource){
 		var deferredObject = $q.defer();
@@ -12,6 +14,20 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
 		CropResource.query().$promise.then(
 			function(croplist) {
 				deferredObject.resolve(_.map(croplist,processListDisplay));
+			}, 
+			function(error){
+				deferredObject.reject(error);
+			}
+		);
+		return deferredObject.promise;
+	}
+
+	var processCropResourceFormatted = function(CropResource){
+		var deferredObject = $q.defer();
+
+		CropResource.query().$promise.then(
+			function(croplist) {
+				deferredObject.resolve(_.map(croplist,processListDisplayFormat));
 			}, 
 			function(error){
 				deferredObject.reject(error);
@@ -47,10 +63,10 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
 	};
 
 	this.cropBetweenDates = function(crop, start){
-		var start_date = dateHelper(date),
+		var start_date = dateHelper(start),
 			end_date = dateHelper(),
-			Crop = $resouce("https://agrimarketwatch.herokuapp.com/crops/daily/dates/" + start_date + "/" + end_date+"/"+crop);
-			return processCropResource(Crop);
+			Crop = $resource("https://agrimarketwatch.herokuapp.com/crops/daily/dates/" + start_date + "/" + end_date+"/"+crop);
+			return processCropResourceFormatted(Crop);
 	};
 
 	//no information form the server
@@ -99,6 +115,16 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
 		el.price = "$"+ el.price.toFixed(2);
 		return el;
 	};
+
+	var processListDisplayFormat =function(el){
+		//remove id
+		delete el._id;
+		//convert date to human readable form
+		el.date = processDate(el.date);
+		//make price more presentable
+		el.price = el.price.toFixed(2);
+		return el;
+	}
 	
 	var processDate = function(date){// adjust the date to correspond to the actual date from the server since it is 4 hours off (date which is shown when a crop is selected)
 		//console.log(typeof date);

@@ -582,23 +582,26 @@ getCrops - Loads crops that are availible.
 		return date;
 	};
 
+	var start = new Date((new Date()).getTime() - (30 * 86400000));
 
 	DailyCrop
-		.cropBetweenDates()
+		.cropBetweenDates(crop, start)
 		.then(function(data){
+			console.log("Processing Records " )
 			// Process the data in the format need for the chanrts
 			var labels = [], price_recs = [], vol_recs = [];
 			// Transform the data recieved into the form need for visualization
 			_.each(data, function(el){
 				labels.push(processDate(el['date']));
+
 				price_recs.push(el['price']);
 				vol_recs.push(el['volume']);
 			});
 
-			console.log()
-
-			$scope.price_data = price_recs;
-			$scope.volume_data = vol_recs;
+			$scope.price_data = [price_recs];
+			$scope.volume_data = [vol_recs];
+			$scope.price_series = ["Price for " + crop + " per "+data[0].unit+ " in TTD"];
+			$scope.volume_series =["Volume for " + crop+ " in " + data[0].unit]
 			$scope.labels = labels;
 		});
 
