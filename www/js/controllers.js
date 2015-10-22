@@ -284,7 +284,6 @@ changeDate - Would allow the user to display information for a day selected.
 	};
 
 	$scope.manageNotification = function(){
-		console.log("Manage Notification CLicked");
 		$state.go("menu.notifications");
 	};
 
@@ -422,9 +421,6 @@ changeDate - Would allow the user to display information for a day selected.
 				$scope.projected = val[0].price;
 			});
 	};
-
-
-
 }])
 
 .controller("CropPriceCtrl", ["$stateParams", "$scope", "$localstorage", function($stateParams, $scope,$localstorage){
