@@ -140,6 +140,7 @@ register - If the user is not registered Google login would open and the user wo
 	var login = $localstorage.get("login");
 	console.log(login);
 	if (login) {
+		console.log("User Previously Logged In");
 		navigator.notification.alert(
 			'You are already logged in.', // message
 			function() { $state.go("menu.checkprices"); }, // callback to invoke with index of button pressed
@@ -211,7 +212,7 @@ register - If the user is not registered Google login would open and the user wo
 									console.log("Successfully Subscribed to: " + result[i]);
 								}, function(e) {
 									console.log("Unable to Subscribe to " + result[i] + " Error: " + e);
-									navigator.notification.alert("error");
+									navigator.notification.alert("Unable to Sign In to Google");
 								});
 								$ionicLoading.hide();
 								$state.go('menu.checkprices');
