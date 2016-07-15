@@ -114,9 +114,25 @@ angular.module('agrinet.controllers', [])
 /*
 	System Controller
 */
-.controller("SystemCtrl", ["$scope", function($scope){
+.controller("SystemCtrl", ["$scope","$ionicPopup", "$state", "loggedInService", function($scope,$ionicPopup, $state, loggedInService){
 	console.log("System Controller Loaded");
-	console.log($scope);
+	$scope.loggedin = loggedInService.isLoggedIn();
+	console.log($scope.loggedin);
+
+	$scope.logout = function(){
+		console.log("selected Logged out");
+		// Provide user confirmation of log out
+		$ionicPopup.confirm({
+			title: 'Log Out',
+			template: 'Are you sure you want to log out of AgriPrice?'
+		}).then(function(res) {
+			if(res){
+				loggedInService.logout(); // perform the actual log out process
+				$state.go('menu.login');
+			}
+		});
+
+	};
 }])
 
 /*
@@ -251,10 +267,6 @@ changeDate - Would allow the user to display information for a day selected.
 //populates crop prices page
 
 .controller("PriceListCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", "$ionicLoading", "$http", "$state", "$sessionstorage", function($scope, DailyCrop, $localstorage, $ionicPopup, $ionicLoading, $http, $state, $sessionstorage) {
-
-	$ionicLoading.show({
-		template: 'Loading...'
-	});
 
 	var processDate = function(date) { // adjust the date to correspond to the actual date from the server since it is 4 hours off(date being selected for change date)
 		// console.log(typeof date);
@@ -473,7 +485,7 @@ getCrops - Loads crops that are availible.
 				cache.date = (new Date()).toDateString();
 				cache.names = resp.names;
 				$localstorage.setObject('crops', val);
-				$ionicLoading.hide();
+				$ionicLoading.hide();s
 			});
 	}
 

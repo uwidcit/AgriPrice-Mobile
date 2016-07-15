@@ -22,7 +22,8 @@
     },
     "cordova-plugin-network-information",
     "cordova-plugin-device",
-    "cordova-plugin-inappbrowser"
+    "cordova-plugin-inappbrowser",
+    "https://github.com/benjie/phonegap-parse-plugin"
   ],
   "cordovaPlatforms": [
     "android",

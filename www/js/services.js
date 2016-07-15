@@ -162,6 +162,9 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
 				return false;
 			}
 			return true;
+		},
+		logout : function(){
+			$localstorage.delete("login");
 		}
 	}
 }])
@@ -183,6 +186,9 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
 		exists : function(key){
 			var val = $window.localStorage[key];
 			return (val !== null && val !== undefined);
+		},
+		delete : function(key){
+			$window.localStorage.removeItem(key);
 		}
   	}
 }])

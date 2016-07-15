@@ -13,11 +13,15 @@
 .val{
     font-weight: bold;
     font-size: 18px;
-    padding-left: 10px;
+    padding-left: 5px;
 }
 
 .value{
     margin-bottom: 10px;
+}
+
+.menu_item{
+    line-height: 20px
 }
 
 
@@ -109,7 +113,7 @@
 }
 
 #cpviewAvatar{
-    margin: 20px 20px;
+    margin: 5px 10px;
     width: 90%;
 }
 #infoCard{

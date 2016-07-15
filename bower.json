@@ -13,7 +13,6 @@
     "angular-chart.js": "~1.0.0",
     "ng-cordova-oauth": "^0.2.9",
     "parse": "^1.8.5",
-    "angular-chart": "^0.5.0",
     "Chart.js": "^2.1.6",
     "underscore": "^1.8.3"
   }
