@@ -1,29 +1,42 @@
 <ion-side-menus>
-  <ion-side-menu-content>
-    <ion-nav-bar class="bar-balanced">
-      <ion-nav-back-button class="button-icon ion-arrow-left-c">
-      </ion-nav-back-button>
-    </ion-nav-bar>
-    <ion-nav-buttons side="left">
-      <button class="button button-icon button-clear ion-navicon" ng-click="toggleLeft()">
-      </button>
-    </ion-nav-buttons>
-    <ion-nav-view name="content">
+    <ion-side-menu-content>
+        <ion-nav-bar class="bar-balanced" align-title="center">
+            <ion-nav-back-button class="no-text">
+            </ion-nav-back-button>
+            <ion-nav-buttons side="left">
+                <button class="button button-icon button-clear ion-navicon-round" menu-toggle="left">
+                    Menu
+                </button>
+            </ion-nav-buttons>
+        </ion-nav-bar>
 
-    </ion-nav-view>
-  </ion-side-menu-content> 
-  
-  <ion-side-menu side="left" enable-menu-with-back-views="false">
-    <ion-header-bar class="bar-dark">
-      <h1 class="title">Menu</h1>
-    </ion-header-bar>
-    <ion-content>
-      <ul class="list">
-        <a menu-close href="#/app/checkprices" class="item">Latest Prices</a>
-        <a menu-close href="#/app/notifications" class="item">Notifications</a>
-        <a menu-close href="#/app/about" class="item">About</a>
-      </ul>
-    </ion-content>
-  </ion-side-menu>
-  
+        <ion-nav-view name="content"></ion-nav-view>
+    </ion-side-menu-content>
+    <ion-side-menu side="left" enable-menu-with-back-views="false">
+        <ion-header-bar class="bar">
+            <h3>AgriPrice</h3>
+        </ion-header-bar>
+        <ion-content class="stable-bg has-expanded-header">
+            <ion-list>
+                <ion-item menu-close href="#/app/checkprices" class="item item-icon-left">
+                    <i class="icon ion-cash"></i>Latest Prices
+                </ion-item>
+                <ion-item menu-close href="#/app/notifications" class="item item-icon-left">
+                    <i class="icon ion-alert"></i>Notifications
+                </ion-item>
+                <ion-item menu-close href="#/app/about" class="item item-icon-left">
+                    <i class="icon ion-information"></i>About
+                </ion-item>
+
+                <ion-item ng-hide="loggedin" menu-close href="#/app/login" class="item item-icon-left">
+                    <i class="icon ion-person"></i>Login
+                </ion-item>
+                
+                <ion-item ng-show="loggedin" menu-close ng-click='logout()' class='item item-icon-left' >
+                    <i class="icon ion-person"></i>Logout
+                </ion-item>
+
+            </ion-list>
+        </ion-content>
+    </ion-side-menu>
 </ion-side-menus>

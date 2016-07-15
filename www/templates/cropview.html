@@ -1,0 +1,47 @@
+<ion-view title="AgriPrice - {{crop.commodity | capitalize}}">
+	<ion-content>
+		<div id="infoCard" class="card">
+			<div class="item item-image">
+			    <img id="cpviewAvatar" src="img/fruits/{{crop.commodity}}.jpg" />
+			  </div>
+
+			<div class="item item-text-wrap">
+				<div class="value"><span class="dim">
+					Commodity</span>: 
+					<span class="val">{{crop.commodity | capitalize}} TTD</span>
+				</div>
+				<div class="value"><span class="dim">
+					Current Price</span>: 
+					<span class="val">{{crop.price | currency}} TTD</span>
+				</div>
+				<div class="value"><span class="dim">
+					Category</span>: 
+					<span class="val">{{crop.category | capitalize}}</span>
+				</div>
+				<div class="value">
+					<span class="dim">Date</span>: 
+					<span class="val">{{crop.date | capitalize}}</span>
+				</div>
+				<div class="value">
+					<span class="dim">Volume Sold ( {{crop.unit}} )</span>:  
+					<span class="val">{{crop.volume }}</span>
+				</div>
+				<!--<div class="value"><span class="dim">Projected Price</span>: <span class="val">{{projected}} TTD</span></div>-->
+			</div>
+			<div id="cropViewControls" class="item">
+				<div class="row">
+					<div class="col col-50">
+						<button class="button icon-left ion-arrow-graph-up-right" disabled="true" style="width: 100%">
+							Future Price
+						</button>
+					</div>
+					<div class="col col-50">
+						<a ng-href="#/app/visualize/{{crop.commodity}}" class="button icon-left ion-pie-graph" style="width: 100%">
+							Trends
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ion-content>
+</ion-view>

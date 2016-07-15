@@ -5,14 +5,24 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('agrinet', ['ionic', 'agrinet.controllers', 'agrinet.services', 'ngCordova', 'ui.router'])
+angular.module('agrinet', 
+[
+  'ionic', 
+  'agrinet.controllers', 
+  'agrinet.services', 
+  'ngCordova', 
+  'ui.router', 
+  'dcbImgFallback', 
+  'chart.js',
+  'ngCordovaOauth'])
 
   .config(function($stateProvider, $urlRouterProvider){
     $stateProvider
       .state("menu", {
         url: "/app",
         abstract: true,
-        templateUrl: "templates/menu.html"
+        templateUrl: "templates/menu.html",
+        controller: "SystemCtrl"
       })
 
       .state("menu.about",{
@@ -30,7 +40,27 @@ angular.module('agrinet', ['ionic', 'agrinet.controllers', 'agrinet.services', '
         views:{
           "content":{
             templateUrl: "templates/checkprices.html",
-            controller : "PriceCtrl"
+            controller : "PriceListCtrl"
+          }
+        }
+      })
+
+      .state("menu.crop",{
+        url: "/crop/:crop/:date",
+        views:{
+          "content":{
+            templateUrl : "templates/cropview.html",
+            controller : "CropPriceCtrl"
+          }
+        }
+      })
+
+      .state("menu.visualize",{
+        url: "/visualize/:crop",
+        views:{
+          "content":{
+            templateUrl : "templates/visualize.html",
+            controller : "VisualCtrl"
           }
         }
       })
@@ -54,7 +84,7 @@ angular.module('agrinet', ['ionic', 'agrinet.controllers', 'agrinet.services', '
           }
         }
       })
-      $urlRouterProvider.otherwise("app/login");
+      $urlRouterProvider.otherwise("app/checkprices");
   });
 
 

@@ -1,38 +1,24 @@
-<ion-view title="Latest Prices">
-    <a href="#/app/notifications">
-        <div id="bottom-bar">
-            Manage Notifications  
-        </div>
-    </a>
+<ion-view title="AgriPrice - Latest Prices">
 	<ion-content padding="true">
-		<div class="list">
-
+		<div class="list" ng-init="logmein()">
 			<label class="item item-input item-select">
 			  <div class="input-label">
-			    Date
+				Date
 			  </div>
-			  <select ng-init="selDate = dates[0]" ng-model="selDate" ng-options="date for date in dates" ng-change="changeDate(selDate)" >
-			  </select>
-		</label>
-        </div>
-	  <ion-list>
-        <div id="crop-list">
-        <div ng-repeat="crop in dailycrops | orderBy: 'commodity'">
-            <ion-item class="item-stable"
-                    ng-click="toggleCrop(crop)"
-                    ng-class="{active: isCropShown(crop)}">
-             <i class="icon" ng-class="isCropShown(crop) ? 'ion-minus' : 'ion-plus'"></i>
-            &nbsp;
-            {{crop.commodity | capitalize}} <span class="price">{{crop.price}} per {{crop.unit}}</span>
-            </ion-item>
-            <ion-item class="item-accordion"
-                    ng-show="isCropShown(crop)">
-            <div class="value"><span class="dim">Category</span>: <span clas="val">{{crop.category | lowercase}}</span></div>
-            <div class="value"><span class="dim">Date</span>: <span clas="val">{{crop.date | lowercase}}</span></div>
-            <div class="value"><span class="dim">Volume</span>: <span clas="val">{{crop.volume | lowercase}} {{crop.unit}}</span></div>
-            </ion-item>
-        </div>
-        </div>
-      </ion-list>
+			  <select ng-init="selDate = dates[0]" ng-model="selDate" ng-options="date for date in dates" ng-change="changeDate(selDate)"></select>
+			  
+			</label>
+		</div>
+		<ion-list id="crop-list">
+			<ion-item collection-repeat="crop in dailycrops | orderBy: 'commodity' | filter: filterCrops" class="item item-avatar" href="#/app/crop/{{crop.commodity}}/{{crop.date}}">
+				<img  id="cAvatar" ng-src="img/fruits/{{crop.commodity}}.jpg" fallback-src="img/fruits_icon_placeholder.jpg"  />
+				<h2>{{crop.commodity | capitalize}}</h2>
+				<p>{{crop.price | currency}} per {{crop.unit}}</p>
+			</ion-item>
+		</ion-list>
+		
 	</ion-content>
+	<ion-footer-bar id="bottom-bar" >
+		<button class="button button-dark button-block" ng-click="manageNotification()">Manage Notifications</button>
+	</ion-footer-bar>
 </ion-view>
