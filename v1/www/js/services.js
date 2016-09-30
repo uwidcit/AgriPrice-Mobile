@@ -2,11 +2,8 @@ var app = angular.module('agrinet.services', ['ngResource'])
 
 app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $http){
 	console.log("Initializing DailyCrop");
-
 	// returns the information form the server of the crops.
-
 	//TODO the difference between the processCropResource and processCropResourceFormatted, is opposite than what is logically expected. Need to be reversed
-
 	// Helper function to return the promise of the REST request for crop prices
 	var processCropResource = function(CropResource){
 		var deferredObject = $q.defer();
