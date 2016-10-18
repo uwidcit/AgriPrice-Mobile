@@ -13,17 +13,18 @@
     "which": "^1.1.1"
   },
   "cordovaPlugins": [
-    "cordova-plugin-splashscreen",
-    "cordova-plugin-dialogs",
     "cordova-plugin-whitelist",
+    "cordova-plugin-device",
+    "cordova-plugin-console",
+    "com.ionic.keyboard",
+    "cordova-plugin-dialogs",
+    "cordova-plugin-splashscreen",
     {
       "locator": "https://github.com/benjie/phonegap-parse-plugin",
       "id": "org.apache.cordova.core.parseplugin"
     },
     "cordova-plugin-network-information",
-    "cordova-plugin-device",
-    "cordova-plugin-inappbrowser",
-    "https://github.com/benjie/phonegap-parse-plugin"
+    "cordova-plugin-inappbrowser"
   ],
   "cordovaPlatforms": [
     "android",
