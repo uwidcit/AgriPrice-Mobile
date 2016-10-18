@@ -2,7 +2,8 @@ node_modules/
 plugins/
 platforms/
 .idea/
-www/lib
+www/lib/
 resources/android/
 resources/ios/
 *.keystore
+*.apk

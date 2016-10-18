@@ -5,6 +5,8 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
 
 	// returns the information form the server of the crops.
 
+	//TODO the difference between the processCropResource and processCropResourceFormatted, is opposite than what is logically expected. Need to be reversed
+
 	// Helper function to return the promise of the REST request for crop prices
 	var processCropResource = function(CropResource){
 		var deferredObject = $q.defer();
@@ -20,6 +22,30 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
 		return deferredObject.promise;
 	}
 
+	var processCropResourceFormatted = function(CropResource){
+		var deferredObject = $q.defer();
+
+		CropResource.query().$promise.then(
+			function(croplist) {
+				deferredObject.resolve(_.map(croplist,processListDisplayFormat));
+			}, 
+			function(error){
+				deferredObject.reject(error);
+			}
+		);
+		return deferredObject.promise;
+	}
+
+	var dateHelper = function(dateStr){
+		var dateObj;
+		if (dateStr)
+		 	dateObj = new Date(dateStr);
+		 else
+		 	dateObj = new Date();
+
+		return dateObj.getFullYear() + "-" + (dateObj.getMonth() + 1) + "-" + dateObj.getDate();
+	}
+
 	this.cropList = function(){
 		var Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/daily/recent',{}); // https://docs.angularjs.org/api/ngResource/service/$resource
 		return processCropResource(Crop);
@@ -28,13 +54,19 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
 	// holds the recent dates that information is stored for
 
 	this.cropsListByDate = function(date){
-		var dateObj = new Date(date),
-			dateTxt = dateObj.getFullYear() + "-" + (dateObj.getMonth() + 1) + "-" + dateObj.getDate(),
+		var dateTxt = dateHelper(date),
 			Crop = $resource('https://agrimarketwatch.herokuapp.com/crops/daily/dates/' + dateTxt , {});
 
-		console.log('Retrieving information from: https://agrimarketwatch.herokuapp.com/crops/daily/dates/' + dateTxt);
+		// console.log('Retrieving information from: https://agrimarketwatch.herokuapp.com/crops/daily/dates/' + dateTxt);
 
 		return processCropResource(Crop);
+	};
+
+	this.cropBetweenDates = function(crop, start){
+		var start_date = dateHelper(start),
+			end_date = dateHelper(),
+			Crop = $resource("https://agrimarketwatch.herokuapp.com/crops/daily/dates/" + start_date + "/" + end_date+"/"+crop);
+			return processCropResourceFormatted(Crop);
 	};
 
 	//no information form the server
@@ -83,6 +115,16 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
 		el.price = "$"+ el.price.toFixed(2);
 		return el;
 	};
+
+	var processListDisplayFormat =function(el){
+		//remove id
+		delete el._id;
+		//convert date to human readable form
+		el.date = processDate(el.date);
+		//make price more presentable
+		el.price = el.price.toFixed(2);
+		return el;
+	}
 	
 	var processDate = function(date){// adjust the date to correspond to the actual date from the server since it is 4 hours off (date which is shown when a crop is selected)
 		//console.log(typeof date);
@@ -99,6 +141,31 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
 	  getCropNames: function() {
 		 return $http.get('https://agrimarketwatch.herokuapp.com/crops/crops');
 	  }
+	}
+}])
+
+.factory('loggedInService', ['$state','$localstorage', function($state, $localstorage){
+	return {
+		isLoggedIn: function(){
+			return ($localstorage.get("login") !== undefined);
+		},
+		checkRedirect: function(type){
+			var login = $localstorage.get("login") ;
+			if (!login){
+				var mssg = "Unable to proceed without logging in.";
+				if (type === "notify" || type === "notification"){
+					msg = "Must be logged in to Manage Notifications";
+				}
+				navigator.notification.alert("Must be logged in to Manage Notifications", function(btn){
+					$state.go("menu.login");
+				}, "AgriPrice")
+				return false;
+			}
+			return true;
+		},
+		logout : function(){
+			$localstorage.delete("login");
+		}
 	}
 }])
 
@@ -119,6 +186,9 @@ app.service("DailyCrop", ['$resource', '$q', '$http', function($resource, $q, $h
 		exists : function(key){
 			var val = $window.localStorage[key];
 			return (val !== null && val !== undefined);
+		},
+		delete : function(key){
+			$window.localStorage.removeItem(key);
 		}
   	}
 }])

@@ -1,44 +1,72 @@
 var angular = window.angular,
 	_ = window._,
-	Parse = window.Parse,
-	parsePlugin = window.parsePlugin || {};
+	Parse = window.Parse || {},
+	parsePlugin = window.parsePlugin || {},
+	isDeviceReady = false,
+	isConnected = false;
 
 angular.module('agrinet.controllers', [])
 
-.run(["$ionicPlatform", "$state", "$localstorage", function($ionicPlatform, $state, $localstorage) {
+.run(["$ionicPlatform", "$state", "$localstorage",function($ionicPlatform, $state, $localstorage) {
+	
 	$ionicPlatform.ready(function() {
 		console.log("Ionic Platform is ready");
+		isDeviceReady = true;
+		
 
-		parsePlugin.getInstallationId(function(id) {
-			console.log("Received Installation ID: " + id);
-		}, function(e) {
-			console.log("Unable to Retrive Installation ID: " + e);
-		});
+		if (window.Connection){
+			if (navigator.connection.type === window.Connection.NONE){
+				console.log("No Connection Detected - Attempting to Exit App");
+				navigator.notification.alert("Unable to Connect to the Internet. Please Connect and Try Again", function(){
+					ionic.Platform.exitApp();
+				}, "AgriPrice");
+				
+				return;
+			}else{
+				console.log("Connection Available");
+			}
+		}else{
+			console.log("No Window Connection Found");
+		}
 
-		var appid = "ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ";
-		var clientKey = "zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb";
+		// Check if cordova parse plugin is available
+		if (parsePlugin && parsePlugin.getInstallationId && parsePlugin.initialize){
+			//TODO Place the Parse Plugin Functionality in its own module (Clean up from run state)
+			parsePlugin.getInstallationId(function(id) {
+				console.log("Received Installation ID: " + id);
+			}, function(e) { console.log("Unable to Retrive Installation ID: " + e); });
 
-		parsePlugin.initialize(appid, clientKey, function() {
-			console.log("Starting Process to Connect to the Parse API");
+			var appid = "ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ";
+			var clientKey = "zLFVgMOZVwxC3IsSKCCgsnL2yEe1IrSRxitas2kb";
 
-			parsePlugin.subscribe('SampleChannel', function() {
-				console.log("Successfully Initialized the appropriate Channel");
-			}, function(e) {
-				console.error("Unable to connect to the Parse API:" + e);
-			});
+			parsePlugin.initialize(appid, clientKey, function() {
+				console.log("Starting Process to Connect to the Parse API");
 
-			console.log("Attempting to retrieve current subscriptions");
+				parsePlugin.subscribe('SampleChannel', function() {
+					console.log("Successfully Initialized the appropriate Channel");
+				}, function(e) {
+					console.log("Unable to connect to the Parse API:" + e);
+				});
 
-			parsePlugin.getSubscriptions(function(subscriptions) {
-				console.log(subscriptions);
-			}, function(e) {
-				console.error("Error Occurred while retrieving subscriptions: " + e);
-			});
-		}, function(e) {
-			console.error(e);
-		});
+				console.log("Attempting to retrieve current subscriptions");
 
-		Parse.initialize("ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "HbaUIyhiXFpUYhDQ7EsXW4IwP6zeXgqC81AQhQSL");
+				parsePlugin.getSubscriptions(function(subscriptions) {
+					console.log(subscriptions);
+				}, function(e) {
+					console.log("Error Occurred while retrieving subscriptions: " + e);
+				});
+			}, function(e) { console.log(e); });
+		}else{
+			console.log("Parse Plugin in not available - probably running in browser");
+		}
+		
+		// Check if the Parse web library loaded
+		if (Parse && Parse.initialize){
+			Parse.initialize("ZEYEsAFRRgxjy0BXX1d5BJ2xkdJtsjt8irLTEnYJ", "HbaUIyhiXFpUYhDQ7EsXW4IwP6zeXgqC81AQhQSL");
+		}else{
+			console.log("Parse Library not loaded");
+		}
+			
 
 		function alertDismissed() {
 			$state.go("menu.checkprices");
@@ -67,6 +95,8 @@ angular.module('agrinet.controllers', [])
 			}
 		}
 
+
+
 		// If user not logged in, the prompt to login
 		if (!$localstorage.get("login") && !$localstorage.get("tried_login")) {
 			navigator.notification.confirm(
@@ -80,6 +110,34 @@ angular.module('agrinet.controllers', [])
 	});
 }])
 
+
+/*
+	System Controller
+*/
+.controller("SystemCtrl", ["$scope","$ionicPopup", "$state", "loggedInService", function($scope,$ionicPopup, $state, loggedInService){
+	console.log("System Controller Loaded");
+	$scope.loggedin = loggedInService.isLoggedIn();
+	console.log($scope.loggedin);
+
+	$scope.logout = function(){
+		console.log("selected Logged out");
+		// Provide user confirmation of log out
+		$ionicPopup.confirm({
+			title: 'Log Out',
+			template: 'Are you sure you want to log out of AgriPrice?'
+		}).then(function(res) {
+			if(res){
+				loggedInService.logout(); // perform the actual log out process
+				$state.go('menu.login');
+			}
+		});
+
+	};
+}])
+
+/*
+	About Controller
+*/
 .controller('AboutCtrl', function($scope, $ionicSideMenuDelegate) {
 	console.log("About Controller Launched");
 })
@@ -98,6 +156,7 @@ register - If the user is not registered Google login would open and the user wo
 	var login = $localstorage.get("login");
 	console.log(login);
 	if (login) {
+		console.log("User Previously Logged In");
 		navigator.notification.alert(
 			'You are already logged in.', // message
 			function() { $state.go("menu.checkprices"); }, // callback to invoke with index of button pressed
@@ -134,11 +193,11 @@ register - If the user is not registered Google login would open and the user wo
 						$localstorage.set("login", email);
 						$scope.register(email);
 					}, function(error) { // Error connecting to Google Services
-						console.error(error);
+						console.log(error);
 						navigator.notification.alert("Unable to Connect to Google");
 					});
 			}, function(error) {
-				console.error(error);
+				console.log(error);
 				navigator.notification.alert("Unable to Connect to Google");
 			});
 	}
@@ -169,7 +228,7 @@ register - If the user is not registered Google login would open and the user wo
 									console.log("Successfully Subscribed to: " + result[i]);
 								}, function(e) {
 									console.log("Unable to Subscribe to " + result[i] + " Error: " + e);
-									navigator.notification.alert("error");
+									navigator.notification.alert("Unable to Sign In to Google");
 								});
 								$ionicLoading.hide();
 								$state.go('menu.checkprices');
@@ -207,14 +266,10 @@ changeDate - Would allow the user to display information for a day selected.
 */
 //populates crop prices page
 
-.controller("PriceCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", "$ionicLoading", "$http", "$state", "$sessionstorage", function($scope, DailyCrop, $localstorage, $ionicPopup, $ionicLoading, $http, $state, $sessionstorage) {
-
-	$ionicLoading.show({
-		template: 'Loading...'
-	});
+.controller("PriceListCtrl", ["$scope", "DailyCrop", "$localstorage", "$ionicPopup", "$ionicLoading", "$http", "$state", "$sessionstorage", function($scope, DailyCrop, $localstorage, $ionicPopup, $ionicLoading, $http, $state, $sessionstorage) {
 
 	var processDate = function(date) { // adjust the date to correspond to the actual date from the server since it is 4 hours off(date being selected for change date)
-		//console.log(typeof date);
+		// console.log(typeof date);
 		date = new Date(date);
 		date.setHours(date.getHours() + 4);
 		date = date.toDateString();
@@ -225,22 +280,31 @@ changeDate - Would allow the user to display information for a day selected.
 		crop.price = parseFloat(crop.price.slice(1));
 		if (crop.unit && crop.unit.toLowerCase() === "kg"){
 			crop.unit = "lb";
-			crop.volume = crop.volume * 2.20462;
-			crop.price = crop.price * 2.20462; 
+			crop.volume = Math.round(crop.volume * 2.20462);
+			crop.price = crop.price / 2.20462; 
 		}
 		return crop;
+	};
+
+	$scope.processMissingImgs = function(el){
+		console.log(el);
 	};
 	
 	$scope.filterCrops =  function(crop){
 		if ( !isNaN(crop.price) && crop.price > 0){ // If valid price and system actual has a price for commodity
 			return crop;	
 		}
-	}
+	};
+
+	$scope.manageNotification = function(){
+		$state.go("menu.notifications");
+	};
+
 
 	// Load Dates from Server to populate the dropdown menu
 	var dateKey = (new Date().toDateString());
 	if (!$sessionstorage.exists(dateKey)){
-		console.log("No previous Request for Dates");
+	console.log("No previous Request for Dates");
 		$http
 			.get("https://agrimarketwatch.herokuapp.com/crops/daily/dates")
 			.success(function(data) {
@@ -250,12 +314,11 @@ changeDate - Would allow the user to display information for a day selected.
 				$scope.dates = dates;
 				$sessionstorage.setObject(dateKey, dates);
 			});
+	}else{
+		console.log("Using Cached Request for Dates");
+		$scope.dates = $sessionstorage.getObject(dateKey);
+	}
 
-		}else{
-			console.log("Using Cached Request for Dates");
-			$scope.dates = $sessionstorage.getObject(dateKey);
-		}
-	
 		
 
 	var MAX_CHECKS = 20;
@@ -371,9 +434,24 @@ changeDate - Would allow the user to display information for a day selected.
 				$scope.projected = val[0].price;
 			});
 	};
+}])
 
+.controller("CropPriceCtrl", ["$stateParams", "$scope", "$localstorage", function($stateParams, $scope,$localstorage){
+	// Making the Assumption that at this point they already have the data cached
+	var date = (new Date($stateParams['date'])).toDateString();
+	// console.log($stateParams);
+	// console.log(new Date($stateParams['date']));
+	if (!$localstorage.exists()){
+		date = (new Date()).toDateString()
+	}
 
-
+	var cropCache = $localstorage.getObject(date);
+	$scope.crop = cropCache.find(function(el){
+		if (el.commodity.toLowerCase() === $stateParams.crop.toLowerCase())
+			return el;
+		else
+			return false;
+	})
 }])
 
 /*NotifyCtrl:
@@ -382,7 +460,7 @@ getCrops - Loads crops that are availible.
  */
 //populates notificates mgmt page
 
-.controller("NotifyCtrl", ["$scope", "notifyService", "$localstorage", "$ionicLoading", function($scope, notifyService, $localstorage, $ionicLoading) {
+.controller("NotifyCtrl", ["$scope", "notifyService", "$localstorage", "$ionicLoading","loggedInService", function($scope, notifyService, $localstorage, $ionicLoading, loggedInService) {
 
 	var checkConnection = function() {
 		if (navigator && navigator.connection && navigator.connection.type === 'none') {
@@ -407,7 +485,7 @@ getCrops - Loads crops that are availible.
 				cache.date = (new Date()).toDateString();
 				cache.names = resp.names;
 				$localstorage.setObject('crops', val);
-				$ionicLoading.hide();
+				$ionicLoading.hide();s
 			});
 	}
 
@@ -476,6 +554,13 @@ getCrops - Loads crops that are availible.
 		}
 	}
 
+	// Main of the Notify Controller
+
+	// Check if User Logged In
+	var res = loggedInService.checkRedirect("notify");
+	if (!res)
+		return;
+
 	if ($localstorage.exists('crops')) {
 		getCrops();
 	} else {
@@ -492,6 +577,51 @@ getCrops - Loads crops that are availible.
 			$scope.crops = crops;
 		}
 	}
+
+}])
+
+.controller("VisualCtrl", ['$scope',"$stateParams","DailyCrop", function($scope, $stateParams, DailyCrop){
+	var crop = $stateParams['crop'];
+
+	var processDate = function(date) { // adjust the date to correspond to the actual date from the server since it is 4 hours off(date being selected for change date)
+		// console.log(typeof date);
+		date = new Date(date);
+		date.setHours(date.getHours() + 4);
+		date = date.toDateString();
+		return date;
+	};
+
+	var start = new Date((new Date()).getTime() - (30 * 86400000));
+
+	DailyCrop
+		.cropBetweenDates(crop, start)
+		.then(function(data){
+			console.log("Processing Records " )
+			// Process the data in the format need for the chanrts
+			var labels = [], price_recs = [], vol_recs = [];
+			// Transform the data recieved into the form need for visualization
+			_.each(data, function(el){
+				labels.push(processDate(el['date']));
+
+				price_recs.push(el['price']);
+				vol_recs.push(el['volume']);
+			});
+
+			$scope.price_data = [price_recs];
+			$scope.volume_data = [vol_recs];
+			$scope.price_series = ["Price for " + crop + " per "+data[0].unit+ " in TTD"];
+			$scope.volume_series =["Volume for " + crop+ " in " + data[0].unit]
+			$scope.labels = labels;
+		});
+
+	// console.log("Received: " + crop);
+	// $scope.labels = ['2006', '2007', '2008', '2009', '2010', '2011', '2012'];
+	// $scope.series = ['Series A', 'Series B'];
+
+	// $scope.data = [
+	// 	[65, 59, 80, 81, 56, 55, 40],
+	// 	[28, 48, 40, 19, 86, 27, 90]
+	// ];
 
 }])
 

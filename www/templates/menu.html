@@ -13,17 +13,30 @@
         <ion-nav-view name="content"></ion-nav-view>
     </ion-side-menu-content>
     <ion-side-menu side="left" enable-menu-with-back-views="false">
-        <ion-header-bar class="bar-dark">
-            <h2>Menu</h2>
+        <ion-header-bar class="bar">
+            <h3>AgriPrice</h3>
         </ion-header-bar>
         <ion-content class="stable-bg has-expanded-header">
-            <ul class="list">
-                <li><a menu-close href="#/app/checkprices" class="item">Latest Prices</a></li>
-                <li><a menu-close href="#/app/notifications" class="item">Notifications</a></li>
-                <li><a menu-close href="#/app/about" class="item">About</a></li>
-                <li><a menu-close href="#/app/login" class="item">Login</a></li>
-                <!--<a menu-close href="#/app/login" class="item">Logout</a>-->
-            </ul>
+            <ion-list>
+                <ion-item menu-close href="#/app/checkprices" class="item item-icon-left">
+                    <i class="icon ion-cash"></i>Latest Prices
+                </ion-item>
+                <ion-item menu-close href="#/app/notifications" class="item item-icon-left">
+                    <i class="icon ion-alert"></i>Notifications
+                </ion-item>
+                <ion-item menu-close href="#/app/about" class="item item-icon-left">
+                    <i class="icon ion-information"></i>About
+                </ion-item>
+
+                <ion-item ng-hide="loggedin" menu-close href="#/app/login" class="item item-icon-left">
+                    <i class="icon ion-person"></i>Login
+                </ion-item>
+                
+                <ion-item ng-show="loggedin" menu-close ng-click='logout()' class='item item-icon-left' >
+                    <i class="icon ion-person"></i>Logout
+                </ion-item>
+
+            </ion-list>
         </ion-content>
     </ion-side-menu>
 </ion-side-menus>

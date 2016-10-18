@@ -13,11 +13,15 @@
 .val{
     font-weight: bold;
     font-size: 18px;
-    padding-left: 10px;
+    padding-left: 5px;
 }
 
 .value{
     margin-bottom: 10px;
+}
+
+.menu_item{
+    line-height: 20px
 }
 
 
@@ -29,17 +33,13 @@
 .title{
     text-align: center;
 }
-
 #bottom-bar{
-    position: fixed;
-    bottom: 20px;
-    z-index: 100;
-    bottom: 0px;
-    padding: 10px;
-    width: 100%;
-    background: #333;
-    text-align: center;
-    margin: auto 0;
+    height: 60px;
+}
+#bottom-bar button{
+    padding: 5px;
+    width: 98%;
+    margin: 0 auto;
 }
 
 #bottom-bar a{
@@ -112,6 +112,16 @@
     font-size: 26px;
 }
 
+#cpviewAvatar{
+    margin: 5px 10px;
+    width: 90%;
+}
+#infoCard{
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* Rules Specific to Tablets */
 @media only screen and (min-device-width : 600px) and (max-device-width : 1024px)  {     
     #cAvatar {
         border-radius: 50%;
@@ -123,10 +133,12 @@
     .item-avatar .item-content{ padding-left: 100px; }
 
     #bottom-bar{
-        height: 50px;
-        font-size: 18px;
-        line-height: 30px;
+        height: 80px;
     }
+    #bottom-bar button{
+        font-size: 18px;
+    }
+
 
     .value{ margin-bottom: 10px; }
     .dim{
@@ -134,6 +146,8 @@
         padding-right: 20px;
         width: 160px;
     }
+
+
 }
 
 @media only screen and (max-device-width : 400px)  { 
@@ -143,5 +157,4 @@
     #homeScreen{
         width: 100%;
     }
-    
 }
