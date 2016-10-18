@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<<<<<<< HEAD
-<widget id="com.agrinett.marketwatcher" version="1.6.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-=======
+
 <widget id="com.agrinett.marketwatcher" version="1.9.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
->>>>>>> d35dfef389ef0d87da85d1bd896b786709c8b3d2
   <name>AgriPrice</name>
   <description>
     Keep updated on the prices of crops in Trinidad and Tobago.
