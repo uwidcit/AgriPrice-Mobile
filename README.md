@@ -5,6 +5,7 @@
 * bower install (to install the js libraries)
 * ionic state restore (To install the required cordova plugins and platforms)
 * ionic resources -icon (To generate icons for android and ios)
+* ionic run android
 
 ## Plugins needed as of 19/08/15
 1. Device

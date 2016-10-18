@@ -180,8 +180,9 @@ register - If the user is not registered Google login would open and the user wo
 		$cordovaOauth
 			.google(
 				"602269272261-ihuhk6paf4bnpppdkmo4fpc1qanhhvp2.apps.googleusercontent.com", [
-					"https://www.googleapis.com/auth/plus.login",
-					"https://www.googleapis.com/auth/plus.profile.emails.read"
+					"email"
+					// "https://www.googleapis.com/auth/plus.login",
+					// "https://www.googleapis.com/auth/plus.profile.emails.read"
 				]
 			).then(function(result) { // Successful Oauth Authentication
 				$http.defaults.headers.common.Authorization = "Bearer " + result.access_token;
