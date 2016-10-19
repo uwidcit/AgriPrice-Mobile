@@ -7,3 +7,5 @@ resources/android/
 resources/ios/
 *.keystore
 *.apk
+
+creds.js

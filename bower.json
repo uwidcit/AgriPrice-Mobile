@@ -16,6 +16,7 @@
     "Chart.js": "^2.1.6",
     "underscore": "^1.8.3",
     "d3": "^4.2.7",
-    "c3": "^0.4.11"
+    "c3": "^0.4.11",
+    "angulartics-google-analytics": "^0.3.0"
   }
 }

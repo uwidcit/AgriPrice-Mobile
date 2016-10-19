@@ -14,6 +14,9 @@ angular.module('agrinet',
   'ui.router', 
   'dcbImgFallback', 
   'chart.js',
+  'angulartics', 
+  'angulartics.google.analytics',
+  'angulartics.scroll',
   'ngCordovaOauth'])
 
   .config(function($stateProvider, $urlRouterProvider){

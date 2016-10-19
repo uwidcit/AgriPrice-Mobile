@@ -138,9 +138,9 @@ angular.module('agrinet.controllers', [])
 /*
 	About Controller
 */
-.controller('AboutCtrl', function($scope, $ionicSideMenuDelegate) {
+.controller('AboutCtrl', ["$scope", "$ionicSideMenuDelegate", function($scope, $ionicSideMenuDelegate) {
 	console.log("About Controller Launched");
-})
+}])
 
 /* LoginCtrl:
 noLogin - Should give an option not to login, sends them directly to checkprices.
