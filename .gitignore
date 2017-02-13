@@ -7,3 +7,4 @@ resources/android/
 resources/ios/
 *.keystore
 *.apk
+.DS_Store
