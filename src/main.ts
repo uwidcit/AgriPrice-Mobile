@@ -9,4 +9,14 @@ if (environment.production) {
   enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule);
+export function main() {
+  platformBrowserDynamic().bootstrapModule(AppModule);
+}
+
+
+
+if (document.readyState === 'complete') {
+  main();
+} else {
+  document.addEventListener('DOMContentLoaded', main);
+}
