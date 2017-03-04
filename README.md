@@ -2,6 +2,11 @@
 
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.26.
 
+## Installation
+1. Ensure that angular cli-was installed.
+2. Run `npm install` for installing local dependencies. I have used [dzone.com](https://dzone.com/articles/getting-started-and-testing-with-angular-cli-and-angular-2-rc5-part-1) as a newer example of using the angular cli
+
+
 ## Development server
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 

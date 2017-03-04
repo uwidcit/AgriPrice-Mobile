@@ -35,7 +35,7 @@ export const firebaseConfig = {
     HttpModule,
     routes,
     AngularFireModule.initializeApp(firebaseConfig),
-    MaterialModule.forRoot()
+    MaterialModule
   ],
   providers: [DailyCropService],
   bootstrap: [AppComponent]
