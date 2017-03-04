@@ -29,9 +29,9 @@ export const firebaseConfig = {
     LoginComponent,
     AboutComponent,
     NotificationsComponent,
-      PricelistComponent,
-      EmailComponent,
-      SignupComponent
+    PricelistComponent,
+    EmailComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +39,7 @@ export const firebaseConfig = {
     HttpModule,
     routes,
     AngularFireModule.initializeApp(firebaseConfig),
-      MaterialModule.forRoot()
+    MaterialModule
   ],
   providers: [DailyCropService],
   bootstrap: [AppComponent]

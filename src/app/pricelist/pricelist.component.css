@@ -1,3 +1,10 @@
 .mySpinner{
   margin: 0 auto;
 }
+
+.agriprice_list_item img {
+	flex-shrink: 0;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+}
