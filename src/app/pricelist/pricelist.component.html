@@ -1,13 +1,18 @@
 <div class="parent">
   <md-spinner *ngIf="crops.length == 0" class="mySpinner" mode="indeterminate"></md-spinner>
-  <md-card *ngFor="let crop of crops; let i = index">
-    <md-card-title>{{crop.commodity}}</md-card-title>
-    <img md-card-image src="../assets/images/fruits/{{crop.commodity}}.jpg">
-    <md-card-content>Price : {{crop.price | currency}}</md-card-content>
-    <md-card-actions>
-      <button md-button (click)="subscribeToCrop(i)">
-        <i class="material-icons md-18">favorite</i> SUBSCRIBE
-      </button>
-    </md-card-actions>
-  </md-card>
+
+
+	<md-list>
+		<md-list-item *ngFor="let crop of crops; let i = index">
+			<img md-list-avatar src="../assets/images/fruits/{{ crop.commodity }}.jpg" alt="Crop Icon">
+			<h3 md-line>{{ crop.commodity }}</h3>
+			<p md-line>
+				<span>Price : {{ crop.price | currency }} </span>
+				<span class="demo-2"></span>
+			</p>
+			<md-divider></md-divider>
+		</md-list-item>
+
+	</md-list>
+
 </div>
