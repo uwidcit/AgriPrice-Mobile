@@ -7,5 +7,5 @@ import { DailyCropService } from './daily-crop.service';
   providers: [DailyCropService]
 })
 export class AppComponent {
-  title = 'app works!';
+  title = 'AgriPrice';
 }
