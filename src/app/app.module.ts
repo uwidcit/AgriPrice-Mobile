@@ -12,6 +12,8 @@ import { LoginComponent } from './login/login.component';
 import { AboutComponent } from './about/about.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { PricelistComponent } from './pricelist/pricelist.component';
+import {EmailComponent} from './email/email.component';
+import {SignupComponent} from './signup/signup.component';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyB8LxFyLM1grQ66E6mqXVYevdlZO2jV_HI",
@@ -27,7 +29,9 @@ export const firebaseConfig = {
     LoginComponent,
     AboutComponent,
     NotificationsComponent,
-    PricelistComponent
+      PricelistComponent,
+      EmailComponent,
+      SignupComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +39,7 @@ export const firebaseConfig = {
     HttpModule,
     routes,
     AngularFireModule.initializeApp(firebaseConfig),
-    MaterialModule
+      MaterialModule.forRoot()
   ],
   providers: [DailyCropService],
   bootstrap: [AppComponent]

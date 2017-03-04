@@ -23,21 +23,6 @@ export class PricelistComponent implements OnInit {
     );
     this.getFirebaseMessagingToken();
   }
-
-  fbgetData(){
-    firebase.database().ref('/').on('child_added', (snapshot) =>{
-      console.log(snapshot.val());
-    })
-  }
-
-  fbpushData(){
-    firebase.database().ref('/users/test').push({name: "food", action: "hungry"});
-  }
-  fbSubscribe(){
-    this.messaging.getToken().then(
-      (currentToken) => console.log(currentToken)
-    );
-  }
   getFirebaseMessagingToken(){
     this.messaging.getToken().then(
       (currentToken) => this.messagingToken = currentToken
