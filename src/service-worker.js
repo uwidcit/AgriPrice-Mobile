@@ -10,7 +10,7 @@ messaging.setBackgroundMessagingHandler(function(payload){
 	return self.registration.showNotification(title, options);
 });
 */
-var cacheName = 'AgriNeTT';
+var cacheName = 'AgriPrice';
 var filesToCache = [
 	'/',
 	'/index.html',

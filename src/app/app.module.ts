@@ -14,6 +14,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { PricelistComponent } from './pricelist/pricelist.component';
 import {EmailComponent} from './email/email.component';
 import {SignupComponent} from './signup/signup.component';
+import {TitleCasePipe} from './pipes/title-case.pipe';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyB8LxFyLM1grQ66E6mqXVYevdlZO2jV_HI",
@@ -31,7 +32,8 @@ export const firebaseConfig = {
     NotificationsComponent,
     PricelistComponent,
     EmailComponent,
-    SignupComponent
+    SignupComponent,
+    TitleCasePipe
   ],
   imports: [
     BrowserModule,

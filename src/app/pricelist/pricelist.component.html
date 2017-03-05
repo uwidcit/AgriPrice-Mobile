@@ -3,15 +3,16 @@
 
 
 	<md-list>
-		<md-list-item class="agriprice_list_item" *ngFor="let crop of crops">
+		<md-list-item class="agriprice_list_item" *ngFor="let crop of crops" (click)="displayCrop(crop)">
 			<img md-list-avatar [src]="crop.img_url" alt="Crop Icon">
-			<h3 md-line>{{ crop.commodity | uppercase }}</h3>
-			<p md-line>
-				<span class="list_price">Price : {{ crop.price | currency:'TTD':true:'1.2-2'}} </span>
+			<h2 md-line>{{ crop.commodity | titleCase }}</h2>
+			<p class="agriprice_list_item_content" md-line>
+				<span class="agriprice_list_price">Price : {{ crop.price | currency:'TTD':true:'1.2-2'}} </span>
 			</p>
-			<hr>
+			<p class="agriprice_list_item_content" md-line>
+				<span class="agriprice_list_price">Unit : {{ crop.unit }}</span>
+			</p>
 		</md-list-item>
-		<md-divider></md-divider>
 	</md-list>
 
 </div>

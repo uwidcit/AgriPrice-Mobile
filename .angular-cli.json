@@ -2,8 +2,9 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "project": {
     "version": "1.0.0-beta.26",
-    "name": "agri-ne-ttmarket-watcher"
+    "name": "AgriPrice"
   },
+  "host": "0.0.0.0",
   "apps": [
     {
       "root": "src",

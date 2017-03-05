@@ -8,4 +8,10 @@ import { DailyCropService } from './daily-crop.service';
 })
 export class AppComponent {
   title = 'AgriPrice';
+  loggedIn = false;
+
+  ngOnInit() {
+    console.log("AppComponent started");
+    this.loggedIn = false;
+  }
 }

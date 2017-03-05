@@ -15,6 +15,9 @@ export class PricelistComponent implements OnInit {
   date;
   messagingToken;
   // myDatabase = firebase.database();
+
+  private currentCrop;
+
   constructor(private dailyCrop: DailyCropService) { }
 
   ngOnInit() {
@@ -28,13 +31,17 @@ export class PricelistComponent implements OnInit {
         });
         // Sort Crop Records
         this.crops = crops.sort((a,b) => {
-          console.log(a.commodity);
           return a.commodity.toLowerCase() - b.commodity.toLowerCase();
         });
-
+        console.dir(this.crops);
       }
     );
     this.getFirebaseMessagingToken();
+  }
+
+  public displayCrop(crop) {
+    console.log("Selected: " + crop.commodity);
+
   }
 
   processDate(date) { // adjust the date to correspond to the actual date from the server since it is 4 hours off(date being selected for change date)

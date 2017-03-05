@@ -8,3 +8,4 @@ resources/ios/
 *.keystore
 *.apk
 .DS_Store
+npm-debug.log
