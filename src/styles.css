@@ -14,3 +14,15 @@ body {
   margin: 0;
   padding: 0;
 }
+
+.agriprice_pg_header {
+  text-align: center;
+}
+
+.agriprice_pg_header_icon {
+  font-size: 60px;
+}
+
+.agriprice_pg_content {
+  margin: 2px 10px;
+}

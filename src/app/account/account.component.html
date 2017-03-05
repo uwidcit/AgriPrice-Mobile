@@ -1,0 +1,59 @@
+<div class="agriprice_pg_header">
+	<i class="material-icons agriprice_pg_header_icon">person</i>
+	<h3>Account</h3>
+	<p>{{ username }}</p>
+</div>
+<div class="agriprice_pg_content">
+	<md-card class="profile_card">
+		<md-card-header>
+			<md-card-title>{{ username }}</md-card-title>
+			<md-card-subtitle>Account Details</md-card-subtitle>
+		</md-card-header>
+
+		<div class="agriprice_img_sec">
+			<img md-card-image [src]="profile_img">
+		</div>
+
+		<md-card-content>
+			<table>
+				<tr>
+					<td>Name:</td>
+					<td>{{ username }}</td>
+				</tr>
+				<tr>
+					<td>Email:</td>
+					<td>{{ email }}</td>
+				</tr>
+				<tr>
+					<td>Account Type:</td>
+					<td>{{ account_type }}</td>
+				</tr>
+			</table>
+		</md-card-content>
+		<md-card-actions style="text-align: right">
+			<button md-raised-button md-button (click)="signOut()">Sign Out</button>
+		</md-card-actions>
+	</md-card>
+
+	<md-card class="profile_card">
+		<md-card-header>
+			<md-card-title>Subscriptions</md-card-title>
+			<md-card-subtitle>Receiving Notifications For</md-card-subtitle>
+		</md-card-header>
+		<md-card-content>
+			<md-list>
+				<h3 md-subheader>Crops</h3>
+				<md-list-item *ngFor="let folder of folders">
+					<md-icon md-list-avatar>folder</md-icon>
+					<h4 md-line>{{ folder.name }}</h4>
+					<p md-line> {{ folder.updated | date }} </p>
+				</md-list-item>
+
+			</md-list>
+
+		</md-card-content>
+		<md-card-actions style="text-align: right">
+			<button md-raised-button md-button (click)="changeNotification()">Change Notifications</button>
+		</md-card-actions>
+	</md-card>
+</div>

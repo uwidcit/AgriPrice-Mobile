@@ -1,6 +1,56 @@
-<div class="button-row">
-	<button md-raised-button class="myButton" (click)="goToEmail()">Sign In with Email</button>
+<div class="agriprice_pg_header">
+	<i class="material-icons agriprice_pg_header_icon">email</i>
+	<h3>Sign In</h3>
+	<p>Sign in using your AgriPrice Account</p>
 </div>
+
+<div id="agriprice_login_form">
+	<form #formData='ngForm' (ngSubmit)="logIn(formData)">
+		<md-input-container class="agriprice_input_container">
+			<input
+					mdInput
+					type="email"
+					placeholder="Enter Email Address"
+					(ngModel)="email"
+					required
+					name="email">
+		</md-input-container>
+		<md-input-container class="agriprice_input_container">
+			<input
+					mdInput
+					type="password"
+					placeholder="Enter Password"
+					(ngModel)="password"
+					required
+					name="password">
+		</md-input-container>
+		<div id="agriprice_login_form_btn_sec">
+			<button
+					md-raised-button
+					type="submit"
+					[disabled]="!formData.valid"
+					class="agriprice_login_form_btn">Log In
+			</button>
+			<button
+					md-raised-button
+					type="button"
+					class="agriprice_login_form_btn"
+					[disabled]="!formData.valid"
+					(click)="signUp(formData)">Create Account
+			</button>
+			<button
+					md-raised-button
+					class="agriprice_login_form_btn"
+					type="button"
+					(click)="googleSignIn()">Google Sign In
+			</button>
+		</div>
+	</form>
+</div>
+
+
+
+
 <div class="button-row">
-	<button md-raised-button class="myButton">Sign In with Google</button>
+
 </div>

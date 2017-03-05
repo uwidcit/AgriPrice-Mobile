@@ -1,9 +1,0 @@
-<form #formData='ngForm' (ngSubmit)="signUp(formData)">
-	<md-input-container class="myInputContainer">
-		<input mdInput type="text" placeholder="Enter Email Address.." (ngModel)="email" name="email">
-	</md-input-container>
-	<md-input-container class="myInputContainer">
-		<input mdInput type="password" placeholder="Enter Password" (ngModel)="password" name="password">
-	</md-input-container>
-	<button md-raised-button type="submit" [disabled]="!formData.valid" class="myButton">Log In</button>
-</form>

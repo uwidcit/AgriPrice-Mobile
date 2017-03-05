@@ -1,47 +1,99 @@
-<md-card class="myCard">
-  <img md-card-image src="assets/images/launcher.png">
-  <md-card-title>
-      <span class="md-headline">AgriPrice</span>
-  </md-card-title>
-  <md-card-content>
-    <p>Get notifications for agricultural commodity prices within Trinidad and Tobago.
-       The AgriPrice application provides an interactive way of allow users to better understand how price
-       for each commodity changes with time. Rather than burden users with constantly checking for price changes,
-       the AgriPrice app will notify users when prices for the selected crops change.</p>
-  </md-card-content>
-</md-card>
-<md-card class="myCard">
-  <img md-card-image src="assets/images/logo_agrinet.png">
-  <md-card-title>
-      <span class="md-headline">AgriNeTT</span>
-  </md-card-title>
-  <md-card-content>
-    <p>The AgriNeTT project is geared toward research and development on intelligent decision support systems
-      for enhancing crop management. AgriNeTT intends to build ICT applications around agricultural data to support its
-      various stakeholders within Trinidad and Tobago and the wider Caribbean.</p>
-  </md-card-content>
-</md-card>
-<md-card class="myCard">
-  <img md-card-image src="assets/images/uwi.gif">
-  <md-card-title>
-      <span class="md-headline">University of the West Indies</span>
-  </md-card-title>
-  <md-card-content>
-    <p>AgriNeTT is an Agriculture ICT project of the St. Augustine campus of The University of the West Indies.
-      It is funded by the UWI-Trinidad and Tobago Research and Development Impact (RDI) Fund.
-      The  AgriNeTT team is multi-disciplinary, consisting of academics from the Department of Computing and Information Technology
-      and the Faculty of Food and Agriculture at UWI as well as persons from industry in the agriculture sector.</p>
-  </md-card-content>
-</md-card>
-<md-card class="myCard">
-  <img md-card-image src="assets/images/namdevco.jpg">
-  <md-card-title>
-      <span class="md-headline">NAMDEVCO</span>
-  </md-card-title>
-  <md-card-content>
-    <p>The National Agricultural Marketing and Development Corporation (NAMDEVCO) is a Statutory body created by Act of
-      Parliament No. 16 of 1991 with a mandate “to create, facilitate and maintain an environment conducive to the efficient
-      marketing of agricultural produce and food products through the provision of marketing services and the stimulation of
-      business investment in the agro-industrial sector of Trinidad and Tobago</p>
-  </md-card-content>
-</md-card>
+<div class="agriprice_pg_header">
+	<!--<i class="material-icons agriprice_pg_header_icon">information</i>-->
+	<h3>About</h3>
+	<p>Details about the Project</p>
+</div>
+<div class="agriprice_pg_content">
+	<md-card class="myCard">
+		<div class="agriprice_img_sec">
+			<img md-card-image src="assets/images/launcher.png">
+		</div>
+		<md-card-title>
+			<span class="md-headline">AgriPrice</span>
+		</md-card-title>
+		<md-card-content>
+			<p>Get notifications for agricultural commodity prices within Trinidad and Tobago.
+				The AgriPrice application provides an interactive way of allow users to better understand how price for each
+				commodity changes with time. Rather than burden users with constantly checking for price changes, the AgriPrice
+				app will notify users when prices for the selected crops change.</p>
+		</md-card-content>
+	</md-card>
+	<md-card class="myCard">
+		<div class="agriprice_img_sec">
+			<img md-card-image src="assets/images/logo_agrinet.png">
+		</div>
+		<md-card-title>
+			<span class="md-headline">AgriNeTT</span>
+		</md-card-title>
+		<md-card-content>
+			<p>The AgriNeTT project is geared toward research and development on intelligent decision support systems for
+				enhancing crop management. AgriNeTT intends to build ICT applications around agricultural data to support its
+				various stakeholders within Trinidad and Tobago and the wider Caribbean.</p>
+		</md-card-content>
+	</md-card>
+	<md-card class="myCard">
+		<div class="agriprice_img_sec">
+			<img md-card-image src="assets/images/uwi.gif">
+		</div>
+		<md-card-title>
+			<span class="md-headline">University of the West Indies</span>
+		</md-card-title>
+		<md-card-content>
+			<p>AgriNeTT is an Agriculture ICT project of the St. Augustine campus of The University of the West Indies. It is
+				funded by the UWI-Trinidad and Tobago Research and Development Impact (RDI) Fund. The AgriNeTT team is
+				multi-disciplinary, consisting of academics from the Department of Computing and Information Technology and the
+				Faculty of Food and Agriculture at UWI as well as persons from industry in the agriculture sector.</p>
+		</md-card-content>
+	</md-card>
+	<md-card class="myCard">
+		<div class="agriprice_img_sec">
+			<img md-card-image src="assets/images/namdevco.jpg">
+		</div>
+		<md-card-title>
+			<span class="md-headline">NAMDEVCO</span>
+		</md-card-title>
+		<md-card-content>
+			<p>The National Agricultural Marketing and Development Corporation (NAMDEVCO) is a Statutory body created by Act
+				of Parliament No. 16 of 1991 with a mandate “to create, facilitate and maintain an environment conducive to the
+				efficient marketing of agricultural produce and food products through the provision of marketing services and
+				the stimulation of business investment in the agro-industrial sector of Trinidad and Tobago</p>
+		</md-card-content>
+	</md-card>
+	<md-card class="myCard">
+		<div class="agriprice_img_sec">
+			<img md-card-image src="assets/images/github_icon.png">
+		</div>
+		<md-card-title>
+			<span class="md-headline">Developers</span>
+		</md-card-title>
+		<md-card-content>
+			<md-list id="developers_list">
+				<h3 md-subheader>Developers</h3>
+				<md-list-item *ngFor="let dev of developers" (click)="visit(dev)">
+					<md-icon md-list-avatar>
+						<img md-card-image [src]="dev.profile_img"/>
+					</md-icon>
+					<h4 md-line>{{ dev.name }}</h4>
+					<p md-line>
+						{{ dev.contributed }}
+					</p>
+					<p md-line>
+						{{ dev.dates_worked }}
+					</p>
+					<p md-line>
+						{{ dev.website }}
+					</p>
+					<p md-line></p>
+				</md-list-item>
+				<!--<md-divider></md-divider>
+				<h3 md-subheader>Testers</h3>
+				<md-list-item *ngFor="let test of testers">
+					<md-icon md-list-avatar><img md-card-image [src]="test.profile_img" /></md-icon>
+					<h4 md-line>{{test.name}}</h4>
+					<p md-line> {{test.contributed }} </p>
+					<p md-line> {{test.dates_worked }} </p>
+				</md-list-item> -->
+			</md-list>
+		</md-card-content>
+	</md-card>
+</div>

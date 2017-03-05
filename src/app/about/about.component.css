@@ -1,0 +1,33 @@
+.md-headline {
+	text-align: center;
+}
+
+.agriprice_pg_content {
+	margin: 2px 30px;
+}
+
+.agriprice_pg_header {
+	text-align: center;
+}
+
+.agriprice_pg_content .myCard {
+	margin-bottom: 10px;
+}
+
+.myCard img {
+	margin-top: 24px;
+	max-width: 200px;
+}
+
+.myCard .agriprice_img_sec {
+	text-align: center;
+}
+
+.myCard P {
+	text-align: justify;
+	line-height: 25px;
+}
+
+#developers_list img {
+	margin-top: -25px;
+}

@@ -1,4 +1,18 @@
-.myButton{
-	width: 100%;
+.agriprice_login_form_btn {
+	min-width: 120px;
 	margin-top: 5px;
 }
+
+.agriprice_input_container {
+	width: 100%;
+	padding: 15px 0;
+}
+
+#agriprice_login_form {
+	margin: 10px 30px;
+}
+
+#agriprice_login_form_btn_sec {
+	text-align: center;
+}
+

@@ -1,0 +1,10 @@
+.profile_card img {
+	margin-top: 24px;
+	max-height: 200px;
+	max-width: 200px;
+}
+
+.profile_card .agriprice_img_sec {
+	text-align: center;
+}
+
