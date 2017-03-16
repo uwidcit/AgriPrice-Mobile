@@ -3,6 +3,7 @@ import {Routes, RouterModule} from "@angular/router";
 import {AboutComponent} from "./about/about.component";
 import {LoginComponent} from "./login/login.component";
 import {NotificationsComponent} from "./notifications/notifications.component";
+import {CropComponent} from "./crop/crop.component";
 import {PricelistComponent} from "./pricelist/pricelist.component";
 import {AccountComponent} from "./account/account.component";
 
@@ -12,7 +13,8 @@ export const router: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'notifications', component: NotificationsComponent },
   { path: 'pricelist', component: PricelistComponent},
-  {path: 'account', component: AccountComponent},
+	{path: 'crop/:name', component: CropComponent},
+	{path: 'account', component: AccountComponent},
 ];
 
 export const routes: ModuleWithProviders = RouterModule.forRoot(router);

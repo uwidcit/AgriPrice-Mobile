@@ -10,7 +10,9 @@ messaging.setBackgroundMessagingHandler(function(payload){
 	return self.registration.showNotification(title, options);
 });
 */
-var cacheName = 'AgriPrice';
+var cacheName = 'AgriPrice',
+	agrinett_debug = false;
+
 var filesToCache = [
 	'/',
 	'/index.html',
@@ -97,21 +99,21 @@ var filesToCache = [
 	'/assets/images/fruits/yam(local).jpg'
 ];
 self.addEventListener('install', function(e){
-	console.log('[ServiceWorker] Install');
+	if (agrinett_debug) console.log('[ServiceWorker] Install');
 	e.waitUntil(
 		caches.open(cacheName).then(function(cache){
-			console.log('Caching app shell');
+			if (agrinett_debug) console.log('Caching app shell');
 			return cache.addAll(filesToCache);
 		})
 	);
 });
 self.addEventListener('activate', function(e){
-	console.log('[ServiceWorker] Activate');
+	if (agrinett_debug) console.log('[ServiceWorker] Activate');
 	e.waitUntil(
 		caches.keys().then(function(keyList){
 			return Promise.all(keyList.map(function(key){
 				if(key !== cacheName){
-					console.log('[ServiceWorker] Removing old cache', key);
+					if (agrinett_debug) console.log('[ServiceWorker] Removing old cache', key);
 					return caches.delete(key);
 				}
 			}));
@@ -120,7 +122,7 @@ self.addEventListener('activate', function(e){
 	return self.clients.claim();
 });
 self.addEventListener('fetch', function(e){
-	console.log('[ServiceWorker] fetch', e.request.url);
+	if (agrinett_debug) console.log('[ServiceWorker] fetch', e.request.url);
 	e.respondWith(
 		caches.match(e.request).then(function(response){
 			return response || fetch(e.request);

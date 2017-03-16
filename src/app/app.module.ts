@@ -17,6 +17,7 @@ import {NotificationsComponent} from "./notifications/notifications.component";
 import {PricelistComponent} from "./pricelist/pricelist.component";
 import {TitleCasePipe} from "./pipes/title-case.pipe";
 import {AccountComponent} from "./account/account.component";
+import {CropComponent} from "./crop/crop.component";
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import {AccountComponent} from "./account/account.component";
     NotificationsComponent,
     PricelistComponent,
     TitleCasePipe,
-    AccountComponent
+	  AccountComponent,
+	  CropComponent
   ],
   imports: [
     BrowserModule,

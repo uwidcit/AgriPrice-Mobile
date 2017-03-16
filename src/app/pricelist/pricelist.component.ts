@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { DailyCropService } from '../daily-crop.service';
+import {Component, OnInit} from "@angular/core";
+import {DailyCropService} from "../daily-crop.service";
+import {Router} from "@angular/router";
 declare var firebase: any;
 declare var retrieved: string;
 
@@ -17,8 +18,11 @@ export class PricelistComponent implements OnInit {
   // myDatabase = firebase.database();
 
   private currentCrop;
-
-  constructor(private dailyCrop: DailyCropService) { }
+  private agriprice_debug: boolean;
+  
+  constructor(private dailyCrop: DailyCropService, private router: Router) {
+    this.agriprice_debug = false;
+  }
 
   ngOnInit() {
     this.dailyCrop.fetchData().subscribe(
@@ -33,15 +37,15 @@ export class PricelistComponent implements OnInit {
         this.crops = crops.sort((a,b) => {
           return a.commodity.toLowerCase() - b.commodity.toLowerCase();
         });
-        console.dir(this.crops);
+  
       }
     );
     this.getFirebaseMessagingToken();
   }
 
   public displayCrop(crop) {
-    console.log("Selected: " + crop.commodity);
-
+    if (this.agriprice_debug) console.log("Selected: " + crop.commodity);
+    this.router.navigate(['/crop', crop.commodity]);
   }
 
   processDate(date) { // adjust the date to correspond to the actual date from the server since it is 4 hours off(date being selected for change date)

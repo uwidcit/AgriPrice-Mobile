@@ -3,7 +3,7 @@
 
 
 	<md-list>
-		<md-list-item class="agriprice_list_item" *ngFor="let crop of crops" (click)="displayCrop(crop)">
+		<md-list-item class="agriprice_list_item" *ngFor="let crop of crops" (click)="displayCrop(crop)" hover>
 			<img md-list-avatar [src]="crop.img_url" alt="Crop Icon">
 			<h2 md-line>{{ crop.commodity | titleCase }}</h2>
 			<p class="agriprice_list_item_content" md-line>
