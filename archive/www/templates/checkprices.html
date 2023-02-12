@@ -1,0 +1,24 @@
+<ion-view title="AgriPrice - Latest Prices">
+	<ion-content padding="true">
+		<div class="list" ng-init="logmein()">
+			<label class="item item-input item-select">
+			  <div class="input-label">
+				Date
+			  </div>
+			  <select ng-init="selDate = dates[0]" ng-model="selDate" ng-options="date for date in dates" ng-change="changeDate(selDate)"></select>
+			  
+			</label>
+		</div>
+		<ion-list id="crop-list">
+			<ion-item collection-repeat="crop in dailycrops | orderBy: 'commodity' | filter: filterCrops" class="item item-avatar" href="#/app/crop/{{crop.commodity}}/{{crop.date}}">
+				<img  id="cAvatar" ng-src="img/fruits/{{crop.commodity}}.jpg" fallback-src="img/fruits_icon_placeholder.jpg"  />
+				<h2>{{crop.commodity | capitalize}}</h2>
+				<p>{{crop.price | currency}} per {{crop.unit}}</p>
+			</ion-item>
+		</ion-list>
+		
+	</ion-content>
+	<ion-footer-bar id="bottom-bar" >
+		<button class="button button-dark button-block" ng-click="manageNotification()">Manage Notifications</button>
+	</ion-footer-bar>
+</ion-view>

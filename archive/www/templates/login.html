@@ -1,0 +1,34 @@
+<ion-view title="AgriPrice Login"  id="login-page">
+	<ion-content padding="true">
+		<div id="homeScreen">
+			<div class="row">
+				<div class="col" >
+                    <img class="fade-in logo" src="img/ic_launcher.png" />
+                </div>
+			</div>
+
+			
+			<div class="row" id="btm-area">
+				<div class="col" >
+                    <h1>AgriPrice</h1>
+                    <p>
+                        Get notifications for crop prices within Trinidad and Tobago.
+					</p>
+					<p>
+						Sign In using your google account to recieve notifications on price changes for selected crops.
+					</p>
+					<button ng-click="googleLogin()" class="button button-assertive gpbtn icon-left ion-social-googleplus-outline">
+                    	 Sign in
+                    </button>
+                    <button ng-click="noLogin()" class="button button-active gpbtn icon-right ion-arrow-right-c">
+                    	Continue
+                	</button>
+					<p> 
+						<b>Note:</b> You can use the application without logging in, however you will only be able to check prices, as notifications will not work without sign-in. 
+					</p>
+                    
+				</div>
+			</div>
+		</div>
+	</ion-content>
+</ion-view>
