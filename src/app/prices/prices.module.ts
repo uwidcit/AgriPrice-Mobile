@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PricesPage } from './prices.page';
-import { ExploreContainerComponentModule } from '../explore-container/explore-container.module';
+import { HttpClientModule } from '@angular/common/http';
 
 import { PricesPageRoutingModule } from './prices-routing.module';
 
@@ -12,7 +12,7 @@ import { PricesPageRoutingModule } from './prices-routing.module';
     IonicModule,
     CommonModule,
     FormsModule,
-    ExploreContainerComponentModule,
+    HttpClientModule,
     PricesPageRoutingModule
   ],
   declarations: [PricesPage]

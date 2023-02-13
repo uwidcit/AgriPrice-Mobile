@@ -24,3 +24,32 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+@media (prefers-color-scheme: dark) {
+    :root {
+
+        /* dark mode variables go here */
+        ion-toolbar {
+            --background: #19422d;
+            --color: white;
+            text-align: center;
+        }
+    }
+}
+
+body.dark {
+
+    /* Dark mode variables go here */
+    ion-toolbar {
+        --background: #19422d;
+        --color: white;
+        text-align: center;
+    }
+}
+
+// Regular colour of the toolbar
+ion-toolbar {
+    --background: #66cc33;
+    --color: white;
+    text-align: center;
+}
