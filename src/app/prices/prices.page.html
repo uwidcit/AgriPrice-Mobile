@@ -1,0 +1,37 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Crop Prices
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Crop Prices</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-item id="cropRecordDate" lines="full">
+    <ion-label>
+      <h2>Prices as of {{cropRecordDate | date }}</h2>
+    </ion-label>
+  </ion-item>
+
+  <ion-list id="crop-list" lines="full" *ngFor="let crop of dailycrops">
+    <ion-item detail="true" (click)="openModal(crop)">
+      <ion-thumbnail slot="start">
+        <img alt="image of {{crop.commodity | titlecase }}" src="assets/fruits/{{crop.commodity}}.jpg" />
+      </ion-thumbnail>
+      <ion-label>
+        <h1>{{crop.commodity | titlecase }}</h1>
+        <div *ngIf="crop.price === 0">
+          <p>No price available for {{crop.commodity | titlecase }}</p>
+        </div>
+        <div *ngIf="crop.price">
+          <p>{{crop.price | currency }} per {{crop.unit}}</p>
+        </div>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

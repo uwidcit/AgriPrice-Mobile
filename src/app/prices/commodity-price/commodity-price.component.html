@@ -1,0 +1,54 @@
+<style>
+    ion-card-header.ios {
+        display: flex;
+        flex-flow: column-reverse;
+    }
+</style>
+<ion-header>
+    <ion-toolbar>
+        <ion-title>{{name | titlecase}}</ion-title>
+        <ion-buttons slot="end">
+            <ion-button (click)="close()">Close</ion-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+    <ion-card>
+        <ion-card-header>
+            <ion-card-title>{{name | titlecase}}</ion-card-title>
+            <ion-card-subtitle>{{date | date}}</ion-card-subtitle>
+        </ion-card-header>
+
+        <ion-card-content>
+            <ion-img alt="image of {{name}}" src="assets/fruits/{{name}}.jpg"></ion-img>
+            <div *ngIf="price === 0">
+                <p>No price available for {{name | titlecase }}</p>
+            </div>
+            <div *ngIf="price">
+                <p></p>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col>Price</ion-col>
+                        <ion-col>{{price | currency }} per {{unit}}</ion-col>
+                    </ion-row>
+                    <ion-row *ngIf="unit === 'kg'">
+                        <ion-col>Price (lb)</ion-col>
+                        <ion-col>{{ (price * 2.2046) | currency }} per lb</ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col>Category</ion-col>
+                        <ion-col>{{category | titlecase}}</ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col>Volume</ion-col>
+                        <ion-col>{{volume}} {{unit}}</ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col>Market</ion-col>
+                        <ion-col>Norris Deonarine Northern Wholesale Market Macoya (NWM)</ion-col>
+                    </ion-row>
+                </ion-grid>
+            </div>
+        </ion-card-content>
+    </ion-card>
+</ion-content>
