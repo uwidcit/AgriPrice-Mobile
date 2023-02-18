@@ -6,6 +6,7 @@ import { PricesPage } from './prices.page';
 import { HttpClientModule } from '@angular/common/http';
 
 import { PricesPageRoutingModule } from './prices-routing.module';
+import { CommodityPriceComponent } from './commodity-price/commodity-price.component';
 
 @NgModule({
   imports: [
@@ -13,8 +14,8 @@ import { PricesPageRoutingModule } from './prices-routing.module';
     CommonModule,
     FormsModule,
     HttpClientModule,
-    PricesPageRoutingModule
+    PricesPageRoutingModule,
   ],
-  declarations: [PricesPage]
+  declarations: [PricesPage, CommodityPriceComponent]
 })
 export class PricesPageModule { }

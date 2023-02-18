@@ -12,14 +12,14 @@
       <ion-title size="large">Crop Prices</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-item id="cropRecordDate">
+  <ion-item id="cropRecordDate" lines="full">
     <ion-label>
       <h2>Prices as of {{cropRecordDate | date }}</h2>
     </ion-label>
   </ion-item>
 
   <ion-list id="crop-list" lines="full" *ngFor="let crop of dailycrops">
-    <ion-item button>
+    <ion-item detail="true" (click)="openModal(crop)">
       <ion-thumbnail slot="start">
         <img alt="image of {{crop.commodity | titlecase }}" src="assets/fruits/{{crop.commodity}}.jpg" />
       </ion-thumbnail>
